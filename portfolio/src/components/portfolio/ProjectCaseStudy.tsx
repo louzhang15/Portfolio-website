@@ -14,8 +14,9 @@ import {
   FileText,
   GitBranch,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, type Ref } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
 import { CinematicFooter } from "@/components/ui/motion-footer";
 
@@ -103,6 +104,56 @@ function LinkIcon({ kind }: { kind?: string }) {
 }
 
 // ============================================================================
+const pumpParts = [
+  ["Cylinder block", "Houses the nine piston assemblies."],
+  ["Retaining plate", "Holds the slippers in position around the assembly."],
+  ["Spherical nut", "Centers the retaining plate within the assembly."],
+  ["Slipper pad", "Pairs with a piston. The drawing shows one pad lifted off to reveal the connection."],
+  ["Piston", "Fits into the cylinder block. Each piston and slipper pad form one assembly."],
+];
+
+function PumpBreakdown({ drawing, visualRef }: { drawing: string; visualRef: Ref<HTMLDivElement> }) {
+  return (
+    <section aria-labelledby="pump-breakdown" className="mx-auto mt-3 max-w-6xl px-4 sm:px-6">
+      <div className="grid border border-white/15 bg-[#101319] lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+        <figure className="min-w-0 border-b border-white/15 lg:border-b-0 lg:border-r">
+          <div ref={visualRef} className="bg-[#f6f4ee] p-3 sm:p-5">
+            <Image
+              src={drawing}
+              alt="Axial piston pump drawing with an assembled view, a numbered exploded view, and a parts table. The five callouts are explained alongside the drawing."
+              width={800}
+              height={754}
+              sizes="(min-width: 1152px) 600px, (min-width: 1024px) 56vw, 100vw"
+              loading="eager"
+              className="mx-auto h-auto w-full"
+            />
+          </div>
+          <figcaption className="flex flex-wrap items-center justify-between gap-x-4 px-4 pb-2 pt-3 text-sm text-white/70 sm:px-5 sm:py-2">
+            <span>Original CAD drawing</span>
+            <a href={drawing} className="inline-flex min-h-11 items-center gap-2 font-semibold text-[#edbd91] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4">
+              Open full-size drawing <ArrowUpRight className="h-4 w-4" aria-hidden />
+            </a>
+          </figcaption>
+        </figure>
+        <div className="p-5 sm:p-7 lg:p-8">
+          <h2 id="pump-breakdown" className="font-headline text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            Assembly breakdown
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-white/70">The numbers match the callouts in the exploded drawing.</p>
+          <ol className="mt-5 list-decimal divide-y divide-white/15 pl-7 marker:font-mono marker:font-bold marker:text-[#edbd91]">
+            {pumpParts.map(([name, detail]) => (
+              <li key={name} className="py-3 pl-2 first:pt-0 last:pb-0">
+                <strong className="block text-sm text-white">{name}</strong>
+                <p className="mt-1 text-sm leading-relaxed text-white/70">{detail}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function ProjectCaseStudy({
   item,
   related,
@@ -124,7 +175,9 @@ export default function ProjectCaseStudy({
     item.gallery.find((s) => !s.includes("/portfolio-pages/full/")) ??
     (item.gallery.length ? item.gallery[0] : null);
 
-  const hasPortfolioPages = item.gallery.some((s) => s.includes("/portfolio-pages/full/"));
+  const pumpDrawing = item.id === "P-2" ? item.image : null;
+  const gallery = pumpDrawing ? item.gallery.filter((src) => src !== pumpDrawing) : item.gallery;
+  const hasPortfolioPages = gallery.some((s) => s.includes("/portfolio-pages/full/"));
   const galleryHeading = hasPortfolioPages ? "Portfolio Pages" : "Visual Evidence";
 
   // spec strip cells
@@ -265,7 +318,7 @@ export default function ProjectCaseStudy({
       </section>
 
       {/* ─────────────────────────────── HERO VISUAL ───────────────────────── */}
-      {heroSrc && (
+      {pumpDrawing ? <PumpBreakdown drawing={pumpDrawing} visualRef={heroVisualRef} /> : heroSrc && (
         <Reveal className="mx-auto mt-3 max-w-6xl px-4 sm:px-6">
           <div className="relative">
             <div
@@ -399,7 +452,7 @@ export default function ProjectCaseStudy({
       )}
 
       {/* ─────────────────────────────── GALLERY ───────────────────────────── */}
-      {item.gallery.length > 0 && (
+      {gallery.length > 0 && (
         <section
           className="mx-auto mt-16 max-w-5xl px-5 pb-4 sm:mt-20 sm:px-8"
           style={{ contentVisibility: "auto", containIntrinsicSize: "auto 700px" } as React.CSSProperties}
@@ -435,7 +488,7 @@ export default function ProjectCaseStudy({
 
           {hasPortfolioPages ? (
             <div className="space-y-6">
-              {item.gallery.map((src, i) => (
+              {gallery.map((src, i) => (
                 <a
                   key={src}
                   href={src}
@@ -456,8 +509,8 @@ export default function ProjectCaseStudy({
               ))}
             </div>
           ) : (
-            <div className={item.gallery.length === 1 ? "flex justify-center" : "grid gap-5 sm:grid-cols-2"}>
-              {item.gallery.map((src, i) => (
+            <div className={gallery.length === 1 ? "flex justify-center" : "grid gap-5 sm:grid-cols-2"}>
+              {gallery.map((src, i) => (
                 <a
                   key={src}
                   href={src}
