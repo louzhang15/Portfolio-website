@@ -155,7 +155,7 @@ export default function WinsChapter({ id }: { id: string }) {
           <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4 lg:gap-x-5">
             {ALSO_COMPETED.map((c) => (
               <li key={c.event}>
-                <Link href={`/portfolio/${c.slug}`} aria-label={`${c.project}, built at ${c.event}, ${c.date}`} className="group block">
+                <Link href={`/portfolio/${c.slug}`} className="group block">
                   <span className="relative block aspect-[16/10] overflow-hidden rounded-[16px] bg-[var(--mat-ink)] shadow-[0_18px_36px_-26px_rgba(0,0,0,0.5)]">
                     <ProjectThumb slug={c.slug} />
                   </span>

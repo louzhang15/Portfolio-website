@@ -160,7 +160,7 @@ function ChapterNav() {
           {/* the game is the other way in: always on screen, so nobody has to find it in the footer */}
           <Link
             href="/game"
-            aria-label="Play the portfolio as a 3D driving game"
+            aria-label="Play the 3D game, the portfolio as a driving game"
             className="nav-game group relative inline-flex min-h-[34px] items-center gap-2 overflow-hidden whitespace-nowrap rounded-[9px] px-3 text-[13px] font-semibold shadow-[0_6px_18px_-8px_rgba(212,132,47,0.8)] transition-[transform,box-shadow] duration-300 hover:-translate-y-px hover:shadow-[0_10px_24px_-8px_rgba(212,132,47,0.9)]"
             style={{ background: "var(--accent)", color: "var(--accent-ink)" }}
           >

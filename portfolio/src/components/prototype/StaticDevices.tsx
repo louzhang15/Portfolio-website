@@ -2,7 +2,7 @@
 
 import { useMotionValue } from "framer-motion";
 import { Phone, Watch, type Motion } from "./devices";
-import { CONTACT, OpenTo, btnGhostDark, btnPrimaryDark } from "./stage";
+import { CONTACT, InternLogos, OpenTo, btnGhostDark, btnPrimaryDark } from "./stage";
 
 const SKILLS: [string, string[]][] = [
   ["Software", ["Python", "TypeScript", "React", "Next.js", "LLM agents", "SQL"]],
@@ -25,9 +25,9 @@ export function StaticIntro({ id }: { id: string }) {
             Mechanical Engineering Student at Polytechnique Montréal. I design hardware and write the software that runs
             on it.
           </p>
+          <InternLogos className="mt-6" />
           <p className="mt-4 max-w-[34rem] text-sm text-[var(--text-tertiary)]">
-            Interned at Tesla, Lockheed Martin and the City of Montréal. Hackathon winner at HackHarvard 2026, ConUHacks X
-            and RoboHacks 2025.
+            Hackathon winner at HackHarvard 2026, ConUHacks X and RoboHacks 2025.
           </p>
           <OpenTo className="mt-4" />
           <div className="mt-7 flex flex-wrap gap-3">

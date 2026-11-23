@@ -1,521 +1,369 @@
 "use client";
 
-import {
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowUpRight,
-  CheckCircle2,
-  ExternalLink,
-  FileText,
-  GitBranch,
-} from "lucide-react";
+import { ArrowLeft, ArrowUpRight, FileText, GitBranch, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
+import { Fragment } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
-import { CinematicFooter } from "@/components/ui/motion-footer";
+import { CONTACT, OpenTo } from "@/components/prototype/stage";
+import { FOCUS, photoFor } from "@/components/prototype/projectData";
+import "@/components/prototype/prototype.css";
 
-// Accent darkened 25% so white text passes contrast; plain hex math rather than color-mix, which Safari 15 lacks.
-const darken = (hex: string) =>
-  "#" + [1, 3, 5].map((i) => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.75).toString(16).padStart(2, "0")).join("");
-console.assert(darken("#ffffff") === "#bfbfbf" && darken("#e8590c") === "#ae4309", "darken");
+/**
+ * Case study page in the homepage's "Machined Product" system (portfolio/DESIGN.md): light page, Archivo set wide
+ * for headings, one kapton accent, crisp hairlines. Everything is visible on first paint; the title's word mask is
+ * the page's one entrance.
+ */
 
-// Keep content visible from first paint, including before Motion hydrates.
-const reducedMotion = "motion-reduce:opacity-100! motion-reduce:transform-none!";
+const WRAP = "mx-auto w-full max-w-[1352px] px-5 md:px-10 xl:px-16";
 
-// ── word-stagger hero headline ──────────────────────────────────────────────
-function WordsPullUp({
-  text,
-  className = "",
-  style,
-}: {
-  text: string;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  const ref = useRef<HTMLHeadingElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const words = text.split(" ");
+// ── details text → structured blocks ─────────────────────────────────────────
+// The data writes headings in capitals ("WHY WE BUILT IT", "RESULTS (no-hindsight replays)") and bullets as "• ".
+type Block = { kind: "p"; text: string } | { kind: "h"; text: string } | { kind: "ul"; items: string[] };
 
-  // the project title is the page's one h1
+const isHeading = (line: string) => {
+  const head = line.split("(")[0].trim();
+  return head.length > 2 && head.length < 48 && /[A-Z]/.test(head) && head === head.toUpperCase() && !/[.:]$/.test(head);
+};
+
+const sentenceCase = (line: string) => {
+  const i = line.indexOf("(");
+  const head = (i > 0 ? line.slice(0, i) : line).trim().toLowerCase();
+  const rest = i > 0 ? ` ${line.slice(i)}` : "";
+  return head.charAt(0).toUpperCase() + head.slice(1) + rest;
+};
+
+function parseDetails(details: string): Block[] {
+  const blocks: Block[] = [];
+  for (const raw of details.split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    if (/^[•\-–]\s*/.test(line)) {
+      const text = line.replace(/^[•\-–]\s*/, "");
+      const last = blocks[blocks.length - 1];
+      if (last?.kind === "ul") last.items.push(text);
+      else blocks.push({ kind: "ul", items: [text] });
+    } else if (isHeading(line)) {
+      blocks.push({ kind: "h", text: sentenceCase(line) });
+    } else {
+      blocks.push({ kind: "p", text: line });
+    }
+  }
+  return blocks;
+}
+
+function Details({ text }: { text: string }) {
+  const blocks = parseDetails(text);
   return (
-    <h1 ref={ref} className={`flex flex-wrap justify-center ${className}`} style={style}>
-      {words.map((word, i) => (
-        <motion.span
-          key={`${word}-${i}`}
-          initial={{ y: 22, opacity: 0 }}
-          animate={isInView ? { y: 0, opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-          className={`inline-block ${reducedMotion}`}
-          style={{ marginRight: i < words.length - 1 ? "0.28em" : 0 }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </h1>
+    <div className="max-w-[68ch] text-pretty text-[17px] leading-[1.65] text-[var(--text-secondary)]">
+      {blocks.map((b, i) => {
+        if (b.kind === "h")
+          return (
+            <h3 key={i} className="mb-3 mt-12 text-[1.25rem] text-[var(--text)] first:mt-0">
+              {b.text}
+            </h3>
+          );
+        if (b.kind === "ul")
+          return (
+            <ul key={i} className="my-5 space-y-3">
+              {b.items.map((item, j) => (
+                <li key={j} className="relative pl-6">
+                  <span aria-hidden className="absolute left-0 top-[0.72em] h-px w-3 bg-[var(--accent)]" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          );
+        return (
+          <p key={i} className={i === 0 ? "text-[19px] leading-[1.6] text-[var(--text)]" : "my-5"}>
+            {b.text}
+          </p>
+        );
+      })}
+    </div>
   );
 }
 
-// ── scroll-reveal wrapper ────────────────────────────────────────────────────
-function Reveal({
-  children,
-  className = "",
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
-
-  return (
-    <motion.div
-      ref={ref}
-      className={`${className} ${reducedMotion}`}
-      initial={{ y: 28, opacity: 0 }}
-      animate={isInView ? { y: 0, opacity: 1 } : {}}
-      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// ── micro-label kicker ───────────────────────────────────────────────────────
-function Kicker({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="font-label text-[0.65rem] uppercase tracking-[0.28em] text-white/60">
-      {children}
-    </p>
-  );
-}
-
-// ── link icon ────────────────────────────────────────────────────────────────
+// ── pieces ───────────────────────────────────────────────────────────────────
 function LinkIcon({ kind }: { kind?: string }) {
-  return kind === "github"
-    ? <GitBranch className="h-4 w-4 shrink-0" />
-    : <ExternalLink className="h-4 w-4 shrink-0" />;
+  return kind === "github" ? <GitBranch aria-hidden className="h-4 w-4" /> : <ExternalLink aria-hidden className="h-4 w-4" />;
+}
+
+const BTN =
+  "group inline-flex min-h-[44px] items-center gap-2 rounded-full px-5 text-[15px] font-medium transition-[transform,background-color,border-color,color] duration-200 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
+const BTN_PRIMARY = `${BTN} bg-[var(--text)] text-[var(--bg)] hover:bg-black`;
+const BTN_GHOST = `${BTN} border border-[var(--border)] text-[var(--text)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-light)]`;
+
+function TopBar({ title }: { title: string }) {
+  return (
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border)] bg-[rgba(var(--bg-rgb),.82)] backdrop-blur-xl backdrop-saturate-150">
+      <div className="mx-auto grid h-12 max-w-[1480px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-5 md:px-10 xl:px-16">
+        <Link
+          href="/#chapter-projects"
+          className="group inline-flex min-h-[44px] items-center gap-2 justify-self-start whitespace-nowrap text-[13px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
+        >
+          <ArrowLeft aria-hidden className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
+          All projects
+        </Link>
+        <Link href="/" className="wide whitespace-nowrap text-[15px] tracking-tight text-[var(--text)]">
+          Louis Zhang
+        </Link>
+        <span className="hidden max-w-[220px] truncate justify-self-end text-[13px] text-[var(--text-tertiary)] md:block">{title}</span>
+      </div>
+    </header>
+  );
+}
+
+function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
+  // the subtitle often carries the date already; say it once
+  const meta = [item.displaySector, item.date && !item.subtitle.includes(item.date) ? item.date : ""].filter(Boolean).join(" · ");
+  const words = item.title.split(" ");
+  return (
+    <section className={`${WRAP} pb-10 pt-28 md:pt-36`}>
+      <div className="flex items-center gap-4">
+        {logo && (
+          // logos come with their own ground (red Tesla, navy Lockheed), so the tile is the logo itself
+          <img src={logo} alt={`${item.title} logo`} width={88} height={56} className="h-14 w-[88px] rounded-[var(--radius-md)] border border-[var(--border)] object-cover" />
+        )}
+        <p className="text-[15px] text-[var(--text-tertiary)]">{meta}</p>
+      </div>
+      <h1 className="mt-4 max-w-[14ch] text-balance text-[clamp(2.75rem,7vw,5.75rem)] text-[var(--text)]">
+        {words.map((w, i) => (
+          <Fragment key={i}>
+            <span className="word-mask">
+              <span style={{ animationDelay: `${0.05 + i * 0.06}s` }}>{w}</span>
+            </span>
+            {i < words.length - 1 ? " " : ""}
+          </Fragment>
+        ))}
+      </h1>
+      <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
+      {(item.links.length > 0 || item.documents.length > 0) && (
+        <div className="mt-8 flex flex-wrap gap-3">
+          {item.links.map((link, i) => (
+            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 ? BTN_PRIMARY : BTN_GHOST}>
+              <LinkIcon kind={link.kind} />
+              {link.label}
+              <ArrowUpRight aria-hidden className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          ))}
+          {item.documents[0] && (
+            <a href={item.documents[0].href} target="_blank" rel="noopener noreferrer" className={item.links.length ? BTN_GHOST : BTN_PRIMARY}>
+              <FileText aria-hidden className="h-4 w-4" />
+              Open the PDF
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function Specs({ item }: { item: PortfolioItem }) {
+  const cells = item.metrics.slice(0, 4).map((m) => {
+    const i = m.search(/\s/);
+    return i > 0 ? { value: m.slice(0, i), caption: m.slice(i + 1) } : { value: m, caption: "" };
+  });
+  if (!cells.length) return null;
+  return (
+    <dl className={`${WRAP} mt-12 grid grid-cols-2 gap-px md:grid-cols-4`}>
+      {cells.map((c) => (
+        <div key={c.value + c.caption} className="flex flex-col-reverse justify-end border-t border-[var(--text)] pb-2 pr-4 pt-4">
+          <dt className="mt-2 text-[14px] text-[var(--text-tertiary)]">{c.caption}</dt>
+          <dd className="wide text-[clamp(1.75rem,3.2vw,2.5rem)] leading-none tabular-nums text-[var(--text)]">{c.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function Gallery({ item, src }: { item: PortfolioItem; src: string[] }) {
+  const pages = src.some((s) => s.includes("/portfolio-pages/full/"));
+  if (!src.length) return null;
+  return (
+    <section className="light mt-24 py-20 md:py-28">
+      <div className={WRAP}>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">{pages ? "Portfolio pages" : "Gallery"}</h2>
+          {pages && item.documents[0] && (
+            <a href={item.documents[0].href} target="_blank" rel="noopener noreferrer" className="link text-[15px] font-medium">
+              Full PDF
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          )}
+        </div>
+        <div className={`mt-10 grid gap-6 ${pages ? "mx-auto max-w-[940px]" : src.length > 1 ? "md:grid-cols-2" : ""}`}>
+          {src.map((s, i) => (
+            <a
+              key={s}
+              data-lead={!pages && src.length % 2 === 1 && i === 0 ? "" : undefined}
+              href={s}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-light)] bg-white data-[lead]:md:col-span-2 shadow-[0_1px_0_rgba(0,0,0,.03),0_24px_48px_-28px_rgba(0,0,0,.28)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_1px_0_rgba(0,0,0,.03),0_36px_60px_-28px_rgba(0,0,0,.35)]"
+            >
+              <div className={pages ? "aspect-[8.5/11] p-2" : "aspect-[16/10] overflow-hidden group-data-[lead]:md:aspect-[2/1]"}>
+                <img
+                  src={s}
+                  alt={pages ? `${item.title}, portfolio page ${i + 1}` : `${item.title}, image ${i + 1}`}
+                  width={pages ? 850 : 1600}
+                  height={pages ? 1100 : 1000}
+                  loading="lazy"
+                  decoding="async"
+                  className={`h-full w-full ${pages ? "object-contain" : "object-cover transition-transform duration-300 ease-out group-hover:scale-[1.025]"}`}
+                />
+              </div>
+              <span className="sr-only">(opens full size in a new tab)</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Related({ item, related }: { item: PortfolioItem; related: PortfolioItem[] }) {
+  if (!related.length) return null;
+  return (
+    <section className={`${WRAP} py-20 md:py-28`}>
+      <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">More in {item.displaySector.toLowerCase()}</h2>
+      <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {related.map((rel) => {
+          const thumb = rel.image ?? rel.gallery[0];
+          return (
+            <li key={rel.id}>
+              <Link href={`/portfolio/${rel.slug}`} className="group block">
+                <div className="aspect-[16/10] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-light)] bg-[var(--bg-light)]">
+                  {thumb && (
+                    <img
+                      src={thumb}
+                      alt=""
+                      width={800}
+                      height={500}
+                      loading="lazy"
+                      decoding="async"
+                      className={`h-full w-full transition-transform duration-300 ease-out group-hover:scale-[1.03] ${
+                        thumb.includes("/logo/") ? "object-contain p-10" : "object-cover"
+                      }`}
+                    />
+                  )}
+                </div>
+                <h3 className="mt-4 flex items-center justify-between gap-3 text-[1.25rem] text-[var(--text)]">
+                  {rel.title}
+                  <ArrowUpRight aria-hidden className="h-4 w-4 shrink-0 text-[var(--accent-on-light)] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </h3>
+                <p className="mt-1 text-[15px] text-[var(--text-tertiary)]">{rel.metrics[0] ?? rel.subtitle}</p>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-[var(--border)]">
+      <div className={`${WRAP} flex flex-col gap-8 py-16 md:flex-row md:items-end md:justify-between`}>
+        <div>
+          <h2 className="text-[clamp(1.75rem,3.4vw,2.75rem)]">Let&apos;s build the next one.</h2>
+          <OpenTo className="mt-5" />
+        </div>
+        <div className="flex flex-wrap items-center gap-x-6 text-[15px] [&>a]:inline-flex [&>a]:min-h-[44px] [&>a]:items-center">
+          <a href={`mailto:${CONTACT.email}`} className="link font-medium">
+            {CONTACT.email}
+          </a>
+          <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]">
+            LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          <a href={CONTACT.github} target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]">
+            GitHub<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          <Link href="/#chapter-projects" className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]">
+            All projects
+          </Link>
+        </div>
+      </div>
+    </footer>
+  );
 }
 
 // ============================================================================
-export default function ProjectCaseStudy({
-  item,
-  related,
-}: {
-  item: PortfolioItem;
-  related: PortfolioItem[];
-}) {
-  // hero visual parallax
-  const heroVisualRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroVisualRef,
-    offset: ["start end", "end start"],
-  });
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [-18, 18]);
-
-  // hero featured image
-  const heroSrc =
-    item.image ??
-    item.gallery.find((s) => !s.includes("/portfolio-pages/full/")) ??
-    (item.gallery.length ? item.gallery[0] : null);
-
-  const hasPortfolioPages = item.gallery.some((s) => s.includes("/portfolio-pages/full/"));
-  const galleryHeading = hasPortfolioPages ? "Portfolio Pages" : "Visual Evidence";
-
-  // spec strip cells
-  type Cell = { value: string; caption: string };
-  const specCells: Cell[] = item.metrics.slice(0, 4).map((m) => {
-    const idx = m.search(/\s/);
-    return idx > 0
-      ? { value: m.slice(0, idx), caption: m.slice(idx + 1) }
-      : { value: m, caption: "highlight" };
-  });
-  const fallbacks: Cell[] = [
-    { value: String(item.skills.length), caption: "competencies" },
-    { value: item.displaySector, caption: "domain" },
-    { value: item.date, caption: "timeline" },
-  ];
-  while (specCells.length < 3 && fallbacks[specCells.length]) {
-    specCells.push(fallbacks[specCells.length]);
-  }
+export default function ProjectCaseStudy({ item, related }: { item: PortfolioItem; related: PortfolioItem[] }) {
+  // a real photo leads when there is one; a page of the PDF deck stays in the gallery
+  const heroSrc = photoFor(item.id) ?? item.image ?? item.gallery[0] ?? null;
+  const heroIsPage = heroSrc?.includes("/portfolio-pages/full/") ?? false;
+  const heroIsLogo = heroSrc?.includes("/logo/") ?? false;
+  // a page or logo already shown as the hero isn't repeated in the gallery
+  const gallery = item.gallery.filter((s) => !(heroIsLogo && s === heroSrc));
 
   return (
-    <main className="relative min-h-screen bg-[#06090e] text-white">
+    <main className="proto min-h-screen overflow-x-clip">
+      <TopBar title={item.title} />
+      <Hero item={item} logo={heroIsLogo ? heroSrc : null} />
 
-      {/* ── fixed background — paints once, never repaints on scroll ── */}
-      <div
-        className="fixed inset-0 -z-10"
-        style={{
-          background: `radial-gradient(circle at 75% 8%, ${item.accent}38, transparent 32%), radial-gradient(circle at 12% 65%, ${item.accent}14, transparent 28%), #06090e`,
-        }}
-      />
-      <div
-        className="fixed inset-0 -z-10 opacity-[0.09]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px)",
-          backgroundSize: "52px 52px",
-        }}
-      />
-
-      {/* ── floating nav pill ── */}
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className={`pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 ${reducedMotion}`}
-      >
-        <div className="pointer-events-auto flex max-w-full items-center gap-3 rounded-b-2xl border border-white/10 bg-black/80 px-4 shadow-2xl backdrop-blur-md sm:gap-4 sm:px-5">
-          <Link
-            href="/#chapter-projects"
-            className="inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap text-sm font-semibold text-white/65 transition hover:text-white"
+      {heroSrc && !heroIsPage && !heroIsLogo && (
+        <div className={WRAP}>
+          <div
+            className="overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-light)] bg-[var(--bg-light)] shadow-[0_1px_0_rgba(0,0,0,.03),0_40px_80px_-40px_rgba(0,0,0,.35)]"
           >
-            <ArrowLeft className="h-4 w-4" />
-            All projects
-          </Link>
-          <div className="h-4 w-px shrink-0 bg-white/12" aria-hidden />
-          <span className="min-w-0 max-w-[160px] truncate text-sm font-bold text-white/85 sm:max-w-xs">
-            {item.title}
-          </span>
+            <img
+              src={heroSrc}
+              alt={`${item.title}, featured image`}
+              width={1600}
+              height={800}
+              fetchPriority="high"
+              decoding="async"
+              className="aspect-[16/8] w-full object-cover"
+              style={{ objectPosition: FOCUS[item.id] }}
+            />
+          </div>
         </div>
-      </motion.div>
+      )}
 
-      {/* ───────────────────────────────── HERO ────────────────────────────── */}
-      <section className="mx-auto max-w-4xl px-5 pt-28 pb-8 text-center sm:pt-32 sm:px-8">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className={`mb-5 inline-flex items-center gap-2.5 ${reducedMotion}`}
-        >
-          <div className="h-px w-5 bg-white/25" />
-          <Kicker>
-            {item.displaySector}
-            {item.date ? ` · ${item.date}` : ""}
-          </Kicker>
-          <div className="h-px w-5 bg-white/25" />
-        </motion.div>
+      <Specs item={item} />
 
-        <WordsPullUp
-          text={item.title}
-          className="font-headline font-extrabold leading-[0.92] tracking-[-0.04em] text-white"
-          style={{ fontSize: "clamp(2.6rem,7.5vw,5.5rem)" }}
-        />
-
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
-          className={`mx-auto mt-5 max-w-2xl text-[1.05rem] leading-8 text-white/60 ${reducedMotion}`}
-        >
-          {item.subtitle}
-        </motion.p>
-
-        {(item.links.length > 0 || item.documents.length > 0) && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.58, ease: [0.16, 1, 0.3, 1] }}
-            className={`mt-7 flex flex-wrap items-center justify-center gap-3 ${reducedMotion}`}
-          >
-            {item.links.map((link, i) => (
-              <a
-                key={`${link.href}-${i}`}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={
-                  i === 0
-                    ? "group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition motion-safe:hover:-translate-y-0.5"
-                    : "group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-5 py-2.5 text-sm font-bold text-white/75 transition motion-safe:hover:-translate-y-0.5 hover:text-white"
-                }
-                style={
-                  i === 0
-                    ? {
-                        background: darken(item.accent),
-                        boxShadow: `0 4px 18px ${item.accent}50`,
-                      }
-                    : undefined
-                }
-              >
-                <LinkIcon kind={link.kind} />
-                {link.label}
-                <ArrowUpRight className="h-3.5 w-3.5 transition motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" />
-              </a>
-            ))}
-            {item.documents[0] && (
-              <a
-                href={item.documents[0].href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-5 py-2.5 text-sm font-bold text-white/75 transition motion-safe:hover:-translate-y-0.5 hover:text-white"
-              >
-                <FileText className="h-4 w-4" />
-                View deck
-                <ArrowUpRight className="h-3.5 w-3.5 transition motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" />
-              </a>
-            )}
-          </motion.div>
-        )}
+      <section className={`${WRAP} mt-20 grid gap-12 md:mt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16`}>
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">Overview</h2>
+          {item.skills.length > 0 && (
+            <>
+              <h3 className="mt-10 text-[15px] font-medium [font-stretch:100%] text-[var(--text-tertiary)]">Tools and skills</h3>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {item.skills.map((s) => (
+                  <li key={s} className="rounded-[var(--radius-sm)] border border-[var(--border)] px-2.5 py-1 text-[13px] text-[var(--text-secondary)]">
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {item.documents.length > 0 && (
+            <>
+              <h3 className="mt-10 text-[15px] font-medium [font-stretch:100%] text-[var(--text-tertiary)]">Documents</h3>
+              <ul className="mt-3 border-t border-[var(--border)]">
+                {item.documents.map((d) => (
+                  <li key={d.href} className="border-b border-[var(--border)]">
+                    <a href={d.href} target="_blank" rel="noopener noreferrer" className="group flex min-h-[48px] items-center gap-3 text-[15px] text-[var(--text)]">
+                      <FileText aria-hidden className="h-4 w-4 text-[var(--text-tertiary)]" />
+                      <span className="flex-1">{d.label}</span>
+                      <ArrowUpRight aria-hidden className="h-4 w-4 text-[var(--accent-on-light)] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      <span className="sr-only">(opens in a new tab)</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </aside>
+        <Details text={item.details} />
       </section>
 
-      {/* ─────────────────────────────── HERO VISUAL ───────────────────────── */}
-      {heroSrc && (
-        <Reveal className="mx-auto mt-3 max-w-6xl px-4 sm:px-6">
-          <div className="relative">
-            <div
-              className="pointer-events-none absolute inset-8 rounded-3xl opacity-20 blur-3xl"
-              style={{ background: item.accent }}
-            />
-            <div
-              ref={heroVisualRef}
-              className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/30 shadow-[0_40px_100px_rgba(0,0,0,0.55)]"
-            >
-              <motion.img
-                src={heroSrc}
-                alt={`${item.title} featured visual`}
-                style={{ y: parallaxY }}
-                loading="eager"
-                decoding="async"
-                className={`${
-                  heroSrc.includes("/portfolio-pages/full/")
-                    ? "h-auto w-full bg-white object-contain p-2"
-                    : "aspect-[16/7] w-full object-cover"
-                } motion-reduce:transform-none!`}
-              />
-            </div>
-          </div>
-        </Reveal>
-      )}
-
-      {/* ─────────────────────────────── SPEC STRIP ────────────────────────── */}
-      {specCells.length > 0 && (
-        <Reveal className="mx-auto mt-10 max-w-6xl px-4 sm:px-6">
-          <div className="flex flex-wrap divide-y divide-white/10 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] sm:flex-nowrap sm:divide-x sm:divide-y-0">
-            {specCells.slice(0, 4).map((cell, i) => (
-              <div
-                key={i}
-                className="flex w-full flex-col items-center justify-center gap-1.5 px-4 py-7 text-center sm:w-auto sm:flex-1 sm:px-6 sm:py-8"
-              >
-                <span className="font-headline text-3xl font-extrabold tabular-nums leading-none text-white sm:text-4xl">
-                  {cell.value}
-                </span>
-                <span className="font-label text-[0.6rem] uppercase tracking-[0.22em] text-white/60">
-                  {cell.caption}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      )}
-
-      {/* ─────────────────────────────── OVERVIEW ──────────────────────────── */}
-      <Reveal className="mx-auto mt-16 max-w-3xl px-5 sm:mt-20 sm:px-8">
-        <div
-          className="mb-4 h-px w-10"
-          style={{ background: item.accent }}
-        />
-        <Kicker>Overview</Kicker>
-        <p className="mt-5 text-lg leading-[1.85] text-white/78 sm:text-xl whitespace-pre-line">
-          {item.details}
-        </p>
-      </Reveal>
-
-      {/* ─────────────────────────────── SKILLS ────────────────────────────── */}
-      <Reveal className="mx-auto mt-16 max-w-3xl px-5 sm:mt-20 sm:px-8">
-        <div
-          className="mb-4 h-px w-10"
-          style={{ background: item.accent }}
-        />
-        <Kicker>
-          Stack & Skills · {item.skills.length} competencies
-        </Kicker>
-        <motion.div
-          className="mt-6 flex flex-wrap justify-center gap-2"
-          variants={{ visible: { transition: { staggerChildren: 0.025 } }, hidden: {} }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          {item.skills.map((skill) => (
-            <motion.div
-              key={skill}
-              variants={{
-                hidden: { y: 8, opacity: 0 },
-                visible: {
-                  y: 0,
-                  opacity: 1,
-                  transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
-                },
-              }}
-              className={`inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3.5 py-1.5 text-xs font-semibold text-white/68 ${reducedMotion}`}
-            >
-              <CheckCircle2
-                className="h-3 w-3 shrink-0"
-                style={{ color: item.accent }}
-              />
-              {skill}
-            </motion.div>
-          ))}
-        </motion.div>
-      </Reveal>
-
-      {/* ─────────────────────────────── DOCUMENTS ─────────────────────────── */}
-      {item.documents.length > 0 && (
-        <Reveal className="mx-auto mt-16 max-w-4xl px-5 sm:mt-20 sm:px-8">
-          <div className="mb-4 h-px w-10" style={{ background: item.accent }} />
-          <Kicker>Documents</Kicker>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {item.documents.map((doc) => (
-              <a
-                key={doc.href}
-                href={doc.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] p-5 transition motion-safe:hover:-translate-y-1 hover:border-white/20"
-                style={
-                  {
-                    "--accent": item.accent,
-                  } as React.CSSProperties
-                }
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <FileText className="h-5 w-5 text-white/45 transition group-hover:text-white/75" />
-                  <ArrowUpRight className="h-4 w-4 text-white/25 transition motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5 group-hover:text-white/65" />
-                </div>
-                <div className="text-sm font-bold leading-snug text-white/80">{doc.label}</div>
-                <div className="mt-2 font-label text-[0.6rem] uppercase tracking-[0.2em] text-white/60">
-                  Open PDF
-                </div>
-              </a>
-            ))}
-          </div>
-        </Reveal>
-      )}
-
-      {/* ─────────────────────────────── GALLERY ───────────────────────────── */}
-      {item.gallery.length > 0 && (
-        <section
-          className="mx-auto mt-16 max-w-5xl px-5 pb-4 sm:mt-20 sm:px-8"
-          style={{ contentVisibility: "auto", containIntrinsicSize: "auto 700px" } as React.CSSProperties}
-        >
-          <Reveal>
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <div className="mb-4 h-px w-10" style={{ background: item.accent }} />
-                <Kicker>{galleryHeading}</Kicker>
-                <h2 className="mt-2 font-headline text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                  {galleryHeading}
-                </h2>
-                {hasPortfolioPages && (
-                  <p className="mt-1.5 max-w-md text-sm text-white/60">
-                    High-resolution case-study pages from the May 04 portfolio deck.
-                  </p>
-                )}
-              </div>
-              {hasPortfolioPages && item.documents[0] && (
-                <a
-                  href={item.documents[0].href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-bold text-white/65 transition hover:text-white"
-                >
-                  <FileText className="h-4 w-4" />
-                  Full PDF
-                  <ArrowUpRight className="h-3.5 w-3.5 transition motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" />
-                </a>
-              )}
-            </div>
-          </Reveal>
-
-          {hasPortfolioPages ? (
-            <div className="space-y-6">
-              {item.gallery.map((src, i) => (
-                <a
-                  key={src}
-                  href={src}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group mx-auto block w-full max-w-[940px] overflow-hidden rounded-2xl border border-white/10 bg-white p-2 shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition motion-safe:hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(0,0,0,0.6)]"
-                >
-                  <div className="aspect-[8.5/11] overflow-hidden rounded-xl">
-                    <img
-                      src={src}
-                      alt={`${item.title} — page ${i + 1}`}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <div className={item.gallery.length === 1 ? "flex justify-center" : "grid gap-5 sm:grid-cols-2"}>
-              {item.gallery.map((src, i) => (
-                <a
-                  key={src}
-                  href={src}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-lg transition motion-safe:hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
-                >
-                  <div className="aspect-[16/9] overflow-hidden">
-                    <img
-                      src={src}
-                      alt={`${item.title} visual ${i + 1}`}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-full w-full object-cover transition duration-500 motion-safe:group-hover:scale-[1.04]"
-                    />
-                  </div>
-                </a>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* ─────────────────────────────── RELATED ───────────────────────────── */}
-      {related.length > 0 && (
-        <section
-          className="mx-auto mt-16 max-w-5xl px-5 pb-16 sm:mt-20 sm:px-8"
-          style={{ contentVisibility: "auto", containIntrinsicSize: "auto 320px" } as React.CSSProperties}
-        >
-          <Reveal>
-            <div className="mb-4 h-px w-10" style={{ background: item.accent }} />
-            <Kicker>More from {item.displaySector}</Kicker>
-          </Reveal>
-          <Reveal delay={0.08} className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((rel) => (
-              <Link
-                key={rel.id}
-                href={`/portfolio/${rel.slug}`}
-                className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 transition motion-safe:hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.07]"
-              >
-                <div>
-                  <div className="text-sm font-bold text-white/82">{rel.title}</div>
-                  <div className="mt-0.5 text-xs text-white/60">
-                    {rel.metrics[0] ?? rel.displaySector}
-                  </div>
-                </div>
-                <span className="ml-3 flex shrink-0 items-center gap-1.5">
-                  <span className="text-base">{rel.emoji}</span>
-                  <ArrowUpRight className="h-4 w-4 text-white/25 transition motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5 group-hover:text-white/65" />
-                </span>
-              </Link>
-            ))}
-          </Reveal>
-        </section>
-      )}
-
-      {/* ─────────────────────────────── FOOTER ────────────────────────────── */}
-      <CinematicFooter />
+      <Gallery item={item} src={gallery} />
+      <Related item={item} related={related} />
+      <Footer />
     </main>
   );
 }
