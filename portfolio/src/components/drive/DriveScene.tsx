@@ -158,9 +158,11 @@ function AdaptiveResolution({ max }: { max: number }) {
 /** lifts the loading screen once a frame has been drawn */
 function Ready({ onReady }: { onReady: () => void }) {
   const done = useRef(false);
-  useFrame(() => {
+  useFrame(({ gl, scene, camera }) => {
     if (done.current) return;
     done.current = true;
+    // compile every material now, behind the loading screen, so the first drive into a new area doesn't hitch
+    gl.compile(scene, camera);
     requestAnimationFrame(onReady);
   });
   return null;

@@ -29,6 +29,13 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
   const roads = useMemo(() => buildRoads(world.districts, world.stops), [world]);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // after a jump, the keyboard goes back to the world (so Enter opens the stop), not to the Map button
+  const jumped = useRef(false);
+  const jump = (stop: Stop) => {
+    teleportTo(stop);
+    jumped.current = true;
+    onClose();
+  };
   const R = WORLD_RADIUS + 6;
   const [cx, cy] = project(car.x, car.z);
 
@@ -41,6 +48,10 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
 
     return () => {
       dialog.close();
+      if (jumped.current) {
+        (document.activeElement as HTMLElement | null)?.blur?.();
+        return;
+      }
       if (opener instanceof HTMLElement && opener.isConnected && document.activeElement !== opener) {
         opener.focus({ preventScroll: true });
       }
@@ -85,7 +96,7 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
       className="fixed inset-0 m-0 h-full max-h-none w-full max-w-none items-stretch justify-center bg-[#1d2321]/35 p-3 text-[#1d2321] backdrop-blur-sm open:flex backdrop:bg-transparent sm:items-center sm:p-6"
     >
       <div className="flex max-h-full w-full max-w-[980px] flex-col overflow-hidden rounded-[8px] border border-[#1d2321]/15 bg-[#fbfaf6] shadow-2xl sm:flex-row">
-        <div className="relative shrink-0 border-b border-[#1d2321]/10 bg-[#e7ecdf] sm:w-[55%] sm:border-b-0 sm:border-r">
+        <div className="relative shrink-0 border-b border-[#1d2321]/10 bg-[#e7ecdf] sm:flex sm:w-[55%] sm:items-center sm:border-b-0 sm:border-r">
           <svg viewBox={`${-R} ${-R} ${R * 2} ${R * 2}`} className="mx-auto block aspect-square max-h-[42vh] w-full sm:max-h-none">
             <circle r={WORLD_RADIUS + 2} fill={PALETTE.ground} />
             {roads.segments.map((s, i) => {
@@ -101,7 +112,7 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
               const [x, y] = project(s.x, s.z);
               const seen = visited.has(s.id);
               return (
-                <g key={s.id} transform={`translate(${x} ${y})`} className="cursor-pointer" onClick={() => (teleportTo(s), onClose())}>
+                <g key={s.id} transform={`translate(${x} ${y})`} className="cursor-pointer" onClick={() => jump(s)}>
                   <circle r={3.2} fill={seen ? s.accent : PALETTE.paper} stroke={s.accent} strokeWidth={1.4} />
                   <title>{s.title}</title>
                 </g>
@@ -112,13 +123,17 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
               <circle r={4.6} fill="none" stroke={PALETTE.ink} strokeOpacity={0.35} strokeWidth={0.8} />
             </g>
           </svg>
-          <p className="pointer-events-none absolute bottom-2 left-3 font-label text-[11px] font-semibold text-[#5b625e]">● You are here</p>
+          <p className="pointer-events-none absolute bottom-2 left-3 flex items-center gap-1.5 font-label text-[11px] font-semibold text-[#3d4441]">
+            <span className="h-2 w-2 rounded-full bg-[#1d2321] ring-2 ring-[#1d2321]/25" aria-hidden />
+            You are here
+          </p>
         </div>
         <div className="flex min-h-0 flex-1 flex-col">
           <div className="flex items-center justify-between border-b border-[#1d2321]/10 px-4 py-3">
             <p className="font-label text-sm font-bold">Jump to a stop</p>
-            <button ref={closeRef} type="button" onClick={onClose} className="rounded-[4px] px-2 py-1 font-label text-sm font-semibold text-[#5b625e] hover:bg-[#1d2321]/5 hover:text-[#1d2321]">
-              Close <kbd className="ml-1 hidden text-[10px] text-[#5b625e] pointer-fine:inline">Esc</kbd>
+            <button ref={closeRef} type="button" onClick={onClose} className="inline-flex min-h-11 items-center rounded-[4px] px-3 font-label text-sm font-semibold text-[#3d4441] hover:bg-[#1d2321]/5 hover:text-[#1d2321] focus-visible:outline-[#1d2321]">
+              Close
+              <kbd className="ml-2 hidden rounded-[3px] border border-[#1d2321]/20 px-1 font-sans text-[10px] font-medium leading-4 text-[#5b625e] pointer-fine:inline">Esc</kbd>
             </button>
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
@@ -133,7 +148,7 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
                       <li key={s.id} className="flex items-center gap-1">
                         <button
                           type="button"
-                          onClick={() => (teleportTo(s), onClose())}
+                          onClick={() => jump(s)}
                           className="flex min-h-11 min-w-0 flex-1 items-center gap-3 rounded-[4px] px-2 py-1.5 text-left hover:bg-[#1d2321]/[0.05]"
                           aria-label={`Drive to ${s.title} (${KIND_LABEL[s.kind]})`}
                         >
@@ -144,8 +159,11 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
                           </span>
                         </button>
                         {s.href && (
-                          <Link href={s.href} className="shrink-0 rounded-[4px] px-2 py-2 font-label text-xs font-semibold text-[#5b625e] hover:bg-[#1d2321]/[0.05] hover:text-[#1d2321]" aria-label={`Open the ${s.title} case study`}>
-                            Read →
+                          <Link href={s.href} className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-[4px] px-2 font-label text-xs font-semibold text-[#5b625e] hover:bg-[#1d2321]/[0.05] hover:text-[#1d2321]" aria-label={`Open the ${s.title} case study`}>
+                            Read
+                            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                              <path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" />
+                            </svg>
                           </Link>
                         )}
                       </li>

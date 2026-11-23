@@ -100,6 +100,17 @@ function useKeyboard(active: boolean, onEnter: () => void, onMap: () => void) {
   }, [active, onEnter, onMap]);
 }
 
+/* drawn icons, one 1.75 stroke, in place of text glyphs */
+function Icon({ d, className = "h-4 w-4" }: { d: string; className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={className} fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d={d} />
+    </svg>
+  );
+}
+const ARROW_LEFT = "M13 8H3M7.5 3.5 3 8l4.5 4.5";
+const CLOSE = "M4 4l8 8M12 4l-8 8";
+
 const panel = "rounded-[6px] border border-[#1d2321]/12 bg-[#fbfaf6]/92 shadow-[0_1px_2px_rgba(29,35,33,0.06),0_8px_24px_-12px_rgba(29,35,33,0.25)] backdrop-blur-md";
 const control = "min-h-8 rounded-[4px] border border-[#1d2321]/15 bg-white px-1.5 font-label text-[11px] font-semibold text-[#1d2321] hover:border-[#1d2321]/40 active:bg-[#e7ecdf] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2321] pointer-coarse:min-h-11 pointer-coarse:min-w-11";
 
@@ -109,17 +120,19 @@ function StopCard({ stop, visible }: { stop: Stop; visible: boolean }) {
       className={`pointer-events-auto mx-auto w-full max-w-[440px] transition-all duration-200 ease-out ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"}`}
       aria-live="polite"
     >
-      <div className={`${panel} grid grid-cols-[3px_1fr] overflow-hidden`}>
-        <span style={{ background: stop.accent }} aria-hidden />
+      <div className={`${panel} overflow-hidden`}>
         <div className="px-4 py-3.5">
-          <p className="font-label text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5b625e]">{stop.kicker}</p>
-          <p className="mt-0.5 font-label text-xl font-bold leading-tight text-[#1d2321]">{stop.title}</p>
-          <p className="mt-1 line-clamp-3 text-sm leading-snug text-[#5b625e]">{stop.line}</p>
+          <p className="font-label text-xl font-bold leading-tight text-balance text-[#1d2321]">{stop.title}</p>
+          <p className="mt-1 flex items-center gap-2 font-label text-xs font-semibold text-[#3d4441]">
+            <span className="h-2 w-2 shrink-0 rounded-[2px]" style={{ background: stop.accent }} aria-hidden />
+            {stop.kicker}
+          </p>
+          <p className="mt-2 line-clamp-3 text-sm leading-snug text-[#5b625e]">{stop.line}</p>
           {stop.href ? (
             <Link
               href={stop.href}
               tabIndex={visible ? 0 : -1}
-              className="mt-3 inline-flex items-center gap-2 rounded-[4px] bg-[#1d2321] px-3 py-2 font-label text-sm font-semibold text-[#fbfaf6] hover:bg-black"
+              className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-[4px] bg-[#1d2321] px-3.5 font-label text-sm font-semibold text-[#fbfaf6] hover:bg-black"
             >
               Open case study
               <kbd className="hidden rounded-[3px] border border-white/25 px-1 font-sans text-[10px] font-medium text-white/70 pointer-fine:inline">Enter</kbd>
@@ -133,7 +146,7 @@ function StopCard({ stop, visible }: { stop: Stop; visible: boolean }) {
                   tabIndex={visible ? 0 : -1}
                   target={l.href.startsWith("http") ? "_blank" : undefined}
                   rel={l.href.startsWith("http") ? "noreferrer" : undefined}
-                  className="rounded-[4px] border border-[#1d2321]/20 bg-white px-3 py-1.5 font-label text-sm font-semibold text-[#1d2321] hover:border-[#1d2321]/50"
+                  className="inline-flex min-h-11 items-center rounded-[4px] border border-[#1d2321]/20 bg-white px-3.5 font-label text-sm font-semibold text-[#1d2321] hover:border-[#1d2321]/50"
                 >
                   {l.label}
                 </a>
@@ -215,7 +228,7 @@ export default function DriveGame({ world }: { world: WorldData }) {
   }
 
   return (
-    <main className="fixed inset-0 overflow-hidden bg-[#e7ecdf] text-[#1d2321] select-none">
+    <main className="fixed inset-0 overflow-hidden bg-[#e7ecdf] text-[#1d2321] select-none [-webkit-tap-highlight-color:transparent] [&_:is(a,button):focus-visible]:outline-[#1d2321] [&_:is(a,button)]:touch-manipulation">
       <h1 className="sr-only">Louis Zhang: drive around the portfolio</h1>
       {mode === "drive" && (
         <DriveScene world={world} onReady={() => setReady(true)} onLost={() => setLost(true)} />
@@ -225,8 +238,9 @@ export default function DriveGame({ world }: { world: WorldData }) {
       {/* top bar */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between gap-3 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] sm:px-5 sm:pt-4">
         <div className={`${panel} pointer-events-auto flex items-center gap-3 px-3`}>
-          <Link href="/" className="inline-flex min-h-11 items-center font-label text-sm font-semibold text-[#1d2321]/70 hover:text-[#1d2321]">
-            ← Portfolio
+          <Link href="/" className="inline-flex min-h-11 items-center gap-1.5 font-label text-sm font-semibold text-[#3d4441] hover:text-[#1d2321]">
+            <Icon d={ARROW_LEFT} />
+            Portfolio
           </Link>
           <span className="hidden h-4 w-px bg-[#1d2321]/15 sm:block" aria-hidden />
           <span className="hidden font-label text-sm font-bold sm:inline">Louis Zhang</span>
@@ -270,15 +284,14 @@ export default function DriveGame({ world }: { world: WorldData }) {
         aria-hidden={!showWelcome}
       >
         <div className={`${panel} ${showWelcome ? "pointer-events-auto" : ""} w-full max-w-[440px] bg-[#fbfaf6] p-5 sm:p-6`} role="dialog" aria-label="Welcome">
-          <p className="font-label text-[11px] font-semibold uppercase tracking-[0.14em] text-[#5b625e]">Interactive portfolio</p>
-          <h2 className="mt-1 font-label text-[1.7rem] font-bold leading-tight text-[#1d2321]">Louis Zhang</h2>
+          <h2 className="font-label text-[1.7rem] font-bold leading-tight text-[#1d2321]">Louis Zhang</h2>
           <p className="mt-0.5 text-[15px] text-[#3d4441]">Mechanical engineering · Polytechnique Montréal</p>
           <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[#e4572e]">
             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#e4572e]" />
             Open to 2027 internships
           </p>
 
-          <p className="mt-4 text-sm leading-relaxed text-[#3d4441]">
+          <p className="mt-4 text-sm leading-relaxed text-pretty text-[#3d4441]">
             Explore my work by car: <b className="font-semibold text-[#1d2321]">{world.stops.length} stops</b> with my projects, internships at Tesla, Lockheed Martin
             and the City of Montréal, hackathon wins and community roles. Pull up to one to see it.
           </p>
@@ -290,6 +303,8 @@ export default function DriveGame({ world }: { world: WorldData }) {
               [["Enter"], "Open a stop"],
               [["Shift"], "Boost"],
               [["M"], "Map"],
+              [["Space"], "Drift"],
+              [["R"], "Reset car"],
             ].map(([keys, label]) => (
               <div key={label as string} className="flex items-center gap-2">
                 <dt className="flex gap-0.5">
@@ -336,7 +351,7 @@ export default function DriveGame({ world }: { world: WorldData }) {
         {/* phones: left of the minimap, wrapping if long */}
         <p
           key={district ?? "none"}
-          className={`max-w-[55%] font-label text-[13px] font-semibold uppercase leading-snug tracking-[0.18em] sm:max-w-none text-[#1d2321] transition-opacity duration-300 [text-shadow:0_1px_0_#fbfaf6,0_0_12px_rgba(251,250,246,0.9)] ${district && !showWelcome && !mapOpen ? "animate-[drive-area_500ms_ease-out] opacity-100" : "opacity-0"}`}
+          className={`${panel} max-w-[55%] px-3 py-1.5 font-label text-[12px] font-semibold uppercase leading-snug tracking-[0.16em] sm:max-w-none text-[#1d2321] transition-opacity duration-300 ${district && !showWelcome && !mapOpen ? "animate-[drive-area_500ms_ease-out] opacity-100" : "opacity-0"}`}
         >
           {district ?? ""}
         </p>
@@ -361,8 +376,8 @@ export default function DriveGame({ world }: { world: WorldData }) {
                 Thanks for driving by. The mailbox in the south-west has my email, LinkedIn and GitHub.
               </p>
             </div>
-            <button type="button" onClick={() => setDoneDismissed(true)} className="-mr-1 px-1 text-sm text-[#5b625e] hover:text-[#1d2321]" aria-label="Dismiss">
-              ✕
+            <button type="button" onClick={() => setDoneDismissed(true)} className="-my-2 -mr-2 grid h-11 w-11 shrink-0 place-items-center rounded-[4px] text-[#5b625e] hover:bg-[#1d2321]/5 hover:text-[#1d2321]" aria-label="Dismiss">
+              <Icon d={CLOSE} />
             </button>
           </div>
         </div>
@@ -375,7 +390,7 @@ export default function DriveGame({ world }: { world: WorldData }) {
 
       {/* controls hint */}
       <div
-        className={`pointer-events-none absolute bottom-0 left-0 z-20 hidden px-5 pb-6 transition-opacity duration-700 pointer-fine:block ${nearby || showWelcome ? "opacity-0" : moved ? "opacity-60" : "opacity-100"}`}
+        className={`pointer-events-none absolute bottom-0 left-0 z-20 hidden px-5 pb-6 transition-opacity duration-700 pointer-fine:block ${nearby || showWelcome || moved ? "opacity-0" : "opacity-100"}`}
       >
         <p className={`${panel} px-3 py-2 font-label text-xs text-[#5b625e]`}>
           <b className="text-[#1d2321]">WASD</b> or <b className="text-[#1d2321]">arrows</b> to drive · <b className="text-[#1d2321]">Shift</b> boost ·{" "}
@@ -395,7 +410,7 @@ export default function DriveGame({ world }: { world: WorldData }) {
       >
         <div className="w-48 text-center">
           <p className="font-label text-lg font-bold">Louis Zhang</p>
-          <p className="mt-1 text-xs text-[#5b625e]">Warming up the engine</p>
+          <p className="mt-1 text-xs text-[#5b625e]">Warming up the engine…</p>
           <div className="mt-4 h-px w-full overflow-hidden bg-[#1d2321]/15">
             <div className="h-full w-1/3 animate-[drive-load_1.1s_ease-in-out_infinite] bg-[#1d2321]" />
           </div>
