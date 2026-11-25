@@ -89,22 +89,22 @@ function LinkIcon({ kind }: { kind?: string }) {
 }
 
 const BTN =
-  "group inline-flex min-h-[44px] items-center gap-2 rounded-full px-5 text-[15px] font-medium transition-[transform,background-color,border-color,color] duration-200 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
-const BTN_PRIMARY = `${BTN} bg-[var(--text)] text-[var(--bg)] hover:bg-black`;
-const BTN_GHOST = `${BTN} border border-[var(--border)] text-[var(--text)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-light)]`;
+  "group inline-flex min-h-[44px] items-center gap-2 rounded-[var(--radius-md)] border px-5 text-[15px] font-medium transition-[transform,background-color,border-color,box-shadow] duration-200 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0";
+const BTN_PRIMARY = `${BTN} border-black/30 bg-[var(--text)] bg-linear-to-b from-white/12 to-transparent text-[var(--bg)] shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_2px_5px_rgba(0,0,0,.15)] hover:bg-black`;
+const BTN_GHOST = `${BTN} border-[var(--border-hover)] bg-[rgba(var(--bg-light-rgb),.88)] bg-linear-to-b from-white/90 to-transparent text-[var(--text)] shadow-[inset_0_1px_0_rgba(255,255,255,.85),0_2px_5px_rgba(0,0,0,.06)] hover:border-[var(--text-tertiary)] hover:bg-[var(--bg)]`;
 
 function TopBar({ title }: { title: string }) {
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border)] bg-[rgba(var(--bg-rgb),.82)] backdrop-blur-xl backdrop-saturate-150">
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border)] bg-[rgba(var(--bg-rgb),.95)] bg-linear-to-b from-white/45 to-transparent shadow-[0_1px_4px_rgba(0,0,0,.04)] backdrop-blur-xl backdrop-saturate-150">
       <div className="mx-auto grid h-12 max-w-[1480px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-5 md:px-10 xl:px-16">
         <Link
           href="/#chapter-projects"
           className="group inline-flex min-h-[44px] items-center gap-2 justify-self-start whitespace-nowrap text-[13px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
         >
-          <ArrowLeft aria-hidden className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
+          <ArrowLeft aria-hidden className="h-4 w-4 transition-transform duration-200 motion-safe:group-hover:-translate-x-0.5" />
           All projects
         </Link>
-        <Link href="/" className="wide whitespace-nowrap text-[15px] tracking-tight text-[var(--text)]">
+        <Link href="/" className="wide inline-flex min-h-[44px] items-center whitespace-nowrap text-[15px] tracking-tight text-[var(--text)]">
           Louis Zhang
         </Link>
         <span className="hidden max-w-[220px] truncate justify-self-end text-[13px] text-[var(--text-tertiary)] md:block">{title}</span>
@@ -143,7 +143,7 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
             <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 ? BTN_PRIMARY : BTN_GHOST}>
               <LinkIcon kind={link.kind} />
               {link.label}
-              <ArrowUpRight aria-hidden className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <ArrowUpRight aria-hidden className="h-3.5 w-3.5 transition-transform duration-200 motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5" />
               <span className="sr-only">(opens in a new tab)</span>
             </a>
           ))}
@@ -187,7 +187,7 @@ function Gallery({ item, src }: { item: PortfolioItem; src: string[] }) {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">{pages ? "Portfolio pages" : "Gallery"}</h2>
           {pages && item.documents[0] && (
-            <a href={item.documents[0].href} target="_blank" rel="noopener noreferrer" className="link text-[15px] font-medium">
+            <a href={item.documents[0].href} target="_blank" rel="noopener noreferrer" className={BTN_GHOST}>
               Full PDF
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
