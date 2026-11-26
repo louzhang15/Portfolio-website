@@ -35,6 +35,9 @@ const thumbnailById: Record<string, string> = {
   "P-5": "/media/nursie/dashboard.png",
 };
 
+/** A real photo of the project, when one exists (case study pages lead with it). */
+export const photoFor = (id: string): string | undefined => thumbnailById[id];
+
 /**
  * Wide screenshots shown as a region instead of a centre crop: x, y = top-left as a fraction of the image,
  * w = fraction of the image width that fills the frame. Nursie: rooms 104-105 and the live fall alert.

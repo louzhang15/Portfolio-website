@@ -12,6 +12,8 @@ export type Beat = {
   body: string;
   tools?: string[];
   note?: string;
+  /** a row of real company logos, read faster than a sentence of names */
+  logos?: boolean;
   status?: string;
   actions?: ReactNode;
   pad?: number;
@@ -66,6 +68,35 @@ export function OpenTo({ text = AVAILABILITY, className = "" }: { text?: string;
   );
 }
 
+/** Internships as their real logos. Each logo carries its own ground (Tesla red, Lockheed navy, Montréal red), so it fills its tile. */
+export const INTERNSHIPS = [
+  { name: "Tesla", src: "/logo/tesla.jpg", slug: "tesla", bg: "#e82126" },
+  { name: "Lockheed Martin", src: "/logo/Lockheed.webp", slug: "lockheed-martin", bg: "#122446" },
+  { name: "City of Montréal", src: "/logo/city-of-montreal.gif", slug: "city-of-montreal", bg: "#ff0000" },
+];
+
+export function InternLogos({ className = "" }: { className?: string }) {
+  return (
+    <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 ${className}`}>
+      <span className="text-sm text-[var(--text-tertiary)]">Interned at</span>
+      <ul className="flex items-center gap-2.5">
+        {INTERNSHIPS.map((c) => (
+          <li key={c.slug}>
+            <a
+              href={`/portfolio/${c.slug}`}
+              title={c.name}
+              style={{ background: c.bg }}
+              className="block h-11 w-[66px] overflow-hidden rounded-[8px] shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_8px_16px_-10px_rgba(0,0,0,0.45)] transition-transform duration-200 ease-out hover:-translate-y-0.5"
+            >
+              <img src={c.src} alt={c.name} width={66} height={44} decoding="async" className="h-full w-full object-contain" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function BeatCopy({ progress, beat, hero }: { progress: MotionValue<number>; beat: Beat; hero?: boolean }) {
   const pad = beat.pad ?? 0.03;
   const range = [Math.max(0, beat.start - pad), beat.start, beat.end, Math.min(1, beat.end + pad)];
@@ -97,6 +128,7 @@ export function BeatCopy({ progress, beat, hero }: { progress: MotionValue<numbe
           ))}
         </div>
       )}
+      {beat.logos && <InternLogos className="phone-tall-only mt-5 sm:mt-6" />}
       {beat.note && <p className="phone-tall-only mt-3 max-w-[34rem] sm:mt-4 text-sm text-[var(--text-tertiary)] 2xl:max-w-[40rem] 2xl:text-base">{beat.note}</p>}
       {beat.status && <OpenTo text={beat.status} className="mt-3 sm:mt-4" />}
       {beat.actions && <div className="mt-5 flex flex-wrap gap-3 sm:mt-7">{beat.actions}</div>}

@@ -29,7 +29,8 @@ const beats = withPads([
     end: 0.37,
     title: "Louis Zhang",
     body: "Mechanical Engineering Student at Polytechnique Montréal. I design hardware and write the software that runs on it.",
-    note: "Interned at Tesla, Lockheed Martin and the City of Montréal. Hackathon winner at HackHarvard 2026, ConUHacks X and RoboHacks 2025.",
+    logos: true,
+    note: "Hackathon winner at HackHarvard 2026, ConUHacks X and RoboHacks 2025.",
     status: AVAILABILITY,
     actions: (
       <>
