@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Award } from "lucide-react";
 
 import { ALSO_COMPETED, COMMUNITY, FOCUS, FRAMING, SCHOLARSHIPS, WINS, allProjects, type Recognition } from "./projectData";
 
@@ -36,54 +35,57 @@ function WinImage({ slug, alt }: { slug: string; alt: string }) {
 }
 
 /**
- * One entry, read like a profile: a large logo, the role in bold, the organisation, the date (or amount),
- * one sentence. The whole entry links when there is a case study.
+ * One entry as a picture card, like the wins: the 16:10 card from /game, then the role, organisation,
+ * date (or amount) and one sentence. The whole card links when there is a case study.
  */
-function Entry({ r, money }: { r: Recognition; money?: boolean }) {
+function RecordCard({ r, money }: { r: Recognition; money?: boolean }) {
   const body = (
     <>
-      <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-[var(--border-light)] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:h-[72px] sm:w-[72px]">
-        {r.logo ? (
-          <img src={r.logo} alt="" width={72} height={72} loading="lazy" decoding="async" className="h-full w-full object-contain p-2" />
+      <span className="relative block aspect-[16/10] overflow-hidden rounded-[18px] border border-[var(--border-light)] bg-white shadow-[0_24px_48px_-30px_rgba(0,0,0,0.35)]">
+        {r.image ? (
+          <img
+            src={r.image}
+            alt={r.org}
+            width={640}
+            height={400}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.03]"
+          />
         ) : (
-          <span className="flex h-full w-full items-center justify-center bg-[#1d4f91]">
-            <Award aria-hidden className="h-7 w-7 text-white" strokeWidth={1.7} />
+          r.logo && <img src={r.logo} alt={r.org} loading="lazy" decoding="async" className="h-full w-full object-contain p-10" />
+        )}
+      </span>
+      <span className="mt-5 flex items-baseline justify-between gap-4">
+        <span className="text-sm text-[var(--text-on-light-secondary)]">{r.org}</span>
+        {r.meta && (
+          <span className={money ? "shrink-0 whitespace-nowrap text-lg font-semibold tabular-nums text-[var(--text-on-light)]" : "shrink-0 whitespace-nowrap font-mono text-xs tabular-nums text-[var(--text-on-light-secondary)]"}>
+            {r.meta}
           </span>
         )}
       </span>
-      <span className="min-w-0 flex-1">
-        <span className="flex items-start justify-between gap-4">
-          <span className="min-w-0 text-[17px] font-semibold leading-snug text-[var(--text-on-light)] transition-colors group-hover:text-[var(--accent-on-light)]">
-            {r.title}
-            {r.href && (
-              <span aria-hidden className="ml-1.5 inline-block text-[var(--accent-on-light)] transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
-            )}
+      <h4 className="mt-2 text-[1.35rem] leading-[1.15] text-[var(--text-on-light)] transition-colors group-hover:text-[var(--accent-on-light)]">
+        {r.title}
+        {r.href && (
+          <span aria-hidden className="ml-1.5 inline-block text-[var(--accent-on-light)] transition-transform duration-300 group-hover:translate-x-1">
+            →
           </span>
-          {r.meta && (
-            <span className={money ? "shrink-0 whitespace-nowrap text-[17px] font-semibold tabular-nums text-[var(--text-on-light)]" : "shrink-0 whitespace-nowrap pt-1 font-mono text-xs tabular-nums text-[var(--text-on-light-secondary)]"}>
-              {r.meta}
-            </span>
-          )}
-        </span>
-        <span className="mt-0.5 block text-[15px] text-[var(--text-on-light)] opacity-80">{r.org}</span>
-        {r.detail && <span className="mt-2 block text-sm leading-relaxed text-[var(--text-on-light-secondary)]">{r.detail}</span>}
-      </span>
+        )}
+      </h4>
+      {r.detail && <span className="mt-2 block text-[15px] leading-relaxed text-[var(--text-on-light-secondary)]">{r.detail}</span>}
     </>
   );
-  const cls = "group flex items-start gap-4 px-5 py-5 sm:gap-5 sm:px-6";
-  return <li>{r.href ? <Link href={r.href} className={`${cls} transition-colors hover:bg-[var(--surface-light)]`}>{body}</Link> : <div className={cls}>{body}</div>}</li>;
+  return <li>{r.href ? <Link href={r.href} className="group flex h-full flex-col">{body}</Link> : <div className="group flex h-full flex-col">{body}</div>}</li>;
 }
 
-/** a titled panel of entries, dividers inset past the logo like a profile page */
-function Panel({ title, items, money }: { title: string; items: Recognition[]; money?: boolean }) {
+/** a titled grid of picture cards */
+function Panel({ title, items, money, cols }: { title: string; items: Recognition[]; money?: boolean; cols: string }) {
   return (
-    <div>
+    <div className="mt-24">
       <h3 className="text-lg text-[var(--text-on-light)]">{title}</h3>
-      <ul className="mt-4 overflow-hidden rounded-[18px] border border-[var(--border-light)] bg-white shadow-[0_18px_40px_-30px_rgba(0,0,0,0.35)] [&>li+li]:border-t [&>li+li]:border-[var(--border-light)]">
+      <ul className={`mt-5 grid gap-x-6 gap-y-12 lg:gap-x-8 ${cols}`}>
         {items.map((r) => (
-          <Entry key={r.title + r.org} r={r} money={money} />
+          <RecordCard key={r.title + r.org} r={r} money={money} />
         ))}
       </ul>
     </div>
@@ -187,12 +189,9 @@ export default function WinsChapter({ id }: { id: string }) {
           </ul>
         </div>
 
-        {/* the rest of the record: community work on the left, scholarships on the right */}
-        <div className="mt-24 grid gap-16 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-20">
-          <Panel title="Beyond the hackathons" items={COMMUNITY} />
-
-          <Panel title="Scholarships" items={SCHOLARSHIPS} money />
-        </div>
+        {/* the rest of the record, as picture cards like the wins */}
+        <Panel title="Beyond the hackathons" items={COMMUNITY} cols="sm:grid-cols-2 lg:grid-cols-3" />
+        <Panel title="Scholarships" items={SCHOLARSHIPS} money cols="sm:grid-cols-2 lg:grid-cols-3" />
       </div>
     </section>
   );

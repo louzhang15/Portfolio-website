@@ -148,6 +148,8 @@ export type Recognition = {
   /** one short sentence on the role */
   detail?: string;
   logo?: string;
+  /** 16:10 picture card, shared with the /game screens */
+  image?: string;
   href?: string;
 };
 
@@ -159,6 +161,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Nov. 2026",
     detail: "A hackathon for CEGEP and high school students.",
     logo: "/logo/hackconcordia.png",
+    image: "/media/drive/hack-decouverte.webp",
   },
   {
     title: "Guest speaker",
@@ -166,6 +169,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Oct. 2026",
     detail: "A talk on landing tech internships, to 100 students.",
     logo: "/logo/scs-concordia.png",
+    image: "/media/drive/scs-concordia.webp",
   },
   {
     title: "Hackathon judge",
@@ -173,6 +177,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "May 2026",
     detail: "Evaluated student teams' projects and demos.",
     logo: "/logo/mpc-hacks.png",
+    image: "/media/drive/mpc-hacks.webp",
   },
   {
     title: "Apprentice, Accent on the Community",
@@ -180,6 +185,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Jan.–Apr. 2026",
     detail: "Pro-bono consulting program. Our student team built a CRM outreach tool for a community of agriculture startups.",
     logo: "/logo/accenture-mark.png",
+    image: "/media/drive/crm-outreach-tool.webp",
     href: "/portfolio/crm-outreach-tool",
   },
   {
@@ -188,6 +194,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Jan.–Apr. 2026",
     detail: "I plan and run the chapter's events for students.",
     logo: "/logo/gdg.png",
+    image: "/media/drive/gdg.webp",
   },
 ];
 
@@ -198,11 +205,13 @@ export const SCHOLARSHIPS: Recognition[] = [
     meta: "$20,000",
     detail: "For students in engineering and other priority fields.",
     logo: "/logo/quebec-mark.png",
+    image: "/media/drive/perspective-quebec.webp",
   },
   {
     title: "Lina & Jean-Guy Gaudreault Perseverance Scholarship",
     org: "Polytechnique Montréal",
     meta: "$2,500",
     logo: "/logo/polytechnique-mark.png",
+    image: "/media/drive/scholarship.webp",
   },
 ];
