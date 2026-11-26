@@ -88,7 +88,7 @@ const mediaById: Record<
         kind: "demo",
       },
     ],
-    metrics: ["3.1m deployable tube", "50+ interfaces", "12% mass reduction", "2.5x safety factor"],
+    metrics: ["3.1m deployed design length", "42% less volume when stowed", "25.5N factored rail load"],
     accent: "#1b6fff",
     emoji: "Moon",
   },

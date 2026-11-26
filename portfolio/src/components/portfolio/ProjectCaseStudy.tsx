@@ -6,6 +6,7 @@ import { Fragment } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
 import { CONTACT, OpenTo } from "@/components/prototype/stage";
 import { FOCUS, photoFor } from "@/components/prototype/projectData";
+import LunarEngineering from "./LunarEngineering";
 import "@/components/prototype/prototype.css";
 
 /**
@@ -114,6 +115,7 @@ function TopBar({ title }: { title: string }) {
 }
 
 function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
+  const isLunar = item.slug === "lunar-transport-system";
   // the subtitle often carries the date already; say it once
   const meta = [item.displaySector, item.date && !item.subtitle.includes(item.date) ? item.date : ""].filter(Boolean).join(" · ");
   const words = item.title.split(" ");
@@ -137,10 +139,11 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
         ))}
       </h1>
       <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
-      {(item.links.length > 0 || item.documents.length > 0) && (
+      {(isLunar || item.links.length > 0 || item.documents.length > 0) && (
         <div className="mt-8 flex flex-wrap gap-3">
+          {isLunar && <a href="#lunar-engineering" className={BTN_PRIMARY}>See the engineering work</a>}
           {item.links.map((link, i) => (
-            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 ? BTN_PRIMARY : BTN_GHOST}>
+            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={!isLunar && i === 0 ? BTN_PRIMARY : BTN_GHOST}>
               <LinkIcon kind={link.kind} />
               {link.label}
               <ArrowUpRight aria-hidden className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -324,6 +327,8 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
       )}
 
       <Specs item={item} />
+
+      {item.slug === "lunar-transport-system" && <LunarEngineering />}
 
       <section className={`${WRAP} mt-20 grid gap-12 md:mt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16`}>
         <aside className="lg:sticky lg:top-24 lg:self-start">
