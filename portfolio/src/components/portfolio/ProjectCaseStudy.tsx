@@ -295,6 +295,7 @@ function Footer() {
 
 // ============================================================================
 export default function ProjectCaseStudy({ item, related }: { item: PortfolioItem; related: PortfolioItem[] }) {
+  const isLunar = item.slug === "lunar-transport-system";
   // a real photo leads when there is one; a page of the PDF deck stays in the gallery
   const heroSrc = photoFor(item.id) ?? item.image ?? item.gallery[0] ?? null;
   const heroIsPage = heroSrc?.includes("/portfolio-pages/full/") ?? false;
@@ -328,7 +329,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
 
       <Specs item={item} />
 
-      {item.slug === "lunar-transport-system" && <LunarEngineering />}
+      {isLunar && <LunarEngineering />}
 
       <section className={`${WRAP} mt-20 grid gap-12 md:mt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16`}>
         <aside className="lg:sticky lg:top-24 lg:self-start">
@@ -366,7 +367,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
         <Details text={item.details} />
       </section>
 
-      <Gallery item={item} src={gallery} />
+      {!isLunar && <Gallery item={item} src={gallery} />}
       <Related item={item} related={related} />
       <Footer />
     </main>
