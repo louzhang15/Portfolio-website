@@ -98,10 +98,9 @@ function ChapterNav() {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-40 border-b backdrop-blur-xl backdrop-saturate-150 transition-colors duration-300"
-      // solid frosted bar: a fade-to-transparent let page text show through behind the nav links
+      className="chapter-glass-nav fixed inset-x-0 top-0 z-40 border-b transition-colors duration-300"
       style={{
-        background: light ? "rgba(var(--bg-light-rgb),.82)" : "rgba(var(--bg-rgb),.8)",
+        backgroundColor: light ? "rgba(var(--bg-light-rgb),.9)" : "rgba(var(--bg-rgb),.88)",
         borderColor: light ? "var(--border-light)" : "var(--border)",
       }}
     >
@@ -113,11 +112,11 @@ function ChapterNav() {
         Skip to projects
       </a>
       {/* quiet typographic bar: wordmark, text links, a hairline under the current chapter; no pills */}
-      <div className="mx-auto grid h-12 max-w-[1480px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-5 md:px-10 xl:px-16">
-        <Link href="/" className="wide justify-self-start whitespace-nowrap text-[15px] tracking-tight" style={{ color: fg }}>
+      <div className="mx-auto grid h-12 max-w-[1480px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:gap-4 sm:px-5 md:px-10 lg:grid-cols-[1fr_auto_1fr] xl:px-16">
+        <Link href="/" className="wide inline-flex min-h-11 items-center justify-self-start whitespace-nowrap text-[15px] tracking-tight max-[359px]:text-[13px]" style={{ color: fg }}>
           Louis Zhang
         </Link>
-        <nav aria-label="Chapters" className="hidden h-full items-stretch md:flex">
+        <nav aria-label="Chapters" className="hidden h-full items-stretch lg:flex">
           {chapters.map((c, i) => {
             const on = i === active;
             // plain anchors: deep-linkable, work without JS; html scroll-behavior keeps the glide
@@ -146,38 +145,35 @@ function ChapterNav() {
           aria-expanded={menu}
           aria-controls="chapter-menu"
           aria-label={`Sections, currently ${current}`}
-          className="flex min-h-[44px] items-center gap-1.5 px-2 text-[13px] md:hidden"
+          className="chapter-glass-trigger flex h-11 w-full min-w-11 max-w-36 items-center justify-center gap-1 justify-self-center px-1.5 text-[13px] lg:hidden"
           style={{ color: menu ? fg : muted }}
         >
-          {current}
-          <svg aria-hidden width="10" height="6" viewBox="0 0 10 6" className="transition-transform duration-200" style={{ transform: menu ? "rotate(180deg)" : undefined }}>
+          <span className="truncate">{current}</span>
+          <svg aria-hidden width="10" height="6" viewBox="0 0 10 6" className="shrink-0 transition-transform duration-200" style={{ transform: menu ? "rotate(180deg)" : undefined }}>
             <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
         {/* step arrows, then contact (recruiters shouldn't have to scroll to the end to reach me). Phones keep the
             arrows; Contact is in the sections menu and at the foot of the page */}
-        <div className="flex items-center gap-3 justify-self-end md:gap-5">
+        <div className="flex items-center gap-1 justify-self-end sm:gap-3 md:gap-5">
           {/* the game is the other way in: always on screen, so nobody has to find it in the footer */}
           <Link
             href="/game"
             aria-label="Play the 3D game, the portfolio as a driving game"
-            className="nav-game group relative inline-flex min-h-[34px] items-center gap-2 overflow-hidden whitespace-nowrap rounded-[9px] px-3 text-[13px] font-semibold shadow-[0_6px_18px_-8px_rgba(212,132,47,0.8)] transition-[transform,box-shadow] duration-300 hover:-translate-y-px hover:shadow-[0_10px_24px_-8px_rgba(212,132,47,0.9)]"
-            style={{ background: "var(--accent)", color: "var(--accent-ink)" }}
+            className="nav-game group relative inline-flex min-h-11 min-w-11 items-center justify-center gap-2 overflow-hidden whitespace-nowrap px-2 text-[13px] font-semibold transition-[background-color,transform] duration-200 hover:-translate-y-px sm:px-3 lg:min-h-[34px]"
           >
-            {/* a light sweep every few seconds draws the eye without moving the layout (off for reduced motion) */}
-            <span aria-hidden className="nav-game-shine pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/45 to-transparent" />
-            <CarFront aria-hidden className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-rotate-6" strokeWidth={2} />
+            <CarFront aria-hidden className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-rotate-6 max-[359px]:hidden" strokeWidth={2} />
             <span className="relative max-sm:hidden">Play the 3D game</span>
             <span className="relative sm:hidden">Play</span>
             <span aria-hidden className="relative -ml-0.5 transition-transform duration-300 group-hover:translate-x-1 max-sm:hidden">
               →
             </span>
           </Link>
-          <StepNav chapters={stepChapters} color={muted} />
+          <StepNav chapters={stepChapters} color={muted} className="chapter-step-controls" />
           <a
             href="#contact"
             aria-current={atContact ? "location" : undefined}
-            className="group whitespace-nowrap text-[13px] font-medium max-md:hidden"
+            className="group whitespace-nowrap text-[13px] font-medium max-lg:hidden"
             style={{ color: fg }}
           >
             <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 group-hover:bg-[length:100%_1px]" style={atContact ? { backgroundSize: "100% 1px" } : undefined}>
@@ -195,7 +191,7 @@ function ChapterNav() {
             id="chapter-menu"
             aria-label="Sections"
             // solid, not frosted: a backdrop-filter nested in the bar's own doesn't blur, so the page showed through
-            className="absolute inset-x-0 top-full border-b shadow-[0_24px_40px_-24px_rgba(0,0,0,0.25)] md:hidden"
+            className="absolute inset-x-0 top-full border-b shadow-[0_24px_40px_-24px_rgba(0,0,0,0.25)] lg:hidden"
             style={{ background: light ? "var(--bg-light)" : "var(--bg)", borderColor: light ? "var(--border-light)" : "var(--border)" }}
           >
             <ul className="px-5 py-2">
@@ -262,7 +258,7 @@ function FooterRecap() {
       </dl>
       <nav aria-label="Back to a chapter" className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[15px]">
         {chapters.map((c) => (
-          <a key={c.id} href={`#${c.id}`} className="text-[var(--text-secondary)] underline-offset-4 transition-colors hover:text-[var(--text)] hover:underline">
+          <a key={c.id} href={`#${c.id}`} className="text-[var(--text-secondary)] underline-offset-4 transition-colors hover:text-[var(--text)] hover:underline max-md:inline-flex max-md:min-h-11 max-md:min-w-11 max-md:items-center">
             {c.label}
           </a>
         ))}
@@ -282,7 +278,7 @@ function ContactFooter() {
           </p>
           <OpenTo className="mt-6" />
           {/* typographic contact: the address itself is the call to action, no button chrome */}
-          <a href={`mailto:${CONTACT.email}`} className="group mt-10 flex w-fit max-w-full items-baseline gap-3 text-[var(--text)]">
+          <a href={`mailto:${CONTACT.email}`} className="group mt-10 flex w-fit max-w-full items-baseline gap-3 text-[var(--text)] max-md:min-h-11 max-md:items-center">
             <span className="wide truncate bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-left-bottom bg-no-repeat pb-1 text-[clamp(1.5rem,3.4vw,2.6rem)] leading-tight transition-[background-size] duration-300 group-hover:bg-[length:100%_2px]">
               {CONTACT.email}
             </span>
@@ -309,7 +305,7 @@ function ContactFooter() {
               </li>
             ))}
             <li className="ml-4">
-              <a href="/game" className="group inline-flex items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]">
+              <a href="/game" className="group inline-flex items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] max-md:min-h-11">
                 Game version
                 <span aria-hidden className="text-[var(--accent-on-light)] transition-transform duration-200 group-hover:translate-x-0.5">
                   →

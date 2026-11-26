@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useMap } from "./devices";
 
@@ -68,27 +69,29 @@ export function OpenTo({ text = AVAILABILITY, className = "" }: { text?: string;
   );
 }
 
-/** Internships as their real logos. Each logo carries its own ground (Tesla red, Lockheed navy, Montréal red), so it fills its tile. */
-export const INTERNSHIPS = [
-  { name: "Tesla", src: "/logo/tesla.jpg", slug: "tesla", bg: "#e82126" },
-  { name: "Lockheed Martin", src: "/logo/Lockheed.webp", slug: "lockheed-martin", bg: "#122446" },
-  { name: "City of Montréal", src: "/logo/city-of-montreal.gif", slug: "city-of-montreal", bg: "#ff0000" },
+const INTERNSHIPS = [
+  { name: "Tesla", src: "/logo/tesla.jpg", slug: "tesla", bg: "#e82126", width: 1200, height: 800, scale: 1.35 },
+  { name: "Lockheed Martin", src: "/logo/Lockheed.webp", slug: "lockheed-martin", bg: "#122446", width: 1200, height: 628, scale: 1.12 },
+  { name: "City of Montréal", src: "/logo/city-of-montreal.gif", slug: "city-of-montreal", bg: "#ff0000", width: 1140, height: 570, scale: 1.2 },
 ];
 
 export function InternLogos({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 ${className}`}>
-      <span className="text-sm text-[var(--text-tertiary)]">Interned at</span>
-      <ul className="flex items-center gap-2.5">
+    <div className={`intro-internships w-full max-w-[26rem] ${className}`}>
+      <p className="mb-1.5 text-xs font-semibold text-[var(--text-secondary)]">Interned at</p>
+      <ul role="list" className="grid grid-cols-3 gap-2">
         {INTERNSHIPS.map((c) => (
           <li key={c.slug}>
             <a
               href={`/portfolio/${c.slug}`}
-              title={c.name}
-              style={{ background: c.bg }}
-              className="block h-11 w-[66px] overflow-hidden rounded-[8px] shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_8px_16px_-10px_rgba(0,0,0,0.45)] transition-transform duration-200 ease-out hover:-translate-y-0.5"
+              className="group flex h-full min-h-11 flex-col overflow-hidden rounded-md border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border-hover)]"
             >
-              <img src={c.src} alt={c.name} width={66} height={44} decoding="async" className="h-full w-full object-contain" />
+              <span className="intro-internship-mark block h-8 overflow-hidden sm:h-12" style={{ background: c.bg }}>
+                <Image src={c.src} alt="" width={c.width} height={c.height} sizes="180px" className="h-full w-full object-contain" style={{ scale: c.scale }} />
+              </span>
+              <span className="flex flex-1 items-center justify-center px-1 py-1 text-center text-xs font-semibold leading-tight text-[var(--text)] group-hover:underline">
+                {c.name}
+              </span>
             </a>
           </li>
         ))}
@@ -111,7 +114,7 @@ export function BeatCopy({ progress, beat, hero }: { progress: MotionValue<numbe
       style={{ opacity, y }}
       aria-hidden={hidden || undefined}
       inert={hidden}
-      className="absolute inset-0 flex flex-col justify-center"
+      className={`absolute inset-0 flex flex-col justify-center ${hero ? "intro-hero-copy" : ""}`}
     >
       {hero ? (
         <HeroName text={beat.title} />
@@ -128,10 +131,10 @@ export function BeatCopy({ progress, beat, hero }: { progress: MotionValue<numbe
           ))}
         </div>
       )}
-      {beat.logos && <InternLogos className="phone-tall-only mt-5 sm:mt-6" />}
+      {beat.logos && <InternLogos className="mt-3 sm:mt-5" />}
       {beat.note && <p className="phone-tall-only mt-3 max-w-[34rem] sm:mt-4 text-sm text-[var(--text-tertiary)] 2xl:max-w-[40rem] 2xl:text-base">{beat.note}</p>}
       {beat.status && <OpenTo text={beat.status} className="mt-3 sm:mt-4" />}
-      {beat.actions && <div className="mt-5 flex flex-wrap gap-3 sm:mt-7">{beat.actions}</div>}
+      {beat.actions && <div className="intro-hero-actions mt-5 flex flex-wrap gap-3 sm:mt-7">{beat.actions}</div>}
     </motion.div>
   );
 }
@@ -187,9 +190,9 @@ export function DeviceStage({
             "radial-gradient(55% 60% at 75% 10%,rgba(var(--accent-rgb),0.09),transparent 70%),radial-gradient(45% 55% at 10% 90%,rgba(96,120,160,0.08),transparent 70%)",
         }}
       />
-      <div className="relative mx-auto grid h-full max-w-[1480px] grid-rows-[minmax(0,1fr)_auto] items-center gap-2 px-6 pb-5 pt-16 md:px-10 xl:px-16 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:grid-rows-1 md:gap-8 md:pb-6">
-        <div className="relative order-2 h-[min(390px,56svh)] md:order-1 md:h-[400px] 2xl:h-[480px]">{copy}</div>
-        <div className="relative order-1 flex h-full min-h-0 items-center justify-center md:order-2 md:-mb-6">
+      <div className="device-stage-layout relative mx-auto grid h-full max-w-[1480px] grid-rows-[minmax(0,1fr)_auto] items-center gap-2 px-6 pb-5 pt-16 md:px-10 xl:px-16 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:grid-rows-1 md:gap-8 md:pb-6">
+        <div className="device-stage-copy relative order-2 h-[min(390px,56svh)] md:order-1 md:h-[400px] 2xl:h-[480px]">{copy}</div>
+        <div className="device-stage-visual relative order-1 flex h-full min-h-0 items-center justify-center md:order-2 md:-mb-6">
           <motion.div
             className="absolute bottom-[12%] h-10 w-72 rounded-[50%] bg-[var(--mat-black)] blur-2xl"
             style={{ opacity: shadow ?? 0.5 }}
@@ -301,8 +304,8 @@ export const useReducedMotionSafe = () =>
 /** Buttons (DESIGN.md §4). */
 export const btn =
   "inline-flex min-h-[44px] items-center gap-2 rounded-full px-5 text-[15px] font-medium transition-[transform,background-color,border-color] duration-200 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]";
-export const btnPrimaryDark = `${btn} bg-[var(--text)] text-[var(--bg)] hover:bg-[var(--surface-light)]`;
-export const btnGhostDark = `${btn} border border-[var(--border)] text-[var(--text)] hover:border-[var(--border-hover)] hover:bg-[var(--surface)]`;
+export const btnPrimaryDark = `${btn} hero-glass-action hero-glass-primary`;
+export const btnGhostDark = `${btn} hero-glass-action hero-glass-secondary`;
 export const btnPrimaryLight = `${btn} bg-[var(--text-on-light)] text-[var(--bg-light)] hover:bg-[var(--mat-graphite)]`;
 export const btnGhostLight = `${btn} border border-[var(--border-light)] text-[var(--text-on-light)] hover:border-[var(--border-light-hover)] hover:bg-[var(--surface-light)]`;
 

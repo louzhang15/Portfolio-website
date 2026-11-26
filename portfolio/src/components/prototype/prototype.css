@@ -148,6 +148,32 @@ body:has(.proto) {
   .proto .sticky .phone-roomy-only { display: none !important; }
 }
 
+/* Keep the company links and primary actions in view when the intro is pinned. */
+@media (max-width: 767px) and (max-height: 600px) and (orientation: portrait) {
+  .proto .sticky .intro-hero-copy { bottom: 3.5rem; }
+  .proto .sticky .intro-hero-actions { margin-top: 0.75rem; }
+  .proto #chapter-intro .device-stage-visual {
+    transform: translateY(-0.75rem) scale(0.78);
+    transform-origin: center top;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .proto #chapter-intro .device-stage-layout {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-rows: minmax(0, 1fr);
+    padding-block: 3.5rem 0.5rem;
+  }
+  .proto #chapter-intro .device-stage-copy { grid-area: 1 / 1; height: 100%; }
+  .proto #chapter-intro .device-stage-visual { grid-area: 1 / 2; margin-bottom: 0; }
+  .proto .intro-hero-copy h1 { font-size: clamp(2rem, 6vw, 3.25rem); }
+  .proto .intro-hero-copy > p,
+  .proto .intro-hero-copy .intro-internships,
+  .proto .intro-hero-copy .intro-hero-actions { margin-top: 0.5rem; }
+  .proto .intro-hero-copy > p { font-size: 0.875rem; line-height: 1.4; }
+  .proto .intro-hero-copy .intro-internship-mark { height: 1.75rem; }
+}
+
 /* Light spec-sheet chapters */
 .proto .light {
   background: var(--bg-light);
@@ -240,13 +266,56 @@ body:has(.proto) {
   .proto .step-nudge svg { animation: none; }
 }
 
-/* top bar "Play the 3D game": a sheen crosses the button every few seconds */
-@keyframes nav-game-shine {
-  0%, 72% { transform: translateX(0) skewX(-12deg); }
-  100% { transform: translateX(420%) skewX(-12deg); }
+.proto .hero-glass-action,
+.proto .chapter-glass-trigger,
+.proto .nav-game {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.35);
 }
-/* three passes, then it rests: a link used on every visit shouldn't keep moving */
-.nav-game-shine { animation: nav-game-shine 5.5s ease-in-out 1.2s 3; }
-@media (prefers-reduced-motion: reduce) {
-  .nav-game-shine { animation: none; display: none; }
+
+.proto .hero-glass-primary {
+  color: var(--bg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 65%) var(--text);
+}
+
+.proto .hero-glass-primary:hover { background-color: #343438; }
+
+.proto .hero-glass-secondary {
+  color: var(--text);
+  background-color: rgba(var(--bg-rgb), 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.proto .hero-glass-secondary:hover {
+  background-color: var(--surface);
+  border-color: var(--border-hover);
+}
+
+.proto .chapter-glass-nav {
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px) saturate(125%);
+}
+
+.proto .chapter-glass-trigger { background-color: rgba(var(--bg-rgb), 0.42); }
+.proto .chapter-glass-trigger[aria-expanded="true"] { background-color: var(--surface); }
+
+.proto .nav-game {
+  color: var(--accent-ink);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 70%) var(--accent);
+}
+
+.proto .nav-game:hover { background-color: var(--accent-hover); }
+
+.proto .chapter-step-controls {
+  border-radius: var(--radius-lg);
+  background-color: rgba(var(--bg-rgb), 0.56);
+  box-shadow: inset 0 0 0 1px var(--border), inset 0 1px rgba(255, 255, 255, 0.65);
+}
+
+.proto .hero-glass-action:focus-visible,
+.proto .chapter-glass-nav :focus-visible { outline-color: var(--accent-on-light); }
+
+@media (max-width: 1023px) {
+  .proto .chapter-step-controls > button { width: 44px; height: 44px; }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 /* Same signal DeviceSkeleton listens to: a DeviceCanvas fires it once it has drawn a frame. */
 const READY = "proto:three-ready";
@@ -36,9 +36,17 @@ const MAX_MS = 9000; // never hold anyone hostage
  * so it is on screen before any JS runs; lifts on the first 3D frame, or right away for the static layouts.
  */
 export default function Loader({ static: isStatic }: { static: boolean }) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [progress, setProgress] = useState(0.06);
   const [status, setStatus] = useState(0);
   const [phase, setPhase] = useState<"loading" | "leaving" | "gone">("loading");
+
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    if (phase !== "loading" || !dialog) return;
+    dialog.showModal();
+    return () => dialog.close();
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "loading") return;
@@ -88,11 +96,15 @@ export default function Loader({ static: isStatic }: { static: boolean }) {
   if (phase === "gone") return null;
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
+    <dialog
+      ref={dialogRef}
       aria-label="Loading Louis Zhang's portfolio"
-      className="proto-loader fixed inset-0 z-[90] flex flex-col items-center justify-center bg-[var(--bg)] px-6 transition-[opacity,transform] duration-[650ms] ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+      inert={phase === "leaving"}
+      onCancel={(event) => {
+        event.preventDefault();
+        setPhase("leaving");
+      }}
+      className="proto-loader fixed inset-0 z-[90] m-0 flex h-full max-h-none w-full max-w-none flex-col items-center justify-center bg-[var(--bg)] px-6 transition-[opacity,transform] duration-[650ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] backdrop:bg-transparent"
       style={phase === "leaving" ? { opacity: 0, transform: "translateY(-2%)", pointerEvents: "none" } : undefined}
     >
       {/* pure CSS so the watch assembles from the very first paint, before any JS has loaded */}
@@ -131,7 +143,7 @@ export default function Loader({ static: isStatic }: { static: boolean }) {
       <p className="mt-6 text-[15px] font-semibold tracking-tight text-[var(--text)]" style={{ fontStretch: "118%" }}>
         Louis Zhang
       </p>
-      <p className="mt-1 h-5 font-mono text-[12px] text-[var(--text-tertiary)]">
+      <p role="status" className="mt-1 h-5 font-mono text-[12px] text-[var(--text-tertiary)]">
         {STATUS[status]}…
       </p>
 
@@ -148,11 +160,12 @@ export default function Loader({ static: isStatic }: { static: boolean }) {
         <style>{".proto-loader{display:none!important}"}</style>
       </noscript>
       <button
+        type="button"
         onClick={() => setPhase("leaving")}
         className="absolute bottom-[max(24px,env(safe-area-inset-bottom))] min-h-[44px] px-4 text-[13px] text-[var(--text-tertiary)] underline-offset-4 transition-colors hover:text-[var(--text)] hover:underline"
       >
         Skip
       </button>
-    </div>
+    </dialog>
   );
 }
