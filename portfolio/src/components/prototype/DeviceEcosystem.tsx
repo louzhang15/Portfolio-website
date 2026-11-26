@@ -22,9 +22,10 @@ const chapters = [
   { label: "Skills", id: "chapter-skills" },
   { label: "Experience", id: "chapter-experience" },
   { label: "Wins", id: "chapter-wins" },
-  { label: "Projects", id: "chapter-projects" },
+  { label: "Hardware", id: "chapter-projects" },
+  { label: "Software", id: "chapter-software" },
 ];
-/** The footer is tracked too (it lights the Contact button), so "Projects" does not stay lit at the end. */
+/** The footer is tracked too (it lights the Contact button), so "Software" does not stay lit at the end. */
 const CONTACT_ID = "contact";
 const tracked = [...chapters.map((c) => c.id), CONTACT_ID];
 /** Everything the step arrows can land on, in page order (module-level, so its identity never changes). */
@@ -341,7 +342,18 @@ export default function DeviceEcosystem() {
       {reduced ? <StaticSkills id="chapter-skills" /> : <PhoneChapter id="chapter-skills" />}
       <ExperienceChapter id="chapter-experience" />
       <WinsChapter id="chapter-wins" />
-      <ProjectsChapter id="chapter-projects" />
+      <ProjectsChapter
+        id="chapter-projects"
+        groups={["Hardware & robotics"]}
+        title="Hardware projects."
+        intro="Built, machined, wired and tested: CAD, FEA, embedded control and fabrication."
+      />
+      <ProjectsChapter
+        id="chapter-software"
+        groups={["Software & AI", "Side projects"]}
+        title="Software projects."
+        intro="AI agents, web apps and tools, each with the design decision behind it."
+      />
       <ContactFooter />
     </main>
   );

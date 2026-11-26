@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
-import { DRAWINGS, FOCUS, FRAMING, GROUPS, allProjects, type ProjectItem } from "./projectData";
+import { DRAWINGS, FOCUS, FRAMING, GROUPS, TRADEOFFS, allProjects, type Group, type ProjectItem } from "./projectData";
 import { btnGhostLight, btnPrimaryLight } from "./stage";
 
 export const FILTERS = ["All", ...GROUPS] as const;
 export type Filter = (typeof FILTERS)[number];
 
-export const filterList = (f: Filter) => (f === "All" ? allProjects : allProjects.filter((p) => p.group === f));
+/** The projects of one filter, inside the chapter's own groups. */
+export const filterList = (f: Filter, groups: readonly Group[] = GROUPS) =>
+  allProjects.filter((p) => (f === "All" ? groups.includes(p.group) : p.group === f));
 
 const isAward = (s: string) => /award|place|best use|prize|winner/i.test(s);
 const awardLabel = (s: string) => s.split("·").map((x) => x.trim()).find(isAward);
@@ -99,10 +101,10 @@ const splitMetric = (m: string) => {
 /** Phone labels, so all four tabs fit a 360px row without scrolling. */
 const SHORT: Record<string, string> = { "Hardware & robotics": "Hardware", "Software & AI": "Software", "Side projects": "Side" };
 
-export function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => void }) {
+export function Filters({ options, value, onChange }: { options: readonly Group[]; value: Filter; onChange: (f: Filter) => void }) {
   return (
     <div className="flex max-w-full gap-0.5 overflow-x-auto rounded-full border border-[var(--border-light)] bg-[var(--surface-light)] p-1 [scrollbar-width:none]">
-      {FILTERS.map((f) => {
+      {(["All", ...options] as Filter[]).map((f) => {
         const on = f === value;
         return (
           <button
@@ -125,6 +127,7 @@ export function Filters({ value, onChange }: { value: Filter; onChange: (f: Filt
 export function Detail({ item }: { item: ProjectItem }) {
   const award = awardLabel(item.subtitle);
   const external = item.links.find((l) => l.kind !== "document");
+  const tradeoff = TRADEOFFS[item.id]?.[0];
   return (
     <div>
       {/* one line: a long award label truncates instead of wrapping and pushing the rail down */}
@@ -139,7 +142,7 @@ export function Detail({ item }: { item: ProjectItem }) {
         {summary(item.details, context(item.subtitle))}
       </p>
       {item.metrics.length > 0 && (
-        <dl className="tall-only mt-4 hidden grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[var(--border-light)] bg-[var(--border-light)] sm:grid">
+        <dl className="tall-only xtall-only mt-4 hidden grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[var(--border-light)] bg-[var(--border-light)] sm:grid">
           {item.metrics.slice(0, 4).map((m, i, shown) => {
             const { value, caption, numeric } = splitMetric(m);
             // an odd last cell spans the row instead of leaving an empty slot
@@ -152,6 +155,12 @@ export function Detail({ item }: { item: ProjectItem }) {
             );
           })}
         </dl>
+      )}
+      {tradeoff && (
+        <p className="tall-only mt-3 hidden max-w-[34rem] border-l-2 border-[var(--accent)] pl-3 text-[14px] leading-[1.5] text-[var(--text-on-light-secondary)] sm:block">
+          <span className="font-semibold text-[var(--text-on-light)]">Tradeoff: </span>
+          {tradeoff.choice} {tradeoff.why}
+        </p>
       )}
       {/* buttons stay on one row: smaller and shorter-labelled on phones */}
       <div className="mt-4 flex flex-nowrap gap-2 sm:mt-5 sm:gap-3 [&>*]:whitespace-nowrap max-sm:[&>*]:px-4 max-sm:[&>*]:text-[14px] max-[360px]:[&>*]:px-3 max-[360px]:[&>*]:text-[13px]">

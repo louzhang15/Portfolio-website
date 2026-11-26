@@ -7,6 +7,7 @@ import type { PortfolioItem } from "@/lib/portfolio";
 import { CONTACT, OpenTo } from "@/components/prototype/stage";
 import { FOCUS, photoFor } from "@/components/prototype/projectData";
 import "@/components/prototype/prototype.css";
+import { CsaDeepDive, Tradeoffs } from "./CaseStudyDeepDive";
 
 /**
  * Case study page in the homepage's "Machined Product" system (portfolio/DESIGN.md): light page, Archivo set wide
@@ -360,6 +361,9 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
         </aside>
         <Details text={item.details} />
       </section>
+
+      <Tradeoffs id={item.id} />
+      {item.id === "P-1" && <CsaDeepDive />}
 
       <Gallery item={item} src={gallery} />
       <Related item={item} related={related} />
