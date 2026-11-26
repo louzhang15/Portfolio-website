@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 const concepts = [
   { name: "Cableway", tradeoff: "Fast and mechanically simple, with difficult dust protection and openings through the airlock." },
   { name: "Rover", tradeoff: "Adaptable on uneven terrain, with more complex mechanisms exposed to lunar dust." },
-  { name: "Telescoping tube", tradeoff: "An enclosed, fixed route reduced dust exposure. Deployment and installation became the main trade-offs.", selected: true },
+  { name: "Telescoping tube", tradeoff: "An enclosed, fixed route offered better protection from lunar dust. Deployment and installation became the main trade-offs.", selected: true },
 ];
 
 function EvidenceImage({ file, width, height, alt, caption, source }: {
@@ -127,7 +127,7 @@ export default function LunarEngineering() {
           />
         }
       >
-        <p>We modeled a 1.50 m rail span as simply supported and placed the loaded wagon at midspan, the position that produces the largest bending moment in this model.</p>
+        <p>We modeled a 1.50 m simply supported rail span and applied the full factored wagon load at midspan, where the model gives the largest bending moment.</p>
         <dl className="grid grid-cols-3 gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--bg-light)] p-3 sm:p-4">
           {[
             ["25.5 N", "Factored load"],
@@ -156,7 +156,7 @@ export default function LunarEngineering() {
         }
       >
         <p>The bench build brought the guide rails, insulation, and wagon into one assembly. In the demonstrations, we checked the transport sequence and checked whether the rails could conduct electricity.</p>
-        <p>The lab demonstrations covered fit, transport, and electrical continuity. Lunar dust, vacuum, and temperature cycling remained environmental tests for a later build.</p>
+        <p>The lab demonstrations covered fit, transport, and electrical continuity. Lunar dust, vacuum, and temperature cycling would require separate environmental tests.</p>
       </EngineeringStep>
     </section>
   );
