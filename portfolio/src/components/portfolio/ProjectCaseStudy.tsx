@@ -126,7 +126,7 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
           // logos come with their own ground (red Tesla, navy Lockheed), so the tile is the logo itself
           <img src={logo} alt={`${item.title} logo`} width={88} height={56} className="h-14 w-[88px] rounded-[var(--radius-md)] border border-[var(--border)] object-cover" />
         )}
-        <p className="text-[15px] text-[var(--text-tertiary)]">{meta}</p>
+        {!isLunar && <p className="text-[15px] text-[var(--text-tertiary)]">{meta}</p>}
       </div>
       <h1 className="mt-4 max-w-[14ch] text-balance text-[clamp(2.75rem,7vw,5.75rem)] text-[var(--text)]">
         {words.map((w, i) => (
@@ -138,12 +138,28 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
           </Fragment>
         ))}
       </h1>
-      <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
+      {isLunar ? (
+        <>
+          <p className="mt-6 max-w-[40ch] text-[clamp(1.25rem,2vw,1.5rem)] leading-[1.4] text-[var(--text)]">
+            A telescoping 3 m tube that carries fresh produce from a lunar greenhouse to a habitat. I led the seven-student team that designed its structure and fitted four other teams’ subsystems into it.
+          </p>
+          <dl className="mt-8 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-4 text-[15px] sm:grid-cols-4">
+            {[["Role", "Team lead, structure and integration"], ["Client", "Canadian Space Agency, LEAP OASIS"], ["School", "Polytechnique Montréal"], ["When", "Jan. to Apr. 2025"]].map(([k, v]) => (
+              <div key={k}>
+                <dt className="text-[var(--text-tertiary)]">{k}</dt>
+                <dd className="mt-0.5 text-[var(--text)]">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </>
+      ) : (
+        <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
+      )}
       {(isLunar || item.links.length > 0 || item.documents.length > 0) && (
         <div className="mt-8 flex flex-wrap gap-3">
           {isLunar && <a href="#lunar-engineering" className={BTN_PRIMARY}>See the engineering work</a>}
-          {item.links.map((link, i) => (
-            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={!isLunar && i === 0 ? BTN_PRIMARY : BTN_GHOST}>
+          {!isLunar && item.links.map((link, i) => (
+            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 ? BTN_PRIMARY : BTN_GHOST}>
               <LinkIcon kind={link.kind} />
               {link.label}
               <ArrowUpRight aria-hidden className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -165,12 +181,12 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
 
 function Specs({ item }: { item: PortfolioItem }) {
   const cells = item.metrics.slice(0, 4).map((m) => {
-    const i = m.search(/\s/);
+    const i = m.indexOf(" ");
     return i > 0 ? { value: m.slice(0, i), caption: m.slice(i + 1) } : { value: m, caption: "" };
   });
   if (!cells.length) return null;
   return (
-    <dl className={`${WRAP} mt-12 grid grid-cols-2 gap-px md:grid-cols-4`}>
+    <dl className={`${WRAP} mt-12 grid grid-cols-2 gap-px ${cells.length === 3 ? "md:grid-cols-3" : "md:grid-cols-4"}`}>
       {cells.map((c) => (
         <div key={c.value + c.caption} className="flex flex-col-reverse justify-end border-t border-[var(--text)] pb-2 pr-4 pt-4">
           <dt className="mt-2 text-[14px] text-[var(--text-tertiary)]">{c.caption}</dt>
@@ -231,7 +247,7 @@ function Related({ item, related }: { item: PortfolioItem; related: PortfolioIte
   return (
     <section className={`${WRAP} py-20 md:py-28`}>
       <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">More in {item.displaySector.toLowerCase()}</h2>
-      <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className={`mt-10 grid gap-6 sm:grid-cols-2 ${related.length >= 3 ? "lg:grid-cols-3" : ""}`}>
         {related.map((rel) => {
           const thumb = rel.image ?? rel.gallery[0];
           return (
@@ -320,7 +336,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
               height={800}
               fetchPriority="high"
               decoding="async"
-              className="aspect-[16/8] w-full object-cover"
+              className="aspect-[4/3] w-full object-cover md:aspect-[16/8]"
               style={{ objectPosition: FOCUS[item.id] }}
             />
           </div>
@@ -329,8 +345,9 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
 
       <Specs item={item} />
 
-      {isLunar && <LunarEngineering />}
+      {isLunar && <LunarEngineering demos={item.links} />}
 
+      {!isLunar && (
       <section className={`${WRAP} mt-20 grid gap-12 md:mt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16`}>
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">Overview</h2>
@@ -366,6 +383,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
         </aside>
         <Details text={item.details} />
       </section>
+      )}
 
       {!isLunar && <Gallery item={item} src={gallery} />}
       <Related item={item} related={related} />

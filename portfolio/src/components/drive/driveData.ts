@@ -4,7 +4,7 @@
  * north is -z, the camera looks from the south-east.
  */
 import { activeProjects, internships } from "@/lib/portfolio";
-import { WINS } from "@/components/prototype/projectData";
+import { photoFor, WINS } from "@/components/prototype/projectData";
 import { GAME_CONTACT, GAME_INTERNSHIPS } from "@/data/gameContact";
 
 export type StopKind = "internship" | "project" | "win" | "community" | "contact";
@@ -27,6 +27,8 @@ export type Stop = {
   group: string;
   /** company logo for internship offices, or the card shown on a community stop's screen (same-origin image) */
   logo: string | null;
+  /** Evidence photo for the project promoted in the map and list. */
+  featureImage?: string;
   x: number;
   z: number;
 };
@@ -104,17 +106,19 @@ export function buildWorld(): WorldData {
     items.forEach((p, i) => {
       const off = cluster.spread[i % cluster.spread.length];
       const ring = Math.floor(i / cluster.spread.length);
+      const lunar = p.id === "P-1";
       stops.push({
         id: p.slug,
         kind: "project",
-        kicker: sector,
+        kicker: lunar ? "CSA LEAP OASIS · Team C1" : sector,
         title: p.title,
-        line: p.subtitle,
+        line: lunar ? "Structural design and integration for a telescoping tube with a rail-guided wagon to move produce on the Moon." : p.subtitle,
         href: `/portfolio/${p.slug}`,
         links: [],
         accent: p.accent,
         group: sector,
         logo: null,
+        featureImage: lunar ? photoFor(p.id) : undefined,
         x: cluster.x + off[0] * (1 + ring * 0.6),
         z: cluster.z + off[1] * (1 + ring * 0.6),
       });

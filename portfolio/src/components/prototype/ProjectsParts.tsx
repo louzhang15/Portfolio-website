@@ -91,7 +91,7 @@ const dropEcho = (text: string, echo: string) => {
 const splitMetric = (m: string) => {
   const ordinal = m.match(/^(\d+(?:st|nd|rd|th) place),?\s*(.*)$/i);
   if (ordinal) return { value: ordinal[1], caption: ordinal[2], numeric: true };
-  const i = m.search(/\s/);
+  const i = m.indexOf(" ");
   if (i > 0 && /\d/.test(m.slice(0, i))) return { value: m.slice(0, i), caption: m.slice(i + 1), numeric: true };
   return { value: m, caption: "", numeric: false };
 };

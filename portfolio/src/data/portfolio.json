@@ -76,23 +76,20 @@
     {
       "id": "P-1",
       "title": "Lunar Transport System",
-      "subtitle": "PM & Systems Integrator · CSA LEAP · Jan.–May 2025 · Polytechnique Montréal",
+      "subtitle": "Team Lead, Structure & Systems Integration · CSA LEAP OASIS · Jan.–Apr. 2025 · Polytechnique Montréal",
       "sector": "Aero Atoll",
       "status": "active",
       "emoji": "🌕",
       "skills": [
-        "CATIA V6",
-        "Fusion 360",
-        "GD&T",
-        "MS Project",
-        "Cold Welding",
+        "CATIA V5",
+        "Mechanical CAD",
+        "Team Leadership",
+        "Structural Design",
         "Systems Integration",
-        "FEA",
-        "Arduino",
-        "Raspberry Pi Pico"
+        "Prototype Verification"
       ],
-      "details": "In this Polytechnique Montréal design project for the CSA LEAP OASIS challenge, our team designed a telescoping tube to move produce between a lunar greenhouse and a habitat. The tube enclosed a rail-guided wagon and had to make room for the insulation, transfer hardware, and airlock connections.\n\nThe final design review reported an occupied volume of 0.65 m³ deployed and 0.38 m³ stowed. The full-system demonstration and rail conductivity test show the lab prototype in operation.",
-      "github": "https://github.com/louzhang15",
+      "details": "This Polytechnique Montréal design project addressed the Canadian Space Agency’s LEAP OASIS challenge. Team C1 worked on the structure and joined the wagon, insulation, transfer hardware, and airlock connections into one transport system. The produce compartment, docking and transfer, propulsion and control, and thermal protection were the responsibility of neighboring teams.",
+      "github": null,
       "demo": null,
       "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBfmEpezBSpneFvCrYKhOLUOseL8Ykp1jo-HSG-ffLWpXFUDPcJaLNQ_yYG5K3rrQojomG93egnxnwooCUeOcPCLWPOTN3DCgnuB1cKbCeyo00IDUBjs5tK3QD_526_Tv0wWlf_J9c26MbyCm2M9Bh0lHMTaYyyp_lR2bOctqYMSHKc0imzdeQ5FArd6MJgX1SS1NDA5WuXGr8-BMg81vmKL76Uzzftusbi3MNmNr5KKskCa3NgMBifjJq1unU1ixty6_658_OlN05p"
     },

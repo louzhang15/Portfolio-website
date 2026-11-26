@@ -134,7 +134,7 @@ function StopCard({ stop, visible }: { stop: Stop; visible: boolean }) {
               tabIndex={visible ? 0 : -1}
               className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-[4px] bg-[#1d2321] px-3.5 font-label text-sm font-semibold text-[#fbfaf6] hover:bg-black"
             >
-              Open case study
+              {stop.featureImage ? "Explore the engineering case study" : "Open case study"}
               <kbd className="hidden rounded-[3px] border border-white/25 px-1 font-sans text-[10px] font-medium text-white/70 pointer-fine:inline">Enter</kbd>
             </Link>
           ) : (
@@ -171,6 +171,8 @@ export default function DriveGame({ world }: { world: WorldData }) {
   const visited = useSyncExternalStore(driveStore.subscribe, driveStore.getVisited, driveStore.getVisited);
   const moved = useSyncExternalStore(driveStore.subscribe, driveStore.getMoved, () => false);
   const nearby = world.stops.find((s) => s.id === nearbyId) ?? null;
+  const featured = world.stops.find((s) => s.featureImage && s.href);
+  const contact = world.stops.find((s) => s.kind === "contact");
   // keep the last card mounted while it fades out
   const [shown, setShown] = useState<Stop | null>(null);
   if (nearby && nearby !== shown) setShown(nearby);
@@ -202,7 +204,8 @@ export default function DriveGame({ world }: { world: WorldData }) {
     if (!showWelcome) return;
     const skip = (e: KeyboardEvent) => {
       if (e.code !== "Enter" && e.code !== "NumpadEnter" && e.code !== "Escape" && e.code !== "Space") return;
-      if (e.target instanceof HTMLElement && e.target.closest("button, a") && e.code !== "Escape") {
+      if (e.target instanceof HTMLElement && e.target.closest("a") && (e.code === "Enter" || e.code === "NumpadEnter")) return;
+      if (e.target instanceof HTMLElement && e.target.closest("button") && e.code !== "Escape") {
         // a focused button handles Enter itself (List view, etc.)
         if (!(e.target as HTMLElement).closest('[aria-label="Welcome"]')) return;
         if ((e.target as HTMLElement).textContent?.includes("Browse")) return;
@@ -286,15 +289,27 @@ export default function DriveGame({ world }: { world: WorldData }) {
         <div className={`${panel} ${showWelcome ? "pointer-events-auto" : ""} w-full max-w-[440px] bg-[#fbfaf6] p-5 sm:p-6`} role="dialog" aria-label="Welcome">
           <h2 className="font-label text-[1.7rem] font-bold leading-tight text-[#1d2321]">Louis Zhang</h2>
           <p className="mt-0.5 text-[15px] text-[#3d4441]">Mechanical engineering · Polytechnique Montréal</p>
-          <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[#e4572e]">
-            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#e4572e]" />
-            Open to 2027 internships
-          </p>
+          {contact && (
+            <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[#a43e21]">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#e4572e]" />
+              {contact.line}
+            </p>
+          )}
 
           <p className="mt-4 text-sm leading-relaxed text-pretty text-[#3d4441]">
             Explore my work by car: <b className="font-semibold text-[#1d2321]">{world.stops.length} stops</b> with my projects, internships at Tesla, Lockheed Martin
             and the City of Montréal, hackathon wins and community roles. Pull up to one to see it.
           </p>
+          {featured?.href && (
+            <Link
+              href={featured.href}
+              tabIndex={showWelcome ? 0 : -1}
+              className="mt-3 flex min-h-11 items-center justify-between gap-3 rounded-[4px] border border-[#1d2321]/15 bg-[#e7ecdf] px-3 font-label text-sm font-bold hover:bg-[#dfe5d7] hover:underline"
+            >
+              {featured.title}
+              <span aria-hidden>↗</span>
+            </Link>
+          )}
 
           {/* controls as keys, not a sentence */}
           <dl className="mt-4 hidden grid-cols-2 gap-x-4 gap-y-2 text-xs text-[#5b625e] pointer-fine:grid">
@@ -371,7 +386,7 @@ export default function DriveGame({ world }: { world: WorldData }) {
         <div className="pointer-events-none absolute inset-x-0 top-[calc(env(safe-area-inset-top)+4.5rem)] z-20 flex justify-center px-4 sm:top-5">
           <div className={`${panel} pointer-events-auto flex max-w-[420px] items-start gap-3 px-4 py-3`} role="status">
             <div className="min-w-0">
-              <p className="font-label text-[11px] font-semibold uppercase tracking-[0.14em] text-[#c9971c]">All {world.stops.length} found</p>
+              <p className="font-label text-[11px] font-semibold uppercase tracking-[0.14em] text-[#705000]">All {world.stops.length} found</p>
               <p className="mt-0.5 text-sm leading-snug text-[#1d2321]">
                 Thanks for driving by. The mailbox in the south-west has my email, LinkedIn and GitHub.
               </p>
@@ -408,7 +423,7 @@ export default function DriveGame({ world }: { world: WorldData }) {
         className={`absolute inset-0 z-30 grid place-items-center bg-[#e7ecdf] transition-opacity duration-500 ${ready ? "pointer-events-none opacity-0" : "opacity-100"}`}
         aria-hidden={ready}
       >
-        <div className="w-48 text-center">
+        <div className={`w-48 text-center ${ready ? "invisible" : ""}`}>
           <p className="font-label text-lg font-bold">Louis Zhang</p>
           <p className="mt-1 text-xs text-[#5b625e]">Warming up the engine…</p>
           <div className="mt-4 h-px w-full overflow-hidden bg-[#1d2321]/15">

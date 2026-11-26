@@ -3,9 +3,11 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import DeviceSkeleton from "./DeviceSkeleton";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRef } from "react";
 import { useMap, type Motion } from "./devices";
-import { AVAILABILITY, BeatCopy, CONTACT, DeviceStage, btnGhostDark, btnPrimaryDark, withPads, useSmoothProgress, holdStops, stopsAttr, type Hold } from "./stage";
+import { LUNAR_PROJECT_HREF } from "./projectData";
+import { AVAILABILITY, BeatCopy, DeviceStage, btnGhostDark, btnPrimaryLight, withPads, useSmoothProgress, holdStops, stopsAttr, type Hold } from "./stage";
 
 const Watch3D = dynamic(() => import("./three/Watch3D"), { ssr: false });
 
@@ -34,11 +36,11 @@ const beats = withPads([
     status: AVAILABILITY,
     actions: (
       <>
-        <a className={btnPrimaryDark} href="#chapter-projects">
+        <Link className={btnPrimaryLight} href={LUNAR_PROJECT_HREF}>
+          Lunar case study
+        </Link>
+        <a className={btnGhostDark} href="#chapter-projects">
           View projects
-        </a>
-        <a className={btnGhostDark} href={`mailto:${CONTACT.email}`}>
-          Email me
         </a>
       </>
     ),

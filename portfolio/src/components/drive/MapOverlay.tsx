@@ -76,6 +76,7 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
     }
   }
 
+  const featured = world.stops.find((s) => s.featureImage && s.href);
   const groups: { title: string; kind: Stop["kind"] }[] = [
     { title: "Internships", kind: "internship" },
     { title: "Projects", kind: "project" },
@@ -113,6 +114,7 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
               const seen = visited.has(s.id);
               return (
                 <g key={s.id} transform={`translate(${x} ${y})`} className="cursor-pointer" onClick={() => jump(s)}>
+                  {s.id === featured?.id && <circle r={5.7} fill="none" stroke={s.accent} strokeWidth={1} />}
                   <circle r={3.2} fill={seen ? s.accent : PALETTE.paper} stroke={s.accent} strokeWidth={1.4} />
                   <title>{s.title}</title>
                 </g>
@@ -137,8 +139,22 @@ export default function MapOverlay({ world, visited, onClose }: { world: WorldDa
             </button>
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
+            {featured?.href && (
+              <section className="mx-1 mt-3 rounded-[5px] border border-[#1d2321]/20 bg-white p-3" aria-label="Featured engineering project">
+                <p className="font-label text-[10px] font-bold uppercase tracking-[0.14em] text-[#5b625e]">{featured.kicker}</p>
+                <h2 className="mt-1 font-label text-base font-bold">{featured.title}</h2>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <button type="button" onClick={() => jump(featured)} className="min-h-11 rounded-[4px] border border-[#1d2321]/20 px-3 font-label text-xs font-bold hover:bg-[#1d2321]/5" aria-label={`Drive to ${featured.title}`}>
+                    Drive here
+                  </button>
+                  <Link href={featured.href} className="inline-flex min-h-11 items-center rounded-[4px] bg-[#1d2321] px-3 font-label text-xs font-bold text-[#fbfaf6] hover:bg-black" aria-label={`Open the ${featured.title} case study`}>
+                    Read case study
+                  </Link>
+                </div>
+              </section>
+            )}
             {groups.map((g) => {
-              const items = world.stops.filter((s) => s.kind === g.kind);
+              const items = world.stops.filter((s) => s.kind === g.kind && s.id !== featured?.id);
               if (!items.length) return null;
               return (
                 <section key={g.kind} className="pt-3">

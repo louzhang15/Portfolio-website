@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import "./prototype.css";
 import DeckChapter from "./DeckChapter";
 import ExperienceChapter from "./ExperienceChapter";
+import LunarChapter from "./LunarChapter";
 import PhoneChapter from "./PhoneChapter";
 import ProjectsChapter from "./ProjectsChapter";
 import { StaticIntro, StaticSkills } from "./StaticDevices";
@@ -18,6 +19,7 @@ import { CONTACT, OpenTo, useWebGL, useReducedMotionSafe } from "./stage";
 /** Each chapter scrolls on its own track; the bar names them by content and shows progress through the current one. */
 const chapters = [
   { label: "Intro", id: "chapter-intro" },
+  { label: "Lunar Transport", id: "chapter-lunar" },
   { label: "Portfolio", id: "chapter-deck" },
   { label: "Skills", id: "chapter-skills" },
   { label: "Experience", id: "chapter-experience" },
@@ -117,7 +119,7 @@ function ChapterNav() {
         <Link href="/" className="wide justify-self-start whitespace-nowrap text-[15px] tracking-tight" style={{ color: fg }}>
           Louis Zhang
         </Link>
-        <nav aria-label="Chapters" className="hidden h-full items-stretch md:flex">
+        <nav aria-label="Chapters" className="hidden h-full items-stretch lg:flex">
           {chapters.map((c, i) => {
             const on = i === active;
             // plain anchors: deep-linkable, work without JS; html scroll-behavior keeps the glide
@@ -146,10 +148,10 @@ function ChapterNav() {
           aria-expanded={menu}
           aria-controls="chapter-menu"
           aria-label={`Sections, currently ${current}`}
-          className="flex min-h-[44px] items-center gap-1.5 px-2 text-[13px] md:hidden"
+          className="flex min-h-[44px] items-center gap-1.5 whitespace-nowrap px-2 text-[13px] lg:hidden"
           style={{ color: menu ? fg : muted }}
         >
-          {current}
+          {current === "Lunar Transport" ? "Lunar" : current}
           <svg aria-hidden width="10" height="6" viewBox="0 0 10 6" className="transition-transform duration-200" style={{ transform: menu ? "rotate(180deg)" : undefined }}>
             <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -177,7 +179,7 @@ function ChapterNav() {
           <a
             href="#contact"
             aria-current={atContact ? "location" : undefined}
-            className="group whitespace-nowrap text-[13px] font-medium max-md:hidden"
+            className="group whitespace-nowrap text-[13px] font-medium max-lg:hidden"
             style={{ color: fg }}
           >
             <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 group-hover:bg-[length:100%_1px]" style={atContact ? { backgroundSize: "100% 1px" } : undefined}>
@@ -195,7 +197,7 @@ function ChapterNav() {
             id="chapter-menu"
             aria-label="Sections"
             // solid, not frosted: a backdrop-filter nested in the bar's own doesn't blur, so the page showed through
-            className="absolute inset-x-0 top-full border-b shadow-[0_24px_40px_-24px_rgba(0,0,0,0.25)] md:hidden"
+            className="absolute inset-x-0 top-full border-b shadow-[0_24px_40px_-24px_rgba(0,0,0,0.25)] lg:hidden"
             style={{ background: light ? "var(--bg-light)" : "var(--bg)", borderColor: light ? "var(--border-light)" : "var(--border)" }}
           >
             <ul className="px-5 py-2">
@@ -337,6 +339,7 @@ export default function DeviceEcosystem() {
       <Loader static={reduced} />
       <ChapterNav />
       {reduced ? <StaticIntro id="chapter-intro" /> : <WatchChapter id="chapter-intro" />}
+      <LunarChapter id="chapter-lunar" />
       <DeckChapter id="chapter-deck" />
       {reduced ? <StaticSkills id="chapter-skills" /> : <PhoneChapter id="chapter-skills" />}
       <ExperienceChapter id="chapter-experience" />

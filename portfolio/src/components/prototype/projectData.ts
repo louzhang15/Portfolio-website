@@ -13,6 +13,9 @@ export type ProjectItem = PortfolioItem & {
   visual?: "lane" | "latex";
 };
 
+export const LUNAR_PROJECT_SLUG = "lunar-transport-system";
+export const LUNAR_PROJECT_HREF = `/portfolio/${LUNAR_PROJECT_SLUG}`;
+
 // Hardware leads: most target roles are hardware, robotics and manufacturing.
 const groupById: Record<string, Group> = {
   "P-1": "Hardware & robotics",
@@ -49,15 +52,13 @@ export const FRAMING: Record<string, { x: number; y: number; w: number }> = {
 /**
  * Focal point (CSS object-position) for photos and renders cropped to the 16/10 frame; anything not listed is centred.
  * Reforestation Robot: a portrait shot whose top half is legs, so the frame sits on the breadboard and dispenser.
- * The square app renders lean up so their title bars stay in frame.
+ * The CRM dashboard is pinned top-left so its sidebar and stats stay in frame.
  */
 export const FOCUS: Record<string, string> = {
   "P-1": "50% 30%",
   "P-3": "50% 62%",
-  "P-9": "50% 35%",
-  "P-11": "50% 20%",
-  "P-12": "50% 15%",
-  "P-13": "50% 40%",
+  "P-9": "0% 0%",
+  "P-11": "50% 50%",
 };
 
 /** Technical drawings: shown whole on white, never cropped like a photo. */
