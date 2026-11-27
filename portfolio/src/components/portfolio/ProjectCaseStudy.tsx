@@ -170,13 +170,6 @@ function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: s
               <span className="sr-only">(opens in a new tab)</span>
             </a>
           ))}
-          {item.documents[0] && (
-            <a href={item.documents[0].href} target="_blank" rel="noopener noreferrer" className={item.links.length ? BTN_GHOST : BTN_PRIMARY}>
-              <FileText aria-hidden className="h-4 w-4" />
-              Open the PDF
-              <span className="sr-only">(opens in a new tab)</span>
-            </a>
-          )}
         </div>
       )}
     </section>

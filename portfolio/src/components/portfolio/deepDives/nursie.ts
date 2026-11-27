@@ -381,7 +381,6 @@ const dive: TechDive = {
         { src: `${D}/dashboard.webp`, caption: "Nurse dashboard: five rooms and one active fall alert", kind: "screenshot", shape: "wide" },
         { src: `${D}/dashboard-alert.webp`, caption: "Room 105 flagged with the fall alert card", kind: "screenshot", shape: "wide" },
         { src: `${D}/build-timeline.webp`, caption: "Commit timeline across the hackathon", kind: "chart", shape: "wide" },
-        { src: `${D}/claimed-pipeline.webp`, caption: "Pipeline as pitched on the portfolio page, for comparison with the code", kind: "document", shape: "wide" },
       ],
     },
   ],

@@ -111,8 +111,8 @@ const mediaById: Record<
     emoji: "CAD",
   },
   "P-3": {
-    image: fullPortfolioPages[6],
-    gallery: [fullPortfolioPages[6]],
+    image: "/media/robohacks/robot-held.jpg",
+    gallery: ["/media/robohacks/robot-held.jpg", "/media/robohacks/robot-top.jpg"],
     documents: [fullPortfolioDocument],
     metrics: ["24 hour build", "5th overall", "Autonomous line following"],
     accent: "#4f9d32",
@@ -131,8 +131,8 @@ const mediaById: Record<
     emoji: "Rescue",
   },
   "P-5": {
-    image: fullPortfolioPages[4],
-    gallery: fullPortfolioPages.slice(4, 6),
+    image: "/media/nursie/dashboard.png",
+    gallery: ["/media/nursie/mmwave-radar.webp", "/media/nursie/door-node.webp", "/media/nursie/vibration-node.webp"],
     documents: [fullPortfolioDocument],
     metrics: ["No cameras", "8.4 cm radar range resolution", "0.3 s fall to alert in test", "Best Use of ElevenLabs"],
     accent: "#7b4fd6",

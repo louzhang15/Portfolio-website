@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
-import { DRAWINGS, FOCUS, FRAMING, GROUPS, TRADEOFFS, allProjects, type Group, type ProjectItem } from "./projectData";
+import { DRAWINGS, FOCUS, FRAMING, GROUPS, HOOKS, TRADEOFFS, allProjects, type Group, type ProjectItem } from "./projectData";
 import { btnGhostLight, btnPrimaryLight } from "./stage";
 
 export const FILTERS = ["All", ...GROUPS] as const;
@@ -139,7 +139,7 @@ export function Detail({ item }: { item: ProjectItem }) {
       <p className="mt-1 text-[15px] text-[var(--text-on-light-secondary)]">{context(item.subtitle)}</p>
       {/* exclusive ranges, so the clamp never depends on utility order: 2 lines on phones, 3 on short windows, 4 on tall */}
       <p className="phone-roomy-only mt-3 line-clamp-2 max-w-[32rem] text-[15px] leading-[1.55] text-[var(--text-on-light-secondary)] [@media(min-width:640px)_and_(max-height:859px)]:line-clamp-3 [@media(min-width:640px)_and_(min-height:860px)]:line-clamp-4">
-        {summary(item.details, context(item.subtitle))}
+        {HOOKS[item.id] ?? summary(item.details, context(item.subtitle))}
       </p>
       {item.metrics.length > 0 && (
         <dl className="tall-only xtall-only mt-4 hidden grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[var(--border-light)] bg-[var(--border-light)] sm:grid">

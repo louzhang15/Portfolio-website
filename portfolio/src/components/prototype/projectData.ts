@@ -234,3 +234,22 @@ export const TRADEOFFS: Record<string, Tradeoff[]> = {
     { choice: "Nothing is stored.", why: "Resumes are processed and returned, so no personal file stays on the server." },
   ],
 };
+
+/**
+ * One or two sentences per project card: what it does and the hardest part, with a number from the sources.
+ * Shown in place of the auto summary on the homepage.
+ */
+export const HOOKS: Record<string, string> = {
+  "P-1": "A 3 m telescopic tube that carries fresh produce from a lunar greenhouse to a habitat. The tube beat a rover and a zipline 251 to 206 and 197, then passed clearance and load tests on a wood and PLA bench model.",
+  "P-5": "Spots a fall in a care-home room with no camera, using mmWave radar and a floor vibration sensor. In testing, the alert reached the nurse's dashboard 0.3 s after the fall.",
+  "P-3": "A robot built in 24 hours from cardboard and bottles that follows a black line and plants seeds. A colour reading stops the motors and turns a folded-paper dispenser.",
+  "P-4": "A $1.50 triage bracelet with no battery: its NFC chip runs on the reader's own field. A SmartTriage dashboard maps every tagged patient.",
+  "P-2": "An axial piston pump modelled part by part in CATIA: 9 pistons with slipper pads, one retaining plate and a spherical nut, in a 21-part exploded drawing.",
+  "P-14": "Warns each home before a wildfire or storm surge reaches it, instead of whole zones. Replays of the Eaton and Palisades fires warned every destroyed home a median of 8.7 hours ahead.",
+  "P-9": "Runs outreach for a community of agriculture startups: Gemini drafts each email, bookings land in a Google Sheet, and it runs on free tiers for about $0 a month.",
+  "P-11": "Interview prep for mechanical engineers built around a J58 engine model you can turn in 3D, with an AI that asks and scores technical questions.",
+  "P-12": "A health assistant split into three services, with a 1.1B TinyLlama model answering behind a Next.js chat that keeps your history.",
+  "P-13": "Asks technical interview questions out loud, transcribes the spoken answer with Whisper, and has GPT-3.5 score it and pick the next question.",
+  "S-1": "A Chrome extension that tracks internship applications through 8 statuses and syncs application and rejection emails from Gmail.",
+  "S-2": "Upload a resume as a PDF or Word file and get back a compiled LaTeX PDF and its .tex source, with nothing stored.",
+};
