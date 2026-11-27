@@ -46,14 +46,14 @@ PM & Systems Integrator for the Canadian Space Agency LEAP — OASIS Mission (Ja
 ---
 
 ### ⚙️ Axial Piston Pump — Hydraulic System Design
-**Period:** Nov.–Dec. 2024 · Polytechnique Montréal  
+**Period:** Oct.–Nov. 2024 · Polytechnique Montréal  
 **Skills:** 3D CAD · SolidWorks · Mechanical Design · GD&T · Assembly Modeling  
 
-3D CAD modeling project at Polytechnique Montréal (Nov.–Dec. 2024). Fully modeled a high-performance axial piston hydraulic pump from the ground up.
+3D CAD modeling project at Polytechnique Montréal (Oct.–Nov. 2024). Fully modeled a high-performance axial piston hydraulic pump from the ground up.
 
 The assembly houses 9 individual piston assemblies — each comprising a piston and slipper pad — retained by a retaining plate and centered via a spherical nut. Optimized component geometry and assembly parameters for mechanical durability.
 
-Produced a full exploded-view drawing with a bilingual French/English BOM following standard drafting conventions.
+Produced a full exploded-view drawing with a French bill of materials following standard drafting conventions.
 
 ---
 
@@ -65,7 +65,7 @@ Produced a full exploded-view drawing with a bilingual French/English BOM follow
 
 Autonomous seed-planting robot built in 24 hours at RoboHacks (Feb. 2025) using recycled materials for the structure — cardboard chassis, plastic bottles, and a paper-engineered seed dispenser.
 
-Coded the full navigation and dispensing sequence in C++ on Arduino: two IR sensors fused with a color sensor for line-following, a servo-actuated paper dispenser for timed seed placement. All electronics wired on a breadboard from scratch under competition conditions.
+Wrote the navigation and dispensing code in C++ on Arduino: two IR sensors drive on/off line-following, a color sensor reads the floor, and a servo-actuated paper dispenser places seeds on a timer. All electronics wired on a breadboard from scratch under competition conditions.
 
 Won the Unexpected Expedition Award and placed 5th overall.
 

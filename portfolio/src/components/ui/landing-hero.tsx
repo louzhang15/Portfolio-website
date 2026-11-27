@@ -70,7 +70,7 @@ const credibilitySignals = [
 ];
 
 const featuredSignals = [
-  { title: "Lunar Transport System", detail: "PM & Systems Integrator", accent: "#f2d98a" },
+  { title: "Lunar Transport System", detail: "Team C1 Lead, Structure", accent: "#f2d98a" },
   { title: "Autonomous Reforestation Robot", detail: "RoboHacks Award", accent: "#7ec850" },
   { title: "ResQ-Link", detail: "Passive NFC disaster-response hardware", accent: "#ff6b8a" },
   { title: "CRM Outreach Tool", detail: "AI + Google Sheets automation", accent: "#59eafb" },

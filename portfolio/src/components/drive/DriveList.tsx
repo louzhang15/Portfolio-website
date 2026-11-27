@@ -73,7 +73,7 @@ export default function DriveList({ world, onDrive }: { world: WorldData; onDriv
         </div>
         <h1 className="mt-8 font-label text-4xl font-bold tracking-tight sm:text-5xl">Louis Zhang</h1>
         <p className="mt-2 text-[#5b625e]">Mechanical Engineering · Polytechnique Montréal</p>
-        {contact && <p className="mt-1 font-semibold text-[#e4572e]">{contact.line}</p>}
+        {contact && <p className="mt-1 font-semibold text-[#a43b1c]">{contact.line}</p>}
 
         {SECTIONS.map((section) => {
           const items = world.stops.filter((s) => s.kind === section.kind);

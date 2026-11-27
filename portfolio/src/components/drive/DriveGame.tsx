@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { GAME_CONTACT } from "@/data/gameContact";
 import type { Stop, WorldData } from "./driveData";
 import DriveList from "./DriveList";
 import { driveStore, input } from "./driveStore";
@@ -286,9 +287,9 @@ export default function DriveGame({ world }: { world: WorldData }) {
         <div className={`${panel} ${showWelcome ? "pointer-events-auto" : ""} w-full max-w-[440px] bg-[#fbfaf6] p-5 sm:p-6`} role="dialog" aria-label="Welcome">
           <h2 className="font-label text-[1.7rem] font-bold leading-tight text-[#1d2321]">Louis Zhang</h2>
           <p className="mt-0.5 text-[15px] text-[#3d4441]">Mechanical engineering · Polytechnique Montréal</p>
-          <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[#e4572e]">
+          <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[#a43b1c]">
             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#e4572e]" />
-            Open to 2027 internships
+            {GAME_CONTACT.availability}
           </p>
 
           <p className="mt-4 text-sm leading-relaxed text-pretty text-[#3d4441]">

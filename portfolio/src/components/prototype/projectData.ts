@@ -49,15 +49,13 @@ export const FRAMING: Record<string, { x: number; y: number; w: number }> = {
 /**
  * Focal point (CSS object-position) for photos and renders cropped to the 16/10 frame; anything not listed is centred.
  * Reforestation Robot: a portrait shot whose top half is legs, so the frame sits on the breadboard and dispenser.
- * The square app renders lean up so their title bars stay in frame.
+ * The CRM dashboard is pinned top-left so its sidebar and stats stay in frame.
  */
 export const FOCUS: Record<string, string> = {
   "P-1": "50% 30%",
   "P-3": "50% 62%",
-  "P-9": "50% 35%",
-  "P-11": "50% 20%",
-  "P-12": "50% 15%",
-  "P-13": "50% 40%",
+  "P-9": "0% 0%",
+  "P-11": "50% 50%",
 };
 
 /** Technical drawings: shown whole on white, never cropped like a photo. */
@@ -226,32 +224,32 @@ export const SCHOLARSHIPS: Recognition[] = [
 export type Tradeoff = { choice: string; why: string };
 export const TRADEOFFS: Record<string, Tradeoff[]> = {
   "P-1": [
-    { choice: "Cut 12% of system mass, held a 2.5× safety factor.", why: "Part geometry was reworked iteratively against lunar load cases instead of adding material." },
-    { choice: "50 cm of local regolith as the outer shield.", why: "Radiation protection and thermal mass with zero launch weight, since it is harvested on site." },
-    { choice: "MLI and geometry changes at every telescopic joint.", why: "Aluminium joints conduct heat; FEA found the thermal bridges and the redesign broke each path." },
-    { choice: "Cold-welded tab-to-tube joints.", why: "Removes thermal fatigue failure points in the vacuum environment." },
-    { choice: "Two controllers: Arduino for the wagon loop, Pi Pico for the conveyor.", why: "Each loop runs on its own board, so the wagon and the conveyor are built and tested separately." },
+    { choice: "A telescopic tube over a zipline or a rover.", why: "It scored 251 of 350 across all five team matrices (rover 206, zipline 197): a fixed path that shields the produce from regolith." },
+    { choice: "Two sliding sections: 3 m deployed, 1.6 m stowed.", why: "Launch volume drops from 0.65 to 0.38 m³, at the cost of a sliding joint that needs special machining." },
+    { choice: "Aluminium 6061 instead of the titanium shown at the critical design review.", why: "Cheaper and easier to weld, and it takes 210 MJ/kg to make against 690 MJ/kg for titanium." },
+    { choice: "A 1 cm aluminium wall with 1 cm of MLI.", why: "It met the thermal team's request but brought the total to 185 kg; the report proposes a 0.5 cm wall for about 95 kg." },
+    { choice: "A wood and PLA bench prototype.", why: "It tested rail clearance and load for $216.64; wood is about 5 times weaker than aluminium, so passing on wood is conservative." },
   ],
   "P-2": [
     { choice: "9 piston assemblies held by one retaining plate and centred by a spherical nut.", why: "The pistons and slipper pads stay aligned with a single retaining part." },
-    { choice: "Bilingual French and English BOM.", why: "The exploded drawing follows standard drafting conventions for French and English readers." },
+    { choice: "A full exploded-view drawing with a numbered parts list.", why: "Each of the 21 parts can be found and ordered from one sheet." },
   ],
   "P-3": [
     { choice: "Cardboard chassis, plastic bottles and a paper seed dispenser.", why: "Recycled materials kept the build cheap and fast enough to finish in 24 hours." },
-    { choice: "Two IR sensors fused with a colour sensor.", why: "Line following stays on track with more than one sensor reading the floor." },
+    { choice: "On/off steering from two IR sensors.", why: "Four sensor cases map straight to four motor commands, simple enough to write and debug in 24 hours." },
     { choice: "Breadboard wiring.", why: "Circuits could change during the competition without soldering." },
   ],
   "P-4": [
     { choice: "Passive NFC with an inductive copper coil, no battery.", why: "The bracelet never needs charging; a reader must be close to read it." },
     { choice: "Offline mesh data sync.", why: "Patient data reaches the hospital even when cellular service fails." },
     { choice: "Medical-grade silicone band with an overmolded seal, designed for IP68.", why: "The tag is sealed against water and dust." },
-    { choice: "3D-printed pilot units with hand-assembled PCBs, injection molding later.", why: "Pilots cost about $100 to $150 a unit with no tooling; molding brings the unit cost to the $0.30 target." },
+    { choice: "3D-printed pilot units with hand-assembled PCBs, injection molding later.", why: "A pilot unit costs about $125 with no tooling; molding brings the unit cost to the $0.30 target." },
   ],
   "P-5": [
-    { choice: "mmWave radar and a floor vibration mat, no cameras.", why: "Falls are detected without filming residents." },
-    { choice: "3× sensor redundancy.", why: "Radar, floor mat and room sensors confirm each other to cut false alarms." },
-    { choice: "Everything on the facility's local OpenWRT LAN, no cloud.", why: "Resident data never leaves the building." },
-    { choice: "Confidence scoring gates every alert.", why: "One noisy sensor cannot page a nurse on its own." },
+    { choice: "mmWave radar and a floor vibration sensor, no cameras.", why: "Falls are detected without filming residents." },
+    { choice: "An alert fires on the radar or the floor sensor.", why: "Either sensor can raise an alert, which favours fast detection; requiring both to agree is the next step to cut false alarms." },
+    { choice: "Raw values from the ESP32s, logic in the backend.", why: "The boards stay simple and thresholds change without reflashing firmware." },
+    { choice: "Confidence scoring on every event.", why: "Each event gets a score before it pages staff." },
   ],
   "P-14": [
     { choice: "Warnings address by address instead of whole evacuation zones.", why: "Each home gets its own hours-until-arrival estimate from distance, wind and local sensitivity." },
@@ -263,10 +261,10 @@ export const TRADEOFFS: Record<string, Tradeoff[]> = {
     { choice: "Google Sheets sync for the pipeline.", why: "Every contact's stage stays in a sheet in real time." },
   ],
   "P-11": [
-    { choice: "Real CAD models from SolidWorks and Blender inside the web app.", why: "Students turn the parts in 3D instead of reading about them." },
+    { choice: "A real J58 engine model from Fusion 360 and Blender inside the web app.", why: "Students turn the parts in 3D instead of reading about them." },
   ],
   "P-12": [
-    { choice: "Fine-tuned TinyLlama instead of a general LLM.", why: "A small model trained on health data gives more accurate, context-aware answers." },
+    { choice: "TinyLlama 1.1B instead of a large general LLM.", why: "A 1.1B model runs on a laptop; a fine-tune on 100 health Q&A rows was trialled to sharpen its answers." },
     { choice: "Model in its own Python FastAPI service behind a Node.js middleware.", why: "The Python model and the web app run as separate services." },
   ],
   "P-13": [

@@ -76,22 +76,20 @@
     {
       "id": "P-1",
       "title": "Lunar Transport System",
-      "subtitle": "PM & Systems Integrator · CSA LEAP · Jan.–May 2025 · Polytechnique Montréal",
+      "subtitle": "Team C1 Lead, Structure & Integration · CSA LEAP OASIS · Jan.–Apr. 2025 · Polytechnique Montréal",
       "sector": "Aero Atoll",
       "status": "active",
       "emoji": "🌕",
       "skills": [
-        "CATIA V6",
-        "Fusion 360",
-        "GD&T",
-        "MS Project",
-        "Cold Welding",
+        "CATIA V5",
+        "Structural Design",
         "Systems Integration",
-        "FEA",
-        "Arduino",
-        "Raspberry Pi Pico"
+        "Bending & Stress Analysis",
+        "Technical Drawings",
+        "Prototype Testing",
+        "Team Leadership"
       ],
-      "details": "PM & Systems Integrator for the Canadian Space Agency LEAP — OASIS Mission (Jan.–May 2025, Polytechnique Montréal). Directed end-to-end design of a 3.1 m telescopic lunar produce-transport tube (Ø540 mm, 3080 mm deployed length), designed to CSA LEAP performance and safety requirements.\n\n• Managed 50+ part interfaces, achieving a 12% system mass reduction while sustaining a 2.5× structural safety factor\n• Ran thermal FEA over the 14-day lunar night cycle and verified zero mechanical interference across the full telescopic deployment sweep with a kinematic motion study\n• Developed the rail-guided transport wagon's control logic on an Arduino microcontroller\n• Designed and programmed a Raspberry Pi Pico–driven belt conveyor for seamless vegetable transfer from lunar greenhouse to habitat module\n• Led physical integration: AL-6061 machining, MLI fabrication, PCB prototyping, wiring harnesses, and cold-welding of tab-to-tube joints",
+      "details": "A Polytechnique Montréal design project on the Canadian Space Agency's LEAP OASIS challenge: move a vegetable compartment 3 m from a lunar greenhouse to a habitat. Five teams split the system. Team C1, which Louis led, owned the main structure and the integration of the other four (compartment, transfer and docking, propulsion and power, thermal and dust).\n\n• Concept selection: a telescopic tube scored 251 of 350 across all five team matrices, ahead of a rover (206) and a zipline (197)\n• Design: a two-section aluminium tube on 3 pairs of legs, Ø540 mm, 3 m deployed and 1.6 m stowed, with a wagon running on rails inside\n• Analysis: free-body, shear and bending diagrams for the rails and leg-stress checks against a 1.5 safety factor; leg stress on the Moon is 0.0535 MPa against a 240 MPa yield\n• Bench prototype in wood and 3D-printed PLA ($216.64): wheel-to-rail clearance of 1.85 to 1.90 mm against a 2 mm target, and 6.0 kg held for 5 minutes with no visible deformation\n• Final design: 185 kg total mass; the report proposes a 0.5 cm wall to bring it to about 95 kg",
       "github": "https://github.com/louzhang15",
       "demo": null,
       "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBfmEpezBSpneFvCrYKhOLUOseL8Ykp1jo-HSG-ffLWpXFUDPcJaLNQ_yYG5K3rrQojomG93egnxnwooCUeOcPCLWPOTN3DCgnuB1cKbCeyo00IDUBjs5tK3QD_526_Tv0wWlf_J9c26MbyCm2M9Bh0lHMTaYyyp_lR2bOctqYMSHKc0imzdeQ5FArd6MJgX1SS1NDA5WuXGr8-BMg81vmKL76Uzzftusbi3MNmNr5KKskCa3NgMBifjJq1unU1ixty6_658_OlN05p"
@@ -99,7 +97,7 @@
     {
       "id": "P-2",
       "title": "Axial Piston Pump",
-      "subtitle": "Hydraulic System Design · Nov.–Dec. 2024 · Polytechnique Montréal",
+      "subtitle": "Hydraulic System Design · Oct.–Nov. 2024 · Polytechnique Montréal",
       "sector": "Aero Atoll",
       "status": "active",
       "emoji": "⚙️",
@@ -110,7 +108,7 @@
         "GD&T",
         "Assembly Modeling"
       ],
-      "details": "3D CAD modeling project at Polytechnique Montréal (Nov.–Dec. 2024). Fully modeled a high-performance axial piston hydraulic pump from the ground up.\n\nThe assembly houses 9 individual piston assemblies — each comprising a piston and slipper pad — retained by a retaining plate and centered via a spherical nut. Optimized component geometry and assembly parameters for mechanical durability.\n\nProduced a full exploded-view drawing with a bilingual French/English BOM following standard drafting conventions.",
+      "details": "3D CAD modeling project at Polytechnique Montréal (Oct.–Nov. 2024). Fully modeled a high-performance axial piston hydraulic pump from the ground up.\n\nThe assembly houses 9 individual piston assemblies — each comprising a piston and slipper pad — retained by a retaining plate and centered via a spherical nut. Optimized component geometry and assembly parameters for mechanical durability.\n\nProduced a full exploded-view drawing with a French bill of materials following standard drafting conventions.",
       "github": null,
       "demo": null,
       "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBfmEpezBSpneFvCrYKhOLUOseL8Ykp1jo-HSG-ffLWpXFUDPcJaLNQ_yYG5K3rrQojomG93egnxnwooCUeOcPCLWPOTN3DCgnuB1cKbCeyo00IDUBjs5tK3QD_526_Tv0wWlf_J9c26MbyCm2M9Bh0lHMTaYyyp_lR2bOctqYMSHKc0imzdeQ5FArd6MJgX1SS1NDA5WuXGr8-BMg81vmKL76Uzzftusbi3MNmNr5KKskCa3NgMBifjJq1unU1ixty6_658_OlN05p"
@@ -129,7 +127,7 @@
         "DC Motors",
         "Recycled Materials"
       ],
-      "details": "Autonomous seed-planting robot built in 24 hours at RoboHacks (Feb. 2025) using recycled materials for the structure — cardboard chassis, plastic bottles, and a paper-engineered seed dispenser.\n\nCoded the full navigation and dispensing sequence in C++ on Arduino: two IR sensors fused with a color sensor for line-following, a servo-actuated paper dispenser for timed seed placement. All electronics wired on a breadboard from scratch under competition conditions.\n\nWon the Unexpected Expedition Award and placed 5th overall.",
+      "details": "Autonomous seed-planting robot built in 24 hours at RoboHacks (Feb. 2025) using recycled materials for the structure — cardboard chassis, plastic bottles, and a paper-engineered seed dispenser.\n\nWrote the navigation and dispensing code in C++ on Arduino: two IR sensors drive on/off line-following, a color sensor reads the floor, and a servo-actuated paper dispenser places seeds on a timer. All electronics wired on a breadboard from scratch under competition conditions.\n\nWon the Unexpected Expedition Award and placed 5th overall.",
       "github": "https://github.com/louzhang15/RoboHacks-2025",
       "demo": null,
       "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDAS80X_XNEuUFS6k-WwWNK4ujFPPuUxPpWvmTVpU1JR5SivSd5oUG2JcVNgHI4epz7XEJI6N7eCpY_5koJUANuAI1BYhptkTPhdi5UGO2lM2yHA1--6_Zdhkuwaf4AXh47aYn5TOW2B8af31QajqbXwz4Ldn2XPUjvQPK0SasCQYVwEJls5ZWv-YsDYabLJ6PaUZtolG1ufVsJARGvsPWji9-J_dMGuf0kpNNEYucYBsS8AG3SpRwrHKSZrvL4alOKLEcgHbwa7a7w"
@@ -142,15 +140,15 @@
       "status": "active",
       "emoji": "🔧",
       "skills": [
-        "SolidWorks",
         "Blender",
         "React",
         "Python",
         "AI API",
         "3D Modeling",
-        "CAD Integration"
+        "CAD Integration",
+        "Fusion 360"
       ],
-      "details": "An interactive interview prep platform tailored for mechanical and aerospace engineering students, built at McHacks 13 (Jan. 2026).\n\nDesigned and modeled 3D components in SolidWorks and Blender, then integrated the CAD models into a React + Python web app to make them interactive and educational. An AI API generates and evaluates interview questions in real time.\n\nNext steps: expand the question bank across more companies and offer a white-label tool for companies to build their own technical interview question sets.",
+      "details": "An interactive interview prep platform tailored for mechanical and aerospace engineering students, built at McHacks 13 (Jan. 2026).\n\nModeled a Pratt & Whitney J58 engine in Fusion 360 and Blender, then integrated the CAD models into a React + Python web app to make them interactive and educational. An AI API generates and evaluates interview questions in real time.\n\nNext steps: expand the question bank across more companies and offer a white-label tool for companies to build their own technical interview question sets.",
       "github": null,
       "demo": "https://devpost.com/software/mechie",
       "image": null
@@ -191,12 +189,13 @@
         "mmWave Radar",
         "ESP32 / FreeRTOS",
         "ROS 2",
+        "Flask",
         "MongoDB",
         "Gemini AI",
         "ElevenLabs",
-        "OpenWRT"
+        "Twilio"
       ],
-      "details": "On-premises AI nurse assistant for Quebec long-term care facilities (CHSLDs), built at ConUHacks X (Jan. 2026).\n\nFalls among seniors (65+) have risen 47% between 2008 and 2019 — Nursie closes the gap between unwitnessed falls and delayed staff response.\n\n• Detects falls using mmWave radar (IWR6843) fused with a floor vibration mat\n• Tracks room context via magnetic door sensor + PIR presence node on ESP32/FreeRTOS\n• Monitors vital signs via smartwatch integration\n• Sends immediate alerts — phone call + dashboard push — to staff on detection\n• Builds a resident profile in MongoDB over time to flag unusual behavior\n• Provides a voice interface for residents via ElevenLabs for questions, appointment reminders, and medication prompts\n\nDesigned for 3× sensor redundancy to reduce false positives. Privacy by architecture — all data stays on the facility's local OpenWRT LAN, no cameras, no cloud. Won Best Use of ElevenLabs at ConUHacks X.",
+      "details": "On-premises AI nurse assistant prototype for Quebec long-term care facilities (CHSLDs), built at ConUHacks X (Jan. 2026): 38 commits in 16.5 hours.\n\nFalls among seniors (65+) have risen 47% between 2008 and 2019. Nursie targets the gap between an unwitnessed fall and the moment staff respond.\n\n• A TI IWR6843 mmWave radar tracks residents and detects falls with no camera in the room\n• A floor vibration sensor picks up impacts; an alert fires when the radar or the floor sensor reports a fall\n• Two ESP32 boards on FreeRTOS publish raw sensor values to ROS 2 over Wi-Fi with micro-ROS\n• A Flask backend runs the fall logic, scores each event's confidence, and escalates with a phone call (Twilio) and a dashboard alert\n• Gemini triages events, ElevenLabs gives residents a voice assistant, and MongoDB keeps each resident's history\n• An Apple Watch app posts vital signs every second\n\nNext steps: require two sensors to agree before an alert, keep all data on the facility network, and replace the simulated door sensor with real hardware. Won Best Use of ElevenLabs at ConUHacks X.",
       "github": "https://github.com/louzhang15",
       "demo": "https://devpost.com/software/nursie",
       "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDAS80X_XNEuUFS6k-WwWNK4ujFPPuUxPpWvmTVpU1JR5SivSd5oUG2JcVNgHI4epz7XEJI6N7eCpY_5koJUANuAI1BYhptkTPhdi5UGO2lM2yHA1--6_Zdhkuwaf4AXh47aYn5TOW2B8af31QajqbXwz4Ldn2XPUjvQPK0SasCQYVwEJls5ZWv-YsDYabLJ6PaUZtolG1ufVsJARGvsPWji9-J_dMGuf0kpNNEYucYBsS8AG3SpRwrHKSZrvL4alOKLEcgHbwa7a7w"
@@ -238,7 +237,7 @@
         "NOAA",
         "OpenStreetMap"
       ],
-      "details": "Autonomous AI disaster agent that warns people before a wildfire or storm surge reaches their home — address by address, not whole evacuation zones. Won 1st place for Best Data-Driven Agent (Chalk Prize) at HackHarvard 2026. Covers wildfires in LA and Ventura counties and hurricanes on the US East Coast.\n\nWHY WE BUILT IT\nWhile interning at Tesla in Nevada, our team lived through several nearby fires. Coming from Canada and the East Coast, we had no idea whether we were in danger and couldn't find reliable information on where the fires were spreading. Trace turns satellite and environmental data into warnings people can actually act on.\n\nWHAT IT DOES\n• Every 15 minutes, pulls NASA satellite fire detections, national fire perimeters, NWS warnings, NOAA hurricane advisories and tide gauges, and hourly wind, humidity and fuel dryness\n• For each home, estimates hours until the hazard arrives from distance, wind direction and local sensitivity, then decides: watch, warn, or evacuate\n• Texts over iMessage (via Photon) at the first warning; an ElevenLabs voice agent calls at evacuate and answers questions about the fire, its direction, and which way to go\n• Time-aware router plans the fastest safe route with turn-by-turn directions, a map, and the latest time to leave — and says so if no safe route exists\n• Two-way conversation: text NOW for a route, WINDOW for when to leave, STATUS for the latest, LEFT once you're out\n• Web app replays 5 real fires and 4 hurricanes hour by hour with shader-rendered fire spread, 3D buildings that burn on the fire's clock, a thermal view, storm-surge flooding, and a live map of hot spots and Red Flag zones\n\nHOW WE BUILT IT\n• Burn-probability model over 806,000 grid cells from CAL FIRE perimeters, USGS terrain and LANDFIRE fuels (AUC 0.74 on unseen 2015–2025 fires vs 0.71 for fire history alone)\n• Rothermel spread simulation on a 30 m grid with hourly wind and fuel moisture\n• Parametric storm-surge model fitted on Sandy and Matthew, validated on Irma and Isabel against NOAA tide gauges\n• Agent sees each event only as it was known at that hour, so replays never use hindsight; an LLM policy via Chalk's Model Gateway calls fire tools before deciding and distills its own mistakes into lessons\n• Time-aware shortest-path search on OpenStreetMap road graphs that closes roads the fire or water will reach within a safety margin\n• Ran on Chalk Sandboxes (24/7 alert loop + MCP server, web app, learning loop) with Chalk Evaluations for alert quality\n• Safety-critical facts — routes, timing, steps — come from code, never invented by the LLM\n\nRESULTS (no-hindsight replays)\n• Warned 100% of destroyed homes across 600 households in the Eaton and Palisades fires, a median of 8.7 hours ahead\n• 92% of Hurricane Sandy evacuation routes stayed clear of flooding, vs 60% for the fastest route (92% vs 65% for Irma)\n• Spread simulation overlapped 85% of the real Palisades burn area and reached 99% of destroyed homes\n• Surge rules evacuated 100% of flooded homes in time, a median of 30.6 hours ahead\n• Cut New York routing over 297,000 road segments from ~100 s to 1–3 s per request by vectorizing the wind model and replacing a spatial join with a grid lookup\n\nWHAT WE LEARNED\nBack every claim with data, especially when lives are at stake: honest evaluation showed simple distance rings still evacuate more people in time on two fires (92.5% vs 82.5%), and we report it.",
+      "details": "Autonomous AI disaster agent that warns people before a wildfire or storm surge reaches their home — address by address, not whole evacuation zones. Won 1st place for Best Data-Driven Agent (Chalk Prize) at HackHarvard 2026. Covers wildfires in LA and Ventura counties and hurricanes on the US East Coast.\n\nWHY WE BUILT IT\nWhile interning at Tesla in Nevada, our team lived through several nearby fires. Coming from Canada and the East Coast, we had no idea whether we were in danger and couldn't find reliable information on where the fires were spreading. Trace turns satellite and environmental data into warnings people can actually act on.\n\nWHAT IT DOES\n• Every 15 minutes, pulls NASA satellite fire detections, national fire perimeters, NWS warnings, NOAA hurricane advisories and tide gauges, and hourly wind, humidity and fuel dryness\n• For each home, estimates hours until the hazard arrives from distance, wind direction and local sensitivity, then decides: watch, warn, or evacuate\n• Texts over iMessage (via Photon) at the first warning; an ElevenLabs voice agent calls at evacuate and answers questions about the fire, its direction, and which way to go\n• Time-aware router plans the fastest safe route with turn-by-turn directions, a map, and the latest time to leave — and says so if no safe route exists\n• Two-way conversation: text NOW for a route, WINDOW for when to leave, STATUS for the latest, LEFT once you're out\n• Web app replays 5 real fires and 4 hurricanes hour by hour with shader-rendered fire spread, 3D buildings that burn on the fire's clock, a thermal view, storm-surge flooding, and a live map of hot spots and Red Flag zones\n\nHOW WE BUILT IT\n• Burn-probability model over 806,000 grid cells from CAL FIRE perimeters, USGS terrain and LANDFIRE fuels (AUC 0.74 on unseen 2015–2025 fires vs 0.71 for fire history alone)\n• Rothermel spread simulation on a 30 m grid with hourly wind and fuel moisture\n• Parametric storm-surge model fitted on Sandy and Matthew, validated on Irma and Isabel against NOAA tide gauges\n• Agent sees each event only as it was known at that hour, so replays never use hindsight; an LLM policy via Chalk's Model Gateway calls fire tools before deciding and distills its own mistakes into lessons\n• Time-aware shortest-path search on OpenStreetMap road graphs that closes roads the fire or water will reach within a safety margin\n• Ran on Chalk Sandboxes (24/7 alert loop + MCP server, web app, learning loop) with Chalk Evaluations for alert quality\n• Safety-critical facts — routes, timing, steps — come from code, never invented by the LLM\n\nRESULTS (no-hindsight replays)\n• Warned 100% of destroyed homes across 600 households in the Eaton and Palisades fires, a median of 8.7 hours ahead\n• 92% of Hurricane Sandy evacuation routes stayed clear of flooding, vs 60% for the fastest route (92% vs 65% for Irma)\n• Spread simulation overlapped 85% of the real Palisades burn area and reached 99% of destroyed homes\n• Surge rules evacuated 100% of flooded homes in time, a median of 30.6 hours ahead\n\nWHAT WE LEARNED\nBack every claim with data, especially when lives are at stake: honest evaluation showed simple distance rings still evacuate more people in time on two fires (92.5% vs 82.5%), and we report it.",
       "github": null,
       "demo": null,
       "image": null
@@ -282,7 +281,7 @@
         "TinyLlama",
         "AI"
       ],
-      "details": "AI health assistant that provides personalized health recommendations via text-based interactions.\n\nBackend stack: Next.js frontend, Node.js/Express middleware, and a Python FastAPI service running a fine-tuned TinyLlama model for domain-specific health analysis. Fine-tuning allows the model to give more accurate, context-aware answers than a vanilla LLM.\n\nFeatures: personalized profile management, AI chat interface, and full conversation history so the assistant learns your context over time.",
+      "details": "AI health assistant that provides personalized health recommendations via text-based interactions.\n\nBackend stack: Next.js frontend, Node.js/Express middleware, and a Python FastAPI service running TinyLlama 1.1B. A fine-tune on 100 health Q&A rows (3 epochs) was trialled alongside the served base model.\n\nFeatures: personalized profile management, AI chat interface, and full conversation history so the assistant learns your context over time.",
       "github": "https://github.com/Karencheenn/LazyCare",
       "demo": null,
       "image": null

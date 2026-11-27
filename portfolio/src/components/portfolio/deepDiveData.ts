@@ -126,9 +126,9 @@ const robot: DeepDive = {
       kicker: "Engineering and code",
       title: "Line following and timed seed drops",
       points: [
-        "Two infrared sensors fused with a colour sensor follow a black track.",
+        "Two infrared sensors follow a black track with on/off steering. A colour sensor reads the floor.",
         "A servo turns a paper seed dispenser for timed placement.",
-        "One C++ codebase on Arduino: sensor polling loop, PID motor steering and the dispenser trigger sequence, written and debugged in 24 hours.",
+        "One C++ codebase on Arduino: line following, colour reading, drive and the dispenser servo, written in 24 hours.",
         "All electronics wired by hand on a breadboard and checked for signal integrity on the competition floor.",
       ],
       stats: [
@@ -191,7 +191,7 @@ const resq: DeepDive = {
       kicker: "Path to production",
       title: "From printed pilot units to molded bands",
       points: [
-        "Pilot units are 3D printed with hand-assembled PCBs, about $100 to $150 each.",
+        "Pilot units are 3D printed with hand-assembled PCBs, about $125 each.",
         "The pilot plan proves the zero-power design in 5,000 live triage cases.",
         "Health Canada Class I/II and ISO 13485 certification come next.",
         "Injection molding tooling brings the unit cost down to the $0.30 target.",
@@ -207,15 +207,15 @@ const pump: DeepDive = {
       kicker: "Assembly",
       title: "9 piston assemblies around one spherical nut",
       points: [
-        "Modelled from the ground up at Polytechnique Montréal, Nov. to Dec. 2024.",
+        "Modelled from the ground up at Polytechnique Montréal, Oct. to Nov. 2024.",
         "Each of the 9 assemblies is a piston and a slipper pad.",
         "A retaining plate holds the slipper pads. A spherical nut centres the plate.",
         "Part geometry and assembly parameters were refined for mechanical durability.",
-        "The exploded-view drawing carries a bilingual French and English BOM and follows standard drafting conventions.",
+        "The exploded-view drawing carries a French bill of materials and follows standard drafting conventions.",
       ],
       stats: [
         { value: "9", label: "piston assemblies" },
-        { value: "2", label: "BOM languages" },
+        { value: "21", label: "parts" },
       ],
       figures: [{ src: "/media/axial-piston-pump/exploded-drawing.jpg", caption: "Exploded view with the bill of materials", fit: "contain" }],
     },
