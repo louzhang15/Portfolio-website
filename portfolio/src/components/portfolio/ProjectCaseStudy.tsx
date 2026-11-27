@@ -8,6 +8,8 @@ import { CONTACT, OpenTo } from "@/components/prototype/stage";
 import { FOCUS, photoFor } from "@/components/prototype/projectData";
 import "@/components/prototype/prototype.css";
 import { DeepDive, Tradeoffs } from "./CaseStudyDeepDive";
+import TechTimeline from "./deepDives/TechTimeline";
+import { techDiveFor } from "./deepDives";
 
 /**
  * Case study page in the homepage's "Machined Product" system (portfolio/DESIGN.md): light page, Archivo set wide
@@ -363,7 +365,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
       </section>
 
       <Tradeoffs id={item.id} />
-      <DeepDive id={item.id} />
+      {techDiveFor(item.id) ? <TechTimeline dive={techDiveFor(item.id)!} /> : <DeepDive id={item.id} />}
 
       <Gallery item={item} src={gallery} />
       <Related item={item} related={related} />
