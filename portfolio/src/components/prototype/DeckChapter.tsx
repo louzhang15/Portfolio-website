@@ -2,20 +2,10 @@
 
 import { useMotionValueEvent, useTransform } from "framer-motion";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
-import { fullPortfolioDocument, fullPortfolioPages } from "@/lib/portfolio";
+import { fullPortfolioDocument, fullPortfolioPages, fullPortfolioPageTitles as PAGE_TITLES } from "@/lib/portfolio";
 import BookDeck, { PH, PW, SPREADS } from "./BookDeck";
 import PageViewer from "./PageViewer";
 import { btnGhostLight, btnPrimaryLight, useSmoothProgress, useReducedMotionSafe, stopsAttr } from "./stage";
-
-const PAGE_TITLES = [
-  "Profile and skills",
-  "Lunar transport system",
-  "Predictive simulation and analysis",
-  "Mechatronics and fabrication",
-  "Nursie, AI nurse assistant",
-  "Nursie, alert pipeline and outcomes",
-  "Autonomous reforestation robot",
-];
 
 /** Pages flip inside this window of the chapter's own scroll track. */
 const PAGES = [0.08, 0.96];
@@ -74,7 +64,7 @@ function useBookFit() {
 
 function PageList({ active, onPick }: { active: number[]; onPick: (i: number) => void }) {
   return (
-    <ol className="mt-8 space-y-0.5">
+    <ol className="mt-6 max-h-[38svh] space-y-0.5 overflow-y-auto">
       {PAGE_TITLES.map((t, i) => {
         const on = active.includes(i);
         return (
@@ -103,9 +93,9 @@ function PageList({ active, onPick }: { active: number[]; onPick: (i: number) =>
 function Intro() {
   return (
     <>
-      <h2 className="text-[clamp(2.25rem,4.5vw,3.75rem)] text-[var(--text-on-light)]">The portfolio, in seven pages.</h2>
+      <h2 className="text-[clamp(2.25rem,4.5vw,3.75rem)] text-[var(--text-on-light)]">Engineering portfolio</h2>
       <p className="mt-4 max-w-[30rem] text-[1.0625rem] leading-[1.55] text-[var(--text-on-light-secondary)]">
-        My full portfolio as a PDF: lunar transport, simulation, mechatronics, Nursie and the reforestation robot.
+        Lunar Transport System, Nursie, and the Autonomous Reforestation Robot, with extra pages on design trade-offs, calculations, and hardware testing.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <a className={btnPrimaryLight} href={fullPortfolioDocument.href} target="_blank" rel="noopener noreferrer">

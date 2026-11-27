@@ -2,7 +2,7 @@
 
 import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useLayoutEffect, useRef, useState } from "react";
-import { GROUPS, allProjects, type Group } from "./projectData";
+import { allProjects, type Group } from "./projectData";
 import { Detail, Filters, Rail, Showcase, filterList, type Filter } from "./ProjectsParts";
 import { stopsAttr, useReducedMotionSafe } from "./stage";
 
@@ -11,22 +11,26 @@ const STEP = [0.05, 0.97];
 /** Scroll length per project, so a filtered list gets a shorter track rather than coarse steps. */
 const VH_PER_PROJECT = 32;
 
-export default function ProjectsChapter({ id }: { id: string }) {
+type Props = { id: string; groups: Group[]; title: string; intro: string };
+
+/** One chapter per kind of work (hardware, software), each stepping through its own projects. */
+export default function ProjectsChapter(props: Props) {
   const reduced = useReducedMotionSafe();
-  return reduced ? <StaticProjects id={id} /> : <PinnedProjects id={id} />;
+  return reduced ? <StaticProjects {...props} /> : <PinnedProjects {...props} />;
 }
 
 /** Reduced motion: every project grouped in a plain list. */
-function StaticProjects({ id }: { id: string }) {
+function StaticProjects({ id, groups, title, intro }: Props) {
   return (
     <section id={id} data-theme="light" className="light border-t border-[var(--border-light)] px-6 md:px-10 xl:px-16 py-28">
       <div className="mx-auto max-w-[1352px]">
-        <h2 className="text-[clamp(2.25rem,4.5vw,3.75rem)]">Projects.</h2>
-        {GROUPS.map((g: Group) => (
+        <h2 className="text-[clamp(2.25rem,4.5vw,3.75rem)]">{title}</h2>
+        <p className="mt-3 max-w-[34rem] text-[1.0625rem] text-[var(--text-on-light-secondary)]">{intro}</p>
+        {groups.map((g) => (
           <div key={g} className="mt-16">
             <h3 className="text-2xl">{g}</h3>
             <div className="mt-8 space-y-14">
-              {filterList(g).map((item) => (
+              {filterList(g, groups).map((item) => (
                 <article key={item.id} className="grid gap-8 lg:grid-cols-2">
                   <Detail item={item} />
                   <Showcase item={item} />
@@ -40,11 +44,12 @@ function StaticProjects({ id }: { id: string }) {
   );
 }
 
-function PinnedProjects({ id }: { id: string }) {
+function PinnedProjects({ id, groups, title, intro }: Props) {
+  const scope = allProjects.filter((p) => groups.includes(p.group));
   const ref = useRef<HTMLElement>(null);
   const [filter, setFilter] = useState<Filter>("All");
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const list = filterList(filter);
+  const list = filterList(filter, groups);
   const n = list.length;
   // the track is sized by the filtered list, so raw progress maps straight onto it
   const indexAt = (v: number) => Math.floor(Math.min(0.9999, Math.max(0, (v - STEP[0]) / (STEP[1] - STEP[0]))) * n);
@@ -95,14 +100,17 @@ function PinnedProjects({ id }: { id: string }) {
       style={{ height: `${100 + n * VH_PER_PROJECT}svh` }}>
       <div className="sticky top-0 flex h-[100svh] flex-col justify-start overflow-hidden pb-4 pt-[72px] md:justify-center">
         <div className="mx-auto flex w-full max-w-[1480px] flex-wrap items-end justify-between gap-x-3 gap-y-2 px-6 md:px-10 xl:px-16">
-          <h2 className="text-[clamp(2rem,4.5vw,3.75rem)]">Projects.</h2>
-          <Filters value={filter} onChange={changeFilter} />
+          <div>
+            <h2 className="text-[clamp(2rem,4.5vw,3.75rem)]">{title}</h2>
+            <p className="xtall-only mt-1 hidden max-w-[34rem] text-[15px] text-[var(--text-on-light-secondary)] sm:block">{intro}</p>
+          </div>
+          {groups.length > 1 && <Filters options={groups} value={filter} onChange={changeFilter} />}
         </div>
         <div className="mx-auto mt-3 grid w-full max-w-[1480px] grid-cols-[minmax(0,1fr)] items-center gap-4 px-6 md:px-10 xl:px-16 md:mt-6 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-8 lg:gap-12">
           {/* every project's copy is stacked in one grid cell, so the block is always as tall as the tallest one
               and the rail below never moves when the project changes */}
           <div className="relative order-2 grid grid-cols-[minmax(0,1fr)] md:order-1">
-            {allProjects.map((p) => {
+            {scope.map((p) => {
               const on = p.id === item.id;
               return (
                 <div
@@ -119,7 +127,7 @@ function PinnedProjects({ id }: { id: string }) {
           {/* stacked and crossfaded like the copy: swapping one mounted image out before the next mounted left the
               frame empty while it faded and decoded, a visible gap on every step */}
           <div className="order-1 mx-auto grid w-full max-w-[420px] grid-cols-[minmax(0,1fr)] md:order-2 md:max-w-none">
-            {allProjects.map((p) => {
+            {scope.map((p) => {
               const on = p.id === item.id;
               return (
                 <div

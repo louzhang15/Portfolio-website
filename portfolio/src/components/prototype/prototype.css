@@ -134,6 +134,10 @@ body:has(.proto) {
 @media (max-height: 720px) {
   .proto .tall-only { display: none !important; }
 }
+/* laptop-height windows (721 to 859px) keep a project's tradeoff and drop its metric grid, so the pinned stage fits */
+@media (max-height: 859px) {
+  .proto .xtall-only { display: none !important; }
+}
 /* Phones: with Safari's toolbars showing, an iPhone SE has ~550px of height. Pinned stages drop secondary lines
    (phone-tall-only) on short phones, and more (phone-roomy-only) on the very shortest, so nothing is cut off. */
 @media (max-width: 767px) and (max-height: 700px) {

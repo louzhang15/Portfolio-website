@@ -152,6 +152,8 @@ export type Recognition = {
   /** one short sentence on the role */
   detail?: string;
   logo?: string;
+  /** 16:10 picture card, shared with the /game screens */
+  image?: string;
   href?: string;
 };
 
@@ -163,6 +165,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Nov. 2026",
     detail: "A hackathon for CEGEP and high school students.",
     logo: "/logo/hackconcordia.png",
+    image: "/media/drive/hack-decouverte.webp",
   },
   {
     title: "Guest speaker",
@@ -170,6 +173,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Oct. 2026",
     detail: "A talk on landing tech internships, to 100 students.",
     logo: "/logo/scs-concordia.png",
+    image: "/media/drive/scs-concordia.webp",
   },
   {
     title: "Hackathon judge",
@@ -177,6 +181,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "May 2026",
     detail: "Evaluated student teams' projects and demos.",
     logo: "/logo/mpc-hacks.png",
+    image: "/media/drive/mpc-hacks.webp",
   },
   {
     title: "Apprentice, Accent on the Community",
@@ -184,6 +189,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Jan.–Apr. 2026",
     detail: "Pro-bono consulting program. Our student team built a CRM outreach tool for a community of agriculture startups.",
     logo: "/logo/accenture-mark.png",
+    image: "/media/drive/crm-outreach-tool.webp",
     href: "/portfolio/crm-outreach-tool",
   },
   {
@@ -192,6 +198,7 @@ export const COMMUNITY: Recognition[] = [
     meta: "Jan.–Apr. 2026",
     detail: "I plan and run the chapter's events for students.",
     logo: "/logo/gdg.png",
+    image: "/media/drive/gdg.webp",
   },
 ];
 
@@ -202,11 +209,74 @@ export const SCHOLARSHIPS: Recognition[] = [
     meta: "$20,000",
     detail: "For students in engineering and other priority fields.",
     logo: "/logo/quebec-mark.png",
+    image: "/media/drive/perspective-quebec.webp",
   },
   {
     title: "Lina & Jean-Guy Gaudreault Perseverance Scholarship",
     org: "Polytechnique Montréal",
     meta: "$2,500",
     logo: "/logo/polytechnique-mark.png",
+    image: "/media/drive/scholarship.webp",
   },
 ];
+
+/**
+ * Design decisions and what each one bought, from each project's own write-up (portfolio.json, the CSA PDF pages,
+ * the repos). The first one shows on the homepage; the case study lists them all.
+ */
+export type Tradeoff = { choice: string; why: string };
+export const TRADEOFFS: Record<string, Tradeoff[]> = {
+  "P-1": [
+    { choice: "Cut 12% of system mass, held a 2.5× safety factor.", why: "Part geometry was reworked iteratively against lunar load cases instead of adding material." },
+    { choice: "50 cm of local regolith as the outer shield.", why: "Radiation protection and thermal mass with zero launch weight, since it is harvested on site." },
+    { choice: "MLI and geometry changes at every telescopic joint.", why: "Aluminium joints conduct heat; FEA found the thermal bridges and the redesign broke each path." },
+    { choice: "Cold-welded tab-to-tube joints.", why: "Removes thermal fatigue failure points in the vacuum environment." },
+    { choice: "Two controllers: Arduino for the wagon loop, Pi Pico for the conveyor.", why: "Each loop runs on its own board, so the wagon and the conveyor are built and tested separately." },
+  ],
+  "P-2": [
+    { choice: "9 piston assemblies held by one retaining plate and centred by a spherical nut.", why: "The pistons and slipper pads stay aligned with a single retaining part." },
+    { choice: "Bilingual French and English BOM.", why: "The exploded drawing follows standard drafting conventions for French and English readers." },
+  ],
+  "P-3": [
+    { choice: "Cardboard chassis, plastic bottles and a paper seed dispenser.", why: "Recycled materials kept the build cheap and fast enough to finish in 24 hours." },
+    { choice: "Two IR sensors fused with a colour sensor.", why: "Line following stays on track with more than one sensor reading the floor." },
+    { choice: "Breadboard wiring.", why: "Circuits could change during the competition without soldering." },
+  ],
+  "P-4": [
+    { choice: "Passive NFC with an inductive copper coil, no battery.", why: "The bracelet never needs charging; a reader must be close to read it." },
+    { choice: "Offline mesh data sync.", why: "Patient data reaches the hospital even when cellular service fails." },
+    { choice: "Medical-grade silicone band with an overmolded seal, designed for IP68.", why: "The tag is sealed against water and dust." },
+    { choice: "3D-printed pilot units with hand-assembled PCBs, injection molding later.", why: "Pilots cost about $100 to $150 a unit with no tooling; molding brings the unit cost to the $0.30 target." },
+  ],
+  "P-5": [
+    { choice: "mmWave radar and a floor vibration mat, no cameras.", why: "Falls are detected without filming residents." },
+    { choice: "3× sensor redundancy.", why: "Radar, floor mat and room sensors confirm each other to cut false alarms." },
+    { choice: "Everything on the facility's local OpenWRT LAN, no cloud.", why: "Resident data never leaves the building." },
+    { choice: "Confidence scoring gates every alert.", why: "One noisy sensor cannot page a nurse on its own." },
+  ],
+  "P-14": [
+    { choice: "Warnings address by address instead of whole evacuation zones.", why: "Each home gets its own hours-until-arrival estimate from distance, wind and local sensitivity." },
+    { choice: "Data refreshed every 15 minutes.", why: "NASA fire detections, NWS warnings and NOAA advisories stay current without constant polling." },
+    { choice: "The router says when no safe route exists.", why: "People are told the truth instead of being sent down a blocked road." },
+  ],
+  "P-9": [
+    { choice: "Free tiers only.", why: "The tool runs for about $0 a month, which suits a community of startups." },
+    { choice: "Google Sheets sync for the pipeline.", why: "Every contact's stage stays in a sheet in real time." },
+  ],
+  "P-11": [
+    { choice: "Real CAD models from SolidWorks and Blender inside the web app.", why: "Students turn the parts in 3D instead of reading about them." },
+  ],
+  "P-12": [
+    { choice: "Fine-tuned TinyLlama instead of a general LLM.", why: "A small model trained on health data gives more accurate, context-aware answers." },
+    { choice: "Model in its own Python FastAPI service behind a Node.js middleware.", why: "The Python model and the web app run as separate services." },
+  ],
+  "P-13": [
+    { choice: "Spoken questions and spoken answers.", why: "Students practise answering out loud, as in a real interview, instead of typing." },
+  ],
+  "S-1": [
+    { choice: "Gmail sync through OAuth.", why: "Application and rejection emails update each status without manual entry." },
+  ],
+  "S-2": [
+    { choice: "Nothing is stored.", why: "Resumes are processed and returned, so no personal file stays on the server." },
+  ],
+};

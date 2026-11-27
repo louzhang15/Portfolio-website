@@ -6,12 +6,12 @@ import type { PortfolioItem } from "@/lib/portfolio";
 // Every number on this page comes from Team C1's design records (Polytechnique Montréal, AER/MEC1110, winter 2025).
 
 const chapters = [
-  ["lunar-leadership", "Running the team"],
-  ["lunar-concept", "Choosing the concept"],
-  ["lunar-evolution", "Three design reviews"],
+  ["lunar-leadership", "Team & schedule"],
+  ["lunar-concept", "Sketches & trade-offs"],
+  ["lunar-evolution", "Design iterations"],
   ["lunar-rails", "Telescoping rails"],
   ["lunar-interfaces", "Interfaces"],
-  ["lunar-calculations", "Load checks"],
+  ["lunar-calculations", "Calculations"],
   ["lunar-prototype", "Prototype tests"],
   ["lunar-retro", "Looking back"],
 ] as const;
@@ -142,7 +142,7 @@ const myFlags = [
   ["Welding drops 6061-T6 to roughly half its yield strength near the joint. Our checks used the parent metal value.", "Use the as-welded allowable at every leg joint, or plan a post-weld heat treatment."],
   ["Graphite needs moisture to lubricate, so it stops working in vacuum.", "Use MoS₂ or a PTFE liner at the sliding joint of a flight design."],
   ["With stresses under 1% of yield, strength never sized the legs.", "Size them for buckling, stiffness, and handling loads, then cut mass."],
-  ["The report gives 0.0308 MPa in the rail. A 9.6 N·m moment on a 50 × 25 mm section gives roughly 2 MPa, so the section modulus used looks wrong by about 60 times.", "Recompute the rail stress with the section modulus written next to the result."],
+  ["The reported rail stress has a units inconsistency. The moment calculation is traceable, but the reported stress needs a separate check.", "Recompute stress from the actual section modulus, using consistent units throughout."],
   ["The bench test recorded no deflection, only that nothing visibly bent.", "Instrument the next test with a dial gauge and compare against the beam model."],
 ];
 
@@ -194,11 +194,11 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
         </p>
       </header>
 
-      <nav aria-label="Lunar case study chapters" className="sticky top-12 z-30 mt-10 border-y border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur">
-        <ol className="mx-auto flex w-full max-w-[1352px] gap-1 overflow-x-auto px-5 py-2 md:px-10 xl:px-16">
+      <nav aria-label="Lunar case study chapters" className="z-30 mt-10 border-y border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur md:sticky md:top-12">
+        <ol className="mx-auto grid w-full max-w-[1352px] grid-cols-2 gap-px px-5 py-2 md:flex md:gap-1 md:overflow-x-auto md:px-10 xl:px-16">
           {chapters.map(([id, label], i) => (
             <li key={id} className="shrink-0">
-              <a href={`#${id}`} className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-light)] hover:text-[var(--text)]">
+              <a href={`#${id}`} className="flex min-h-11 items-center gap-2 rounded-md px-2 text-sm text-[var(--text)] underline decoration-[var(--border-hover)] underline-offset-4 hover:bg-[var(--bg-light)] md:px-3">
                 <span className="tabular-nums text-[var(--text-tertiary)]">{i + 1}</span>{label}
               </a>
             </li>
@@ -209,7 +209,7 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
       <Chapter
         id="lunar-leadership"
         title="Running the team"
-        lede={<p>As team lead, I owned the schedule, the design direction, and every hand-off with the four partner teams. The hardest part was keeping our structure current while their designs and deadlines moved.</p>}
+        lede={<p>I coordinated Team C1’s schedule and worked on the structural CAD and subsystem interfaces. The hardest part was keeping our structure current while the four partner teams refined their designs.</p>}
       >
         <dl className="grid grid-cols-2 gap-x-6 md:grid-cols-4">
           {leadStats.map(([value, label]) => (

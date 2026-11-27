@@ -8,6 +8,7 @@ import { CONTACT, OpenTo } from "@/components/prototype/stage";
 import { FOCUS, photoFor } from "@/components/prototype/projectData";
 import LunarEngineering from "./LunarEngineering";
 import "@/components/prototype/prototype.css";
+import { DeepDive, Tradeoffs } from "./CaseStudyDeepDive";
 
 /**
  * Case study page in the homepage's "Machined Product" system (portfolio/DESIGN.md): light page, Archivo set wide
@@ -114,7 +115,7 @@ function TopBar({ title }: { title: string }) {
   );
 }
 
-function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
+function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: string | null; hasHardwareDetails: boolean }) {
   const isLunar = item.slug === "lunar-transport-system";
   // the subtitle often carries the date already; say it once
   const meta = [item.displaySector, item.date && !item.subtitle.includes(item.date) ? item.date : ""].filter(Boolean).join(" · ");
@@ -155,11 +156,12 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
       ) : (
         <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
       )}
-      {(isLunar || item.links.length > 0 || item.documents.length > 0) && (
+      {(isLunar || hasHardwareDetails || item.links.length > 0 || item.documents.length > 0) && (
         <div className="mt-8 flex flex-wrap gap-3">
           {isLunar && <a href="#lunar-engineering" className={BTN_PRIMARY}>See the engineering work</a>}
+          {hasHardwareDetails && <a href="#hardware-details" className={BTN_PRIMARY}>Explore the hardware</a>}
           {!isLunar && item.links.map((link, i) => (
-            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 ? BTN_PRIMARY : BTN_GHOST}>
+            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 && !hasHardwareDetails ? BTN_PRIMARY : BTN_GHOST}>
               <LinkIcon kind={link.kind} />
               {link.label}
               <ArrowUpRight aria-hidden className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -312,6 +314,7 @@ function Footer() {
 // ============================================================================
 export default function ProjectCaseStudy({ item, related }: { item: PortfolioItem; related: PortfolioItem[] }) {
   const isLunar = item.slug === "lunar-transport-system";
+  const hasHardwareDetails = item.id === "P-3" || item.id === "P-5";
   // a real photo leads when there is one; a page of the PDF deck stays in the gallery
   const heroSrc = photoFor(item.id) ?? item.image ?? item.gallery[0] ?? null;
   const heroIsPage = heroSrc?.includes("/portfolio-pages/full/") ?? false;
@@ -322,7 +325,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
   return (
     <main className="proto min-h-screen overflow-x-clip">
       <TopBar title={item.title} />
-      <Hero item={item} logo={heroIsLogo ? heroSrc : null} />
+      <Hero item={item} logo={heroIsLogo ? heroSrc : null} hasHardwareDetails={hasHardwareDetails} />
 
       {heroSrc && !heroIsPage && !heroIsLogo && (
         <div className={WRAP}>
@@ -385,7 +388,13 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
       </section>
       )}
 
-      {!isLunar && <Gallery item={item} src={gallery} />}
+      {!isLunar && (
+        <>
+          <Tradeoffs id={item.id} />
+          <DeepDive id={item.id} anchor={hasHardwareDetails ? "hardware-details" : undefined} />
+          <Gallery item={item} src={gallery} />
+        </>
+      )}
       <Related item={item} related={related} />
       <Footer />
     </main>

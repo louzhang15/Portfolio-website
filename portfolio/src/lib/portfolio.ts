@@ -32,13 +32,25 @@ export type PortfolioItem = {
 
 type RawPortfolioItem = Omit<PortfolioItem, "slug" | "gallery" | "documents" | "metrics" | "accent" | "date" | "sortOrder">;
 
-export const fullPortfolioPages = Array.from(
-  { length: 7 },
-  (_, index) => `/media/portfolio-pages/full/page-${String(index + 1).padStart(2, "0")}.jpg`
+export const fullPortfolioPageTitles = [
+  "Profile and skills",
+  "Lunar Transport System",
+  "Predictive simulation and analysis",
+  "Mechatronics and fabrication",
+  "Nursie, AI nurse assistant",
+  "Nursie, alert pipeline and outcomes",
+  "Autonomous reforestation robot",
+  "Lunar Transport System, concept decisions",
+  "Lunar Transport System, rail calculation and validation",
+  "Nursie and Reforestation Robot, hardware checks",
+];
+
+export const fullPortfolioPages = fullPortfolioPageTitles.map(
+  (_, index) => `/media/portfolio-pages/full/page-${String(index + 1).padStart(2, "0")}.jpg`,
 );
 
 export const fullPortfolioDocument = {
-  label: "Full 7-page portfolio PDF",
+  label: "Engineering portfolio PDF",
   href: "/media/portfolio-pages/portfolio.pdf",
 };
 
@@ -122,7 +134,7 @@ const mediaById: Record<
     image: fullPortfolioPages[4],
     gallery: fullPortfolioPages.slice(4, 6),
     documents: [fullPortfolioDocument],
-    metrics: ["3x sensor redundancy", "No cameras", "Local OpenWRT LAN", "Best Use of ElevenLabs"],
+    metrics: ["3 room-sensing inputs", "No cameras", "Local OpenWRT LAN", "Best Use of ElevenLabs"],
     accent: "#7b4fd6",
     emoji: "Care",
   },
@@ -241,6 +253,7 @@ const rawProjects = [
 export const activeProjects: PortfolioItem[] = rawProjects.map(hydrate);
 export const projects = activeProjects;
 export const featuredProjects: PortfolioItem[] = activeProjects.slice(0, 5);
+
 export const allPortfolioItems: PortfolioItem[] = [...activeProjects, ...internships].filter(
   (item) => item.status === "active"
 );
