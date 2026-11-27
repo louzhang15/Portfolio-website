@@ -4,7 +4,7 @@ import type { TechDive } from "./types";
 const dive: TechDive = {
   heading: "How the CRM finds, writes to and books contacts",
   intro:
-    "The CRM runs a full outreach loop for an urban agriculture non-profit in Montreal: find contacts, write each one a personal email, send it, log it, and handle the visit bookings that come back. It is a Next.js app with server routes for Apollo, Gemini, Resend and Google Sheets. The git log runs from Mar. 27 to Apr. 12, 2026.",
+    "The CRM runs a full outreach loop for a community of agriculture startups (the client is under NDA): find contacts, write each one a personal email, send it, log it, and handle the visit bookings that come back. It is a Next.js app with server routes for Apollo, Gemini, Resend and Google Sheets. The git log runs from Mar. 27 to Apr. 12, 2026.",
   architecture: {
     flow:
       "A campaign run calls five server routes in order: discover, enrich, write, send and log, with 2 s between contacts. The browser keeps contacts, campaigns and settings in localStorage. Google Sheets is the shared record. Booking requests come back through a Google Form sheet, and each staff decision emails the client and writes column L.",
@@ -45,15 +45,15 @@ const dive: TechDive = {
       phase: "Problem",
       title: "Three audiences, one small team",
       summary:
-        "The client sells guided visits to three kinds of groups. Each needs a different pitch, price and pipeline, and the team tracked it all by hand.",
+        "The client sells guided visits to three kinds of groups. Each needs a different pitch and pipeline, and the team tracked it all by hand. Prices are left out because of the NDA.",
       tables: [
         {
           caption: "Audience segments (lib/types.ts)",
-          head: ["Segment", "Base price", "Per extra person", "Pitch angle in the prompt"],
+          head: ["Segment", "Pitch angle in the prompt"],
           rows: [
-            ["Corporate", "$450 + tax, up to 20 people", "$22.50", "team building, ESG and CSR values"],
-            ["Schools / non-profits", "$300 + tax, up to 20 people", "$15", "curriculum links: local food, circular economy"],
-            ["Institutions & media", "$300 in the booking estimate", "$15", "press visits, tourism, event venue"],
+            ["Corporate", "team building, ESG and CSR values"],
+            ["Schools and non-profits", "curriculum links: local food, circular economy"],
+            ["Institutions and media", "press visits, tourism, event venue"],
           ],
         },
       ],
@@ -115,32 +115,8 @@ const dive: TechDive = {
       title: "Booking requests with a revenue estimate",
       summary:
         "Visit requests arrive in a Google Form sheet. The bookings page reads them, estimates revenue, and lets staff accept, refuse or cancel. Each action emails the client through Resend and writes the decision into column L of the sheet.",
-      calcs: [
-        {
-          title: "Revenue estimate for one booking",
-          given: ["Corporate group of 30 people", "Lunch box formula, $21 per person"],
-          steps: [
-            "Base = $450 (corporate) or $300 (school or institution)",
-            "Extra people = (30 − 20) × $22.50 = $225",
-            "Culinary = 30 × $21 = $630",
-            "Total = 450 + 225 + 630 = $1,305",
-          ],
-          result: "$1,305 shown before staff accept. A cancel shows the same figure as lost revenue.",
-          source: "src/app/bookings/page.tsx (computeRevenue)",
-        },
-      ],
-      tables: [
-        {
-          caption: "Culinary add-ons per person",
-          head: ["Formula", "Price"],
-          rows: [
-            ["Discovery", "$12"],
-            ["Tasting", "$10"],
-            ["Lunch box", "$21"],
-            ["Cold buffet", "$30"],
-            ["Cocktail dinner", "$47.50"],
-          ],
-        },
+      points: [
+        "The estimate adds a base price per audience, a charge per person over 20 and any catering add-on. The client's prices stay private under the NDA.",
       ],
     },
     {
@@ -171,7 +147,7 @@ const dive: TechDive = {
           name: "French UI with the client's name",
           summary: "The tool was built in French for the client.",
           verdict: "revised",
-          reason: "On Apr. 12 one commit removed every mention of the non-profit for NDA reasons, and the next translated 11 files to English.",
+          reason: "On Apr. 12 one commit removed every mention of the client for NDA reasons, and the next translated 11 files to English.",
         },
       ],
       stats: [
