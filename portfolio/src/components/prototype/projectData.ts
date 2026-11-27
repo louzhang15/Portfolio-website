@@ -245,11 +245,13 @@ export const TRADEOFFS: Record<string, Tradeoff[]> = {
     { choice: "Passive NFC with an inductive copper coil, no battery.", why: "The bracelet never needs charging; a reader must be close to read it." },
     { choice: "Offline mesh data sync.", why: "Patient data reaches the hospital even when cellular service fails." },
     { choice: "Medical-grade silicone band with an overmolded seal, designed for IP68.", why: "The tag is sealed against water and dust." },
+    { choice: "3D-printed pilot units with hand-assembled PCBs, injection molding later.", why: "Pilots cost about $100 to $150 a unit with no tooling; molding brings the unit cost to the $0.30 target." },
   ],
   "P-5": [
     { choice: "mmWave radar and a floor vibration mat, no cameras.", why: "Falls are detected without filming residents." },
     { choice: "3× sensor redundancy.", why: "Radar, floor mat and room sensors confirm each other to cut false alarms." },
     { choice: "Everything on the facility's local OpenWRT LAN, no cloud.", why: "Resident data never leaves the building." },
+    { choice: "Confidence scoring gates every alert.", why: "One noisy sensor cannot page a nurse on its own." },
   ],
   "P-14": [
     { choice: "Warnings address by address instead of whole evacuation zones.", why: "Each home gets its own hours-until-arrival estimate from distance, wind and local sensitivity." },

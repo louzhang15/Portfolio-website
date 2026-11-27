@@ -1,4 +1,5 @@
 import { TRADEOFFS } from "@/components/prototype/projectData";
+import { DEEP_DIVES, type Figure } from "./deepDiveData";
 
 const WRAP = "mx-auto w-full max-w-[1352px] px-5 md:px-10 xl:px-16";
 const H2 = "text-balance text-[clamp(2rem,4vw,3.25rem)]";
@@ -26,70 +27,10 @@ export function Tradeoffs({ id }: { id: string }) {
   );
 }
 
-type Figure = { src: string; caption: string };
-type Part = { kicker: string; title: string; points: string[]; stats?: { value: string; label: string }[]; figures: Figure[] };
-
-/** The CSA LEAP deck (PDF pages 2 to 4), one subsystem per block. */
-const CSA: Part[] = [
-  {
-    kicker: "Design architecture",
-    title: "50+ part interfaces in one 3.1 m envelope",
-    points: [
-      "Coordinated geometry conflicts between the telescopic, structural and thermal subsystems.",
-      "CATIA V6 parametric assemblies enforced interface constraints and carried design changes to dependent parts.",
-      "GD&T on every critical mating surface: flatness, perpendicularity and true position for manufacturing.",
-      "Tolerance stack-up across all telescopic stages checked fit under worst-case dimensional variation.",
-      "Design freezes tracked in MS Project across the mechanical, thermal and electrical subsystems.",
-    ],
-    figures: [
-      { src: "/media/csa/section-view-copy.jpg", caption: "Section cut CAD, interior of the 3.1 m tube" },
-      { src: "/media/csa/section-drawing.jpg", caption: "Transportation tube assembly, section view A-A (Ø540, 3080 mm)" },
-      { src: "/media/csa/isometric-drawing-bom.jpg", caption: "Isometric view and bill of materials" },
-    ],
-  },
-  {
-    kicker: "Simulation and analysis",
-    title: "Thermal FEA over the 14-day lunar night",
-    points: [
-      "Verified heat retention through the full cold soak, so the produce survives the lunar night.",
-      "Found thermal bridging in the aluminium telescopic joints and isolated each conduction path through FEA-guided redesign.",
-      "Validated the drive mechanism against high-vibration launch loads.",
-      "A kinematic motion study confirmed zero interference and clearance margins at every extension state.",
-    ],
-    stats: [
-      { value: "290°C", label: "max thermal gradient" },
-      { value: "2.54×", label: "structural safety factor" },
-      { value: "<4.2%", label: "predictive variance" },
-    ],
-    figures: [{ src: "/media/csa/isometric-view.webp", caption: "Telescopic tube, deployed" }],
-  },
-  {
-    kicker: "Material stack, outer to inner",
-    title: "Regolith, aluminium, insulation",
-    points: [
-      "Layer 1, regolith shielding: 50 cm of local lunar soil for radiation protection and thermal mass, harvested on site.",
-      "Layer 2, Al 6061-T6 pressure vessel: machined structural core for atmosphere containment and primary loads, 2.5× safety factor.",
-      "Layer 3, multi-layer insulation: reflective blankets against radiative heat transfer, placed at every critical interface.",
-    ],
-    figures: [{ src: "/media/csa/section-view.webp", caption: "Section view of the layered tube wall" }],
-  },
-  {
-    kicker: "Mechatronics and fabrication",
-    title: "Power, control and the lab build",
-    points: [
-      "Power and charging routed to keep electrical continuity in every extension state, from stowed to 3.1 m.",
-      "Arduino runs the rail-guided wagon loop. A Raspberry Pi Pico runs the belt conveyor from greenhouse to habitat.",
-      "Live tests confirmed rail continuity during extension and a full autonomous transport cycle with no manual step.",
-      "Led physical integration: AL-6061 machining, MLI fabrication, PCB prototyping, wiring harnesses and cold-welded tab-to-tube joints.",
-    ],
-    figures: [
-      { src: "/media/csa/tube-interior.jpg", caption: "MLI-lined tube and rail during the lab build" },
-      { src: "/media/csa/prototype-overview.jpg", caption: "Wagon, wiring and rail in the integrated prototype" },
-    ],
-  },
-];
-
-function Img({ f, tall }: { f: Figure; tall?: boolean }) {
+function Img({ f }: { f: Figure }) {
+  const tall = f.shape === "tall";
+  // drawings and CAD renders show whole on white; photos and screenshots fill the frame
+  const cover = f.fit ? f.fit === "cover" : tall;
   return (
     <figure>
       <a
@@ -103,7 +44,7 @@ function Img({ f, tall }: { f: Figure; tall?: boolean }) {
           alt={f.caption}
           loading="lazy"
           decoding="async"
-          className={`w-full ${tall ? "aspect-[4/5]" : "aspect-[16/10]"} ${tall ? "object-cover" : "object-contain p-3"}`}
+          className={`w-full ${tall ? "aspect-[4/5]" : "aspect-[16/10]"} ${cover ? "object-cover object-top" : "object-contain p-3"}`}
         />
         <span className="sr-only">(opens full size in a new tab)</span>
       </a>
@@ -112,16 +53,20 @@ function Img({ f, tall }: { f: Figure; tall?: boolean }) {
   );
 }
 
-/** Lunar Transport System: each subsystem with its numbers and figures. */
-export function CsaDeepDive() {
+/** A hardware project's subsystems, each with its numbers and figures; nothing for projects without one. */
+export function DeepDive({ id }: { id: string }) {
+  const dive = DEEP_DIVES[id];
+  if (!dive) return null;
   return (
     <section className="light mt-24 py-20 md:mt-32 md:py-28">
       <div className={WRAP}>
-        <h2 className={H2}>How the system was engineered</h2>
+        <h2 className={H2}>{dive.heading}</h2>
         <div className="mt-14 space-y-24 md:space-y-32">
-          {CSA.map((p, i) => (
-            <article key={p.kicker} className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-              <div className={i % 2 ? "lg:order-2" : ""}>
+          {dive.parts.map((p, i) => {
+            const figs = p.figures ?? [];
+            return (
+            <article key={p.kicker} className={`grid gap-10 lg:gap-16 ${figs.length ? "lg:grid-cols-2" : ""}`}>
+              <div className={i % 2 && figs.length ? "lg:order-2 max-w-[68ch]" : "max-w-[68ch]"}>
                 <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent-on-light)]">
                   {String(i + 1).padStart(2, "0")} · {p.kicker}
                 </p>
@@ -145,16 +90,18 @@ export function CsaDeepDive() {
                   </dl>
                 )}
               </div>
-              <div className={`grid gap-6 ${p.figures.length > 1 ? "sm:grid-cols-2" : ""} ${i % 2 ? "lg:order-1" : ""}`}>
-                {p.figures.map((f, k) => (
-                  <div key={f.src} className={p.figures.length === 3 && k === 0 ? "sm:col-span-2" : ""}>
-                    {/* the two lab photos are near-square or portrait, so they share a taller frame */}
-                    <Img f={f} tall={p.kicker.startsWith("Mechatronics")} />
-                  </div>
-                ))}
-              </div>
+              {figs.length > 0 && (
+                <div className={`grid content-start gap-6 ${figs.length > 1 ? "sm:grid-cols-2" : ""} ${i % 2 ? "lg:order-1" : ""}`}>
+                  {figs.map((f, k) => (
+                    <div key={f.src} className={figs.length === 3 && k === 0 ? "sm:col-span-2" : ""}>
+                      <Img f={f} />
+                    </div>
+                  ))}
+                </div>
+              )}
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
