@@ -1,8 +1,10 @@
 "use client";
 
 import { useMotionValue } from "framer-motion";
+import Link from "next/link";
 import { Phone, Watch, type Motion } from "./devices";
-import { CONTACT, InternLogos, OpenTo, btnGhostDark, btnPrimaryDark } from "./stage";
+import { LUNAR_PROJECT_HREF } from "./projectData";
+import { InternLogos, OpenTo, btnGhostDark, btnPrimaryLight } from "./stage";
 
 const SKILLS: [string, string[]][] = [
   ["Software", ["Python", "TypeScript", "React", "Next.js", "LLM agents", "SQL"]],
@@ -31,11 +33,11 @@ export function StaticIntro({ id }: { id: string }) {
           </p>
           <OpenTo className="mt-4" />
           <div className="mt-7 flex flex-wrap gap-3">
-            <a className={btnPrimaryDark} href="#chapter-projects">
+            <Link className={btnPrimaryLight} href={LUNAR_PROJECT_HREF}>
+              Lunar case study
+            </Link>
+            <a className={btnGhostDark} href="#chapter-projects">
               View projects
-            </a>
-            <a className={btnGhostDark} href={`mailto:${CONTACT.email}`}>
-              Email me
             </a>
           </div>
         </div>

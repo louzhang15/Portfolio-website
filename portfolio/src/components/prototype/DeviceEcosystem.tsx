@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import "./prototype.css";
 import DeckChapter from "./DeckChapter";
 import ExperienceChapter from "./ExperienceChapter";
+import LunarChapter from "./LunarChapter";
 import PhoneChapter from "./PhoneChapter";
 import ProjectsChapter from "./ProjectsChapter";
 import { StaticIntro, StaticSkills } from "./StaticDevices";
@@ -18,6 +19,7 @@ import { CONTACT, OpenTo, useWebGL, useReducedMotionSafe } from "./stage";
 /** Each chapter scrolls on its own track; the bar names them by content and shows progress through the current one. */
 const chapters = [
   { label: "Intro", id: "chapter-intro" },
+  { label: "Lunar Transport", id: "chapter-lunar" },
   { label: "Portfolio", id: "chapter-deck" },
   { label: "Skills", id: "chapter-skills" },
   { label: "Experience", id: "chapter-experience" },
@@ -149,7 +151,7 @@ function ChapterNav() {
           className="chapter-glass-trigger flex h-11 w-full min-w-11 max-w-36 items-center justify-center gap-1 justify-self-center px-1.5 text-[13px] lg:hidden"
           style={{ color: menu ? fg : muted }}
         >
-          <span className="truncate">{current}</span>
+          <span className="truncate">{current === "Lunar Transport" ? "Lunar" : current}</span>
           <svg aria-hidden width="10" height="6" viewBox="0 0 10 6" className="shrink-0 transition-transform duration-200" style={{ transform: menu ? "rotate(180deg)" : undefined }}>
             <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -334,6 +336,7 @@ export default function DeviceEcosystem() {
       <Loader static={reduced} />
       <ChapterNav />
       {reduced ? <StaticIntro id="chapter-intro" /> : <WatchChapter id="chapter-intro" />}
+      <LunarChapter id="chapter-lunar" />
       <DeckChapter id="chapter-deck" />
       {reduced ? <StaticSkills id="chapter-skills" /> : <PhoneChapter id="chapter-skills" />}
       <ExperienceChapter id="chapter-experience" />

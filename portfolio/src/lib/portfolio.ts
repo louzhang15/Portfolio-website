@@ -32,13 +32,25 @@ export type PortfolioItem = {
 
 type RawPortfolioItem = Omit<PortfolioItem, "slug" | "gallery" | "documents" | "metrics" | "accent" | "date" | "sortOrder">;
 
-export const fullPortfolioPages = Array.from(
-  { length: 7 },
-  (_, index) => `/media/portfolio-pages/full/page-${String(index + 1).padStart(2, "0")}.jpg`
+export const fullPortfolioPageTitles = [
+  "Profile and skills",
+  "Lunar Transport System",
+  "Predictive simulation and analysis",
+  "Mechatronics and fabrication",
+  "Nursie, AI nurse assistant",
+  "Nursie, alert pipeline and outcomes",
+  "Autonomous reforestation robot",
+  "Lunar Transport System, concept decisions",
+  "Lunar Transport System, rail calculation and validation",
+  "Nursie and Reforestation Robot, hardware checks",
+];
+
+export const fullPortfolioPages = fullPortfolioPageTitles.map(
+  (_, index) => `/media/portfolio-pages/full/page-${String(index + 1).padStart(2, "0")}.jpg`,
 );
 
 export const fullPortfolioDocument = {
-  label: "Full 7-page portfolio PDF",
+  label: "Engineering portfolio PDF",
   href: "/media/portfolio-pages/portfolio.pdf",
 };
 
@@ -73,22 +85,21 @@ const mediaById: Record<
   "I-2": { accent: "#1f4f99", emoji: "Aero", date: "Jan. – Apr. 2026", sortOrder: 2 },
   "I-1": { accent: "#d3222a", emoji: "Cell", date: "June – Aug. 2026", sortOrder: 1 },
   "P-1": {
-    image: fullPortfolioPages[1],
-    gallery: fullPortfolioPages.slice(1, 4),
+    image: "/media/csa/prototype-overview.jpg",
     documents: [fullPortfolioDocument],
     links: [
       {
-        label: "Whole System Demo",
+        label: "Watch the transport demo",
         href: "https://drive.google.com/file/d/1LqyUNpBNplhUWHvme9c3FFQbZeqPtogA/view",
         kind: "demo",
       },
       {
-        label: "Rail Conductivity Test",
+        label: "Watch the rail conductivity test",
         href: "https://drive.google.com/file/d/1MfcSRCp3KfwCHt7k4i1-HAdao1aqbfDb/view",
         kind: "demo",
       },
     ],
-    metrics: ["3 m telescopic tube", "251/350 concept score", "1.90 mm max wheel clearance", "185 kg final mass"],
+    metrics: ["7 engineering students led", "5/5 decision matrices won by our concept", "42% less volume stowed for launch", "1.90\u00a0mm largest wheel clearance, target under 2\u00a0mm"],
     accent: "#1b6fff",
     emoji: "Moon",
   },
@@ -242,6 +253,7 @@ const rawProjects = [
 export const activeProjects: PortfolioItem[] = rawProjects.map(hydrate);
 export const projects = activeProjects;
 export const featuredProjects: PortfolioItem[] = activeProjects.slice(0, 5);
+
 export const allPortfolioItems: PortfolioItem[] = [...activeProjects, ...internships].filter(
   (item) => item.status === "active"
 );

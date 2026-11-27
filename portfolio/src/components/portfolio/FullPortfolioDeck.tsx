@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, FileText } from "lucide-react";
-import { fullPortfolioDocument, fullPortfolioPages } from "@/lib/portfolio";
+import { fullPortfolioDocument, fullPortfolioPages, fullPortfolioPageTitles } from "@/lib/portfolio";
 
 export default function FullPortfolioDeck() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -21,7 +21,7 @@ export default function FullPortfolioDeck() {
               Full Portfolio
             </div>
             <h2 className="font-headline text-3xl font-extrabold leading-tight text-[var(--color-on-surface)] sm:text-4xl">
-              The complete 7-page deck.
+              The complete {fullPortfolioPages.length}-page deck
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -69,7 +69,7 @@ export default function FullPortfolioDeck() {
                 <div className="relative overflow-hidden rounded-xl border border-[var(--color-outline-variant)] bg-white shadow-sm transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
                   <img
                     src={src}
-                    alt={`Portfolio page ${index + 1}`}
+                    alt={`Portfolio page ${index + 1}, ${fullPortfolioPageTitles[index]}`}
                     className="aspect-[8.5/11] w-full object-cover object-top"
                   />
                   <span className="absolute left-2 top-2 rounded-full bg-black/55 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">

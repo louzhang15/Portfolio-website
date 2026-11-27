@@ -73,16 +73,16 @@ const nursie: DeepDive = {
   parts: [
     {
       kicker: "Sensor hardware",
-      title: "Three sensing nodes, no cameras",
+      title: "Three room-sensing inputs, no cameras",
       points: [
-        "mmWave radar (TI IWR6843) senses position and activity continuously. Its signal processing is tuned to ignore curtain and object motion.",
-        "An ESP32 node running FreeRTOS reads a magnetic door sensor and a PIR detector, publishes occupancy over ROS 2 and flags night-time room exits.",
-        "A floor vibration mat node picks up the impact signature. Fused with the radar, it tells a critical fall from a dropped object.",
+        "The TI IWR6843 mmWave radar observes position and motion without a camera. Abrupt sitting, furnishings and occlusion can complicate its readings.",
+        "A separate ESP32 running FreeRTOS reads a magnetic door sensor and a PIR detector. Those readings add room and movement context over ROS 2.",
+        "The vibration mat senses physical impact. Dropped objects can also trigger it, so the prototype pairs that signal with the radar's motion evidence.",
       ],
       stats: [
-        { value: "3×", label: "sensor redundancy" },
+        { value: "3", label: "room-sensing inputs" },
         { value: "0", label: "cameras" },
-        { value: "LAN", label: "local-only data" },
+        { value: "LAN", label: "sensor network" },
       ],
       figures: [
         { src: "/media/nursie/mmwave-radar.webp", caption: "mmWave radar (IWR6843) on its mount", shape: "tall" },
@@ -103,13 +103,11 @@ const nursie: DeepDive = {
     },
     {
       kicker: "Engineering challenges",
-      title: "Signal clarity and a reliable local network",
+      title: "What still needs measurement",
       points: [
-        "Signal clarity: custom signal processing and threshold tuning separate a resident's heartbeat signature from moving curtains.",
-        "Reliability: telemetry instability and sensor-fusion logic were fixed with an optimised ESP32 mesh network.",
-        "Confidence scoring gates every alert, so one noisy sensor cannot page a nurse alone.",
-        "Privacy: data stays on the facility LAN, designed for Québec's Law 25 personal information framework.",
-        "Next: Apple Watch vital-sign checks, fall-risk prediction from radar gait data, and medical-grade hardware for a CHSLD rollout.",
+        "Test scripted falls, abrupt sitting, dropped objects and partial radar occlusion to see where the combined sensors help or miss events.",
+        "Timestamp the stimulus and staff alert to measure end-to-end delay. Report missed and false alerts separately for each condition.",
+        "The prototype demonstrated how the sensors communicate over a local network. Detection accuracy, latency and clinical performance still need validation.",
       ],
       figures: [
         { src: "/media/nursie/vibration-node.webp", caption: "Floor vibration mat node on its breadboard", shape: "tall" },
@@ -126,10 +124,10 @@ const robot: DeepDive = {
       kicker: "Engineering and code",
       title: "Line following and timed seed drops",
       points: [
-        "Two infrared sensors follow a black track with on/off steering. A colour sensor reads the floor.",
-        "A servo turns a paper seed dispenser for timed placement.",
-        "One C++ codebase on Arduino: line following, colour reading, drive and the dispenser servo, written in 24 hours.",
-        "All electronics wired by hand on a breadboard and checked for signal integrity on the competition floor.",
+        "Two digital infrared readings drive fixed steering branches on the Arduino. A separate colour-reading step controls the dispenser trigger.",
+        "A servo turns a paper seed dispenser. The integrated sketch fixes the reverse sweep condition so the mechanism returns to its starting angle.",
+        "The final sketch makes two out-and-back sweeps with 121 commands per leg and a 10 ms delay per command. That is 4.84 s of programmed delay. Actual servo motion and seed release would need separate measurement.",
+        "Breadboard wiring and a folded paper dispenser made it possible to adjust the setup inside the 24-hour build window.",
       ],
       stats: [
         { value: "24h", label: "build window" },

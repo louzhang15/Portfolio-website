@@ -6,6 +6,7 @@ import { Fragment } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
 import { CONTACT, OpenTo } from "@/components/prototype/stage";
 import { FOCUS, photoFor } from "@/components/prototype/projectData";
+import LunarEngineering from "./LunarEngineering";
 import "@/components/prototype/prototype.css";
 import { DeepDive, Tradeoffs } from "./CaseStudyDeepDive";
 import TechTimeline from "./deepDives/TechTimeline";
@@ -116,7 +117,8 @@ function TopBar({ title }: { title: string }) {
   );
 }
 
-function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
+function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: string | null; hasHardwareDetails: boolean }) {
+  const isLunar = item.slug === "lunar-transport-system";
   // the subtitle often carries the date already; say it once
   const meta = [item.displaySector, item.date && !item.subtitle.includes(item.date) ? item.date : ""].filter(Boolean).join(" · ");
   const words = item.title.split(" ");
@@ -127,7 +129,7 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
           // logos come with their own ground (red Tesla, navy Lockheed), so the tile is the logo itself
           <img src={logo} alt={`${item.title} logo`} width={88} height={56} className="h-14 w-[88px] rounded-[var(--radius-md)] border border-[var(--border)] object-cover" />
         )}
-        <p className="text-[15px] text-[var(--text-tertiary)]">{meta}</p>
+        {!isLunar && <p className="text-[15px] text-[var(--text-tertiary)]">{meta}</p>}
       </div>
       <h1 className="mt-4 max-w-[14ch] text-balance text-[clamp(2.75rem,7vw,5.75rem)] text-[var(--text)]">
         {words.map((w, i) => (
@@ -139,11 +141,29 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
           </Fragment>
         ))}
       </h1>
-      <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
-      {(item.links.length > 0 || item.documents.length > 0) && (
+      {isLunar ? (
+        <>
+          <p className="mt-6 max-w-[40ch] text-[clamp(1.25rem,2vw,1.5rem)] leading-[1.4] text-[var(--text)]">
+            A telescoping 3 m tube that carries fresh produce from a lunar greenhouse to a habitat. I led the seven-student team that designed its structure and fitted four other teams’ subsystems into it.
+          </p>
+          <dl className="mt-8 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-4 text-[15px] sm:grid-cols-4">
+            {[["Role", "Team lead, structure and integration"], ["Client", "Canadian Space Agency, LEAP OASIS"], ["School", "Polytechnique Montréal"], ["When", "Jan. to Apr. 2025"]].map(([k, v]) => (
+              <div key={k}>
+                <dt className="text-[var(--text-tertiary)]">{k}</dt>
+                <dd className="mt-0.5 text-[var(--text)]">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </>
+      ) : (
+        <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
+      )}
+      {(isLunar || hasHardwareDetails || item.links.length > 0 || item.documents.length > 0) && (
         <div className="mt-8 flex flex-wrap gap-3">
-          {item.links.map((link, i) => (
-            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 ? BTN_PRIMARY : BTN_GHOST}>
+          {isLunar && <a href="#lunar-engineering" className={BTN_PRIMARY}>See the engineering work</a>}
+          {hasHardwareDetails && <a href="#hardware-details" className={BTN_PRIMARY}>Explore the hardware</a>}
+          {!isLunar && item.links.map((link, i) => (
+            <a key={`${link.href}-${i}`} href={link.href} target="_blank" rel="noopener noreferrer" className={i === 0 && !hasHardwareDetails ? BTN_PRIMARY : BTN_GHOST}>
               <LinkIcon kind={link.kind} />
               {link.label}
               <ArrowUpRight aria-hidden className="h-3.5 w-3.5 transition-transform duration-200 motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5" />
@@ -165,12 +185,12 @@ function Hero({ item, logo }: { item: PortfolioItem; logo: string | null }) {
 
 function Specs({ item }: { item: PortfolioItem }) {
   const cells = item.metrics.slice(0, 4).map((m) => {
-    const i = m.search(/\s/);
+    const i = m.indexOf(" ");
     return i > 0 ? { value: m.slice(0, i), caption: m.slice(i + 1) } : { value: m, caption: "" };
   });
   if (!cells.length) return null;
   return (
-    <dl className={`${WRAP} mt-12 grid grid-cols-2 gap-px md:grid-cols-4`}>
+    <dl className={`${WRAP} mt-12 grid grid-cols-2 gap-px ${cells.length === 3 ? "md:grid-cols-3" : "md:grid-cols-4"}`}>
       {cells.map((c) => (
         <div key={c.value + c.caption} className="flex flex-col-reverse justify-end border-t border-[var(--text)] pb-2 pr-4 pt-4">
           <dt className="mt-2 text-[14px] text-[var(--text-tertiary)]">{c.caption}</dt>
@@ -231,7 +251,7 @@ function Related({ item, related }: { item: PortfolioItem; related: PortfolioIte
   return (
     <section className={`${WRAP} py-20 md:py-28`}>
       <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">More in {item.displaySector.toLowerCase()}</h2>
-      <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className={`mt-10 grid gap-6 sm:grid-cols-2 ${related.length >= 3 ? "lg:grid-cols-3" : ""}`}>
         {related.map((rel) => {
           const thumb = rel.image ?? rel.gallery[0];
           return (
@@ -295,6 +315,8 @@ function Footer() {
 
 // ============================================================================
 export default function ProjectCaseStudy({ item, related }: { item: PortfolioItem; related: PortfolioItem[] }) {
+  const isLunar = item.slug === "lunar-transport-system";
+  const hasHardwareDetails = item.id === "P-3" || item.id === "P-5";
   // a real photo leads when there is one; a page of the PDF deck stays in the gallery
   const heroSrc = photoFor(item.id) ?? item.image ?? item.gallery[0] ?? null;
   const heroIsPage = heroSrc?.includes("/portfolio-pages/full/") ?? false;
@@ -305,7 +327,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
   return (
     <main className="proto min-h-screen overflow-x-clip">
       <TopBar title={item.title} />
-      <Hero item={item} logo={heroIsLogo ? heroSrc : null} />
+      <Hero item={item} logo={heroIsLogo ? heroSrc : null} hasHardwareDetails={hasHardwareDetails} />
 
       {heroSrc && !heroIsPage && !heroIsLogo && (
         <div className={WRAP}>
@@ -319,7 +341,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
               height={800}
               fetchPriority="high"
               decoding="async"
-              className="aspect-[16/8] w-full object-cover"
+              className="aspect-[4/3] w-full object-cover md:aspect-[16/8]"
               style={{ objectPosition: FOCUS[item.id] }}
             />
           </div>
@@ -328,6 +350,9 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
 
       <Specs item={item} />
 
+      {isLunar && <LunarEngineering demos={item.links} />}
+
+      {!isLunar && (
       <section className={`${WRAP} mt-20 grid gap-12 md:mt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16`}>
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">Overview</h2>
@@ -363,11 +388,20 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
         </aside>
         <Details text={item.details} />
       </section>
+      )}
 
-      <Tradeoffs id={item.id} />
-      {techDiveFor(item.id) ? <TechTimeline dive={techDiveFor(item.id)!} /> : <DeepDive id={item.id} />}
-
-      <Gallery item={item} src={gallery} />
+      {!isLunar && (
+        <>
+          <Tradeoffs id={item.id} />
+          {techDiveFor(item.id) ? (
+            <TechTimeline dive={techDiveFor(item.id)!} anchor={hasHardwareDetails ? "hardware-details" : undefined} />
+          ) : (
+            <DeepDive id={item.id} anchor={hasHardwareDetails ? "hardware-details" : undefined} />
+          )}
+          <Gallery item={item} src={gallery} />
+        </>
+      )}
+      {isLunar && techDiveFor(item.id) && <TechTimeline dive={techDiveFor(item.id)!} />}
       <Related item={item} related={related} />
       <Footer />
     </main>

@@ -209,11 +209,11 @@ function StageBlock({ s, i, last }: { s: Stage; i: number; last: boolean }) {
 }
 
 /** The project's technical story as a numbered timeline, with an index of stages to jump between. */
-export default function TechTimeline({ dive }: { dive: TechDive }) {
+export default function TechTimeline({ dive, anchor }: { dive: TechDive; anchor?: string }) {
   return (
     <section className="light mt-24 py-20 md:mt-32 md:py-28">
       <div className={WRAP}>
-        <h2 className="text-balance text-[clamp(2rem,4vw,3.25rem)]">{dive.heading}</h2>
+        <h2 id={anchor} className="scroll-mt-20 text-balance text-[clamp(2rem,4vw,3.25rem)]">{dive.heading}</h2>
         <p className="mt-4 max-w-[64ch] text-[17px] leading-relaxed text-[var(--text-secondary)]">{dive.intro}</p>
         <p className="mt-3 max-w-[64ch] text-[14px] text-[var(--text-tertiary)]">
           Drawings and calculation pages are the originals, some in French. The English text beside each one explains it. Click any image for full size.

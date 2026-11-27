@@ -54,13 +54,13 @@ function Img({ f }: { f: Figure }) {
 }
 
 /** A hardware project's subsystems, each with its numbers and figures; nothing for projects without one. */
-export function DeepDive({ id }: { id: string }) {
+export function DeepDive({ id, anchor }: { id: string; anchor?: string }) {
   const dive = DEEP_DIVES[id];
   if (!dive) return null;
   return (
     <section className="light mt-24 py-20 md:mt-32 md:py-28">
       <div className={WRAP}>
-        <h2 className={H2}>{dive.heading}</h2>
+        <h2 id={anchor} className={`${H2} scroll-mt-20`}>{dive.heading}</h2>
         <div className="mt-14 space-y-24 md:space-y-32">
           {dive.parts.map((p, i) => {
             const figs = p.figures ?? [];

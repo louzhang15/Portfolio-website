@@ -76,21 +76,20 @@
     {
       "id": "P-1",
       "title": "Lunar Transport System",
-      "subtitle": "Team C1 Lead, Structure & Integration · CSA LEAP OASIS · Jan.–Apr. 2025 · Polytechnique Montréal",
+      "subtitle": "Team Lead, Structure & Systems Integration · CSA LEAP OASIS · Jan.–Apr. 2025 · Polytechnique Montréal",
       "sector": "Aero Atoll",
       "status": "active",
       "emoji": "🌕",
       "skills": [
         "CATIA V5",
+        "Mechanical CAD",
+        "Team Leadership",
         "Structural Design",
         "Systems Integration",
-        "Bending & Stress Analysis",
-        "Technical Drawings",
-        "Prototype Testing",
-        "Team Leadership"
+        "Prototype Verification"
       ],
-      "details": "A Polytechnique Montréal design project on the Canadian Space Agency's LEAP OASIS challenge: move a vegetable compartment 3 m from a lunar greenhouse to a habitat. Five teams split the system. Team C1, which Louis led, owned the main structure and the integration of the other four (compartment, transfer and docking, propulsion and power, thermal and dust).\n\n• Concept selection: a telescopic tube scored 251 of 350 across all five team matrices, ahead of a rover (206) and a zipline (197)\n• Design: a two-section aluminium tube on 3 pairs of legs, Ø540 mm, 3 m deployed and 1.6 m stowed, with a wagon running on rails inside\n• Analysis: free-body, shear and bending diagrams for the rails and leg-stress checks against a 1.5 safety factor; leg stress on the Moon is 0.0535 MPa against a 240 MPa yield\n• Bench prototype in wood and 3D-printed PLA ($216.64): wheel-to-rail clearance of 1.85 to 1.90 mm against a 2 mm target, and 6.0 kg held for 5 minutes with no visible deformation\n• Final design: 185 kg total mass; the report proposes a 0.5 cm wall to bring it to about 95 kg",
-      "github": "https://github.com/louzhang15",
+      "details": "This Polytechnique Montréal design project addressed the Canadian Space Agency’s LEAP OASIS challenge. Team C1 worked on the structure and joined the wagon, insulation, transfer hardware, and airlock connections into one transport system. The produce compartment, docking and transfer, propulsion and control, and thermal protection were the responsibility of neighboring teams.",
+      "github": null,
       "demo": null,
       "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBfmEpezBSpneFvCrYKhOLUOseL8Ykp1jo-HSG-ffLWpXFUDPcJaLNQ_yYG5K3rrQojomG93egnxnwooCUeOcPCLWPOTN3DCgnuB1cKbCeyo00IDUBjs5tK3QD_526_Tv0wWlf_J9c26MbyCm2M9Bh0lHMTaYyyp_lR2bOctqYMSHKc0imzdeQ5FArd6MJgX1SS1NDA5WuXGr8-BMg81vmKL76Uzzftusbi3MNmNr5KKskCa3NgMBifjJq1unU1ixty6_658_OlN05p"
     },
@@ -127,7 +126,7 @@
         "DC Motors",
         "Recycled Materials"
       ],
-      "details": "Autonomous seed-planting robot built in 24 hours at RoboHacks (Feb. 2025) using recycled materials for the structure — cardboard chassis, plastic bottles, and a paper-engineered seed dispenser.\n\nWrote the navigation and dispensing code in C++ on Arduino: two IR sensors drive on/off line-following, a color sensor reads the floor, and a servo-actuated paper dispenser places seeds on a timer. All electronics wired on a breadboard from scratch under competition conditions.\n\nWon the Unexpected Expedition Award and placed 5th overall.",
+      "details": "Autonomous seed-planting robot built in 24 hours at RoboHacks (Feb. 2025) using recycled materials for the structure: a cardboard chassis, plastic bottles, and a folded paper seed dispenser.\n\nI worked on the Arduino control sequence. Two digital IR sensors guided steering along the track, and a separate color reading triggered the servo-driven dispenser. We wired the electronics on a breadboard for quick changes during the build.\n\nWon the Unexpected Expedition Award and placed 5th overall.",
       "github": "https://github.com/louzhang15/RoboHacks-2025",
       "demo": null,
       "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDAS80X_XNEuUFS6k-WwWNK4ujFPPuUxPpWvmTVpU1JR5SivSd5oUG2JcVNgHI4epz7XEJI6N7eCpY_5koJUANuAI1BYhptkTPhdi5UGO2lM2yHA1--6_Zdhkuwaf4AXh47aYn5TOW2B8af31QajqbXwz4Ldn2XPUjvQPK0SasCQYVwEJls5ZWv-YsDYabLJ6PaUZtolG1ufVsJARGvsPWji9-J_dMGuf0kpNNEYucYBsS8AG3SpRwrHKSZrvL4alOKLEcgHbwa7a7w"

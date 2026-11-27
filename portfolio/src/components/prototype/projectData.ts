@@ -13,6 +13,9 @@ export type ProjectItem = PortfolioItem & {
   visual?: "lane" | "latex";
 };
 
+export const LUNAR_PROJECT_SLUG = "lunar-transport-system";
+export const LUNAR_PROJECT_HREF = `/portfolio/${LUNAR_PROJECT_SLUG}`;
+
 // Hardware leads: most target roles are hardware, robotics and manufacturing.
 const groupById: Record<string, Group> = {
   "P-1": "Hardware & robotics",

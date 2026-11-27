@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Stop, WorldData } from "./driveData";
 
@@ -54,18 +55,19 @@ function Row({ stop }: { stop: Stop }) {
 /** the same world as a plain list: for reduced motion, no WebGL, or anyone who prefers reading */
 export default function DriveList({ world, onDrive }: { world: WorldData; onDrive?: () => void }) {
   const contact = world.stops.find((s) => s.kind === "contact");
+  const featured = world.stops.find((s) => s.featureImage && s.href);
   return (
     <main className="min-h-dvh bg-[#e7ecdf] px-4 pb-16 pt-[calc(env(safe-area-inset-top)+1.25rem)] text-[#1d2321] sm:px-8">
       <div className="mx-auto max-w-2xl">
         <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="font-label text-sm font-semibold text-[#1d2321]/70 hover:text-[#1d2321]">
+          <Link href="/" className="inline-flex min-h-11 items-center font-label text-sm font-semibold text-[#1d2321]/70 hover:text-[#1d2321]">
             ← Portfolio
           </Link>
           {onDrive && (
             <button
               type="button"
               onClick={onDrive}
-              className="rounded-[6px] border border-[#1d2321]/20 bg-[#fbfaf6] px-3 py-1.5 font-label text-sm font-semibold hover:border-[#1d2321]/40"
+              className="min-h-11 rounded-[6px] border border-[#1d2321]/20 bg-[#fbfaf6] px-3 py-1.5 font-label text-sm font-semibold hover:border-[#1d2321]/40"
             >
               Drive instead
             </button>
@@ -73,10 +75,31 @@ export default function DriveList({ world, onDrive }: { world: WorldData; onDriv
         </div>
         <h1 className="mt-8 font-label text-4xl font-bold tracking-tight sm:text-5xl">Louis Zhang</h1>
         <p className="mt-2 text-[#5b625e]">Mechanical Engineering · Polytechnique Montréal</p>
-        {contact && <p className="mt-1 font-semibold text-[#a43b1c]">{contact.line}</p>}
+        {contact && <p className="mt-1 font-semibold text-[#a43e21]">{contact.line}</p>}
+
+        {featured?.href && featured.featureImage && (
+          <section className="mt-7" aria-labelledby="featured-drive-project">
+            <Link
+              href={featured.href}
+              className="group grid overflow-hidden rounded-[6px] border border-[#1d2321]/20 bg-[#fbfaf6] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1d2321] sm:grid-cols-[1fr_1.35fr]"
+            >
+              <div className="relative aspect-[2/1] bg-[#d4d9cf] sm:aspect-auto">
+                <Image src={featured.featureImage} alt="Team C1’s lunar transport bench prototype" fill sizes="(max-width: 639px) calc(100vw - 2rem), 286px" className="object-cover object-[50%_30%]" />
+              </div>
+              <div className="p-4 sm:p-5">
+                <p className="font-label text-[11px] font-bold uppercase tracking-[0.14em] text-[#5b625e]">{featured.kicker}</p>
+                <h2 id="featured-drive-project" className="mt-1 font-label text-2xl font-bold leading-tight">{featured.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-[#3d4441]">{featured.line}</p>
+                <span className="mt-3 inline-flex items-center gap-2 font-label text-sm font-bold group-hover:underline group-focus-visible:underline">
+                  Explore the engineering case study <span aria-hidden>→</span>
+                </span>
+              </div>
+            </Link>
+          </section>
+        )}
 
         {SECTIONS.map((section) => {
-          const items = world.stops.filter((s) => s.kind === section.kind);
+          const items = world.stops.filter((s) => s.kind === section.kind && s.id !== featured?.id);
           if (items.length === 0) return null;
           return (
             <section key={section.kind} className="mt-10">

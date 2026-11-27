@@ -19,16 +19,16 @@ function Zoomed({ children }: { children: ReactNode }) {
 }
 
 /**
- * Sheets, front + back. The cover's back carries page 1, then pages pair up across the spine,
- * so the book reads like the printed deck: [cover] [1|2] [3|4] [5|6] [7|end paper].
+ * The cover's back carries page 1. Pages then pair across the spine, with a blank back on the last sheet if needed.
  */
 const SHEETS: { front: number | "cover"; back: number }[] = [
   { front: "cover", back: 0 },
-  { front: 1, back: 2 },
-  { front: 3, back: 4 },
-  { front: 5, back: 6 },
+  ...Array.from({ length: Math.floor(fullPortfolioPages.length / 2) }, (_, index) => ({
+    front: index * 2 + 1,
+    back: index * 2 + 2,
+  })),
 ];
-export const SPREADS = SHEETS.length;
+export const SPREADS = Math.ceil(fullPortfolioPages.length / 2);
 
 /** A sheet's front faces up on spread `index`, its back on `index + 1`; mount pages one spread either side. */
 const near = (shownOn: number, spread: number) => Math.abs(shownOn - spread) <= 1;
@@ -190,7 +190,7 @@ function Sheet({
           />
         )}
         <div className="absolute inset-0">
-          <Page page={sheet.back} title={titles[sheet.back]} side="left" mounted={near(index + 1, spread)} sizes={sizes} />
+          <Page page={sheet.back} title={titles[sheet.back]} side="left" mounted={sheet.back < fullPortfolioPages.length && near(index + 1, spread)} sizes={sizes} />
         </div>
         <motion.div className="pointer-events-none absolute inset-0 bg-[var(--mat-black)]" style={{ opacity: shade }} />
       </div>
@@ -293,7 +293,7 @@ export default function BookDeck({
           />
         ))}
         <div className="absolute left-1/2 top-0" style={{ width: PW, height: PH, transform: "translateZ(-0.5px)" }}>
-          <EndPaper active={spread >= SPREADS} />
+          <EndPaper active={spread >= SPREADS && fullPortfolioPages.length % 2 === 1} />
         </div>
         {SHEETS.map((_, i) => (
           <Sheet key={i} index={i} flip={flip} spread={spread} titles={titles} sizes={sizes} />
