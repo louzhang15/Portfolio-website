@@ -7,6 +7,39 @@ const dive: TechDive = {
   heading: "How ResQ-Link was built at UpStart 2026",
   intro:
     "ResQ-Link is a triage bracelet with no battery plus a web dashboard called SmartTriage. It was designed, costed and pitched at the UpStart 2026 pitching competition in Feb. 2026. The bracelet holds a passive NFC chip and a copper coil sealed in silicone. The dashboard shows every tagged patient by category and on a map.",
+  architecture: {
+    flow:
+      "A reader's field powers the coil, so the chip answers with no battery. The phone field app concept scans the band, records vitals and syncs the patient to SmartTriage. The hospital sees every tag by category and on a map. The pitch names an offline mesh sync for when cellular service fails. The project files hold the CAD part, the deck and dashboard screens, with no app or server code.",
+    layers: [
+      {
+        name: "Bracelet",
+        blocks: [
+          { name: "Silicone band", role: "Closed cuff with a window on one side.", tech: "Medical-grade silicone, matte grey" },
+          { name: "NFC chip and coil", role: "The flat spiral coil picks up the reader's field and powers the chip.", tech: "Passive NFC, no battery" },
+          { name: "Overmolded seal", role: "Closes the window over the board.", tech: "Designed for IP68" },
+        ],
+      },
+      {
+        name: "Field",
+        blocks: [
+          { name: "Phone field app", role: "Scans the wristband. Records pulse, respiratory rate and consciousness level. Has a Sync Now button.", tech: "Concept screens" },
+        ],
+      },
+      {
+        name: "Hospital",
+        blocks: [
+          { name: "Tags and scans", role: "Tags List, Scan Bracelet and Update Tag screens per bracelet ID.", tech: "SmartTriage" },
+          { name: "Location map", role: "Shows where each bracelet is.", tech: "SmartTriage" },
+          { name: "Staff and activity", role: "Registered Staff and a feed of who labelled, updated or resolved a tag.", tech: "SmartTriage" },
+        ],
+      },
+    ],
+    links: [
+      { from: "Reader", to: "NFC chip", label: "the reader's field is the only power source" },
+      { from: "Field app", to: "SmartTriage", label: "Sync Now; offline mesh sync is pitched, not shown" },
+      { from: "SmartTriage", to: "Header counts", label: "Morgue, Immediate, Delayed and Minor counts on every screen" },
+    ],
+  },
   stages: [
     {
       date: "Feb. 2026",

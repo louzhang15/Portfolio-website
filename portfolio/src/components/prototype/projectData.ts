@@ -1,8 +1,7 @@
-import { projects, type PortfolioItem } from "@/lib/portfolio";
+import { projects, sideProjects, type PortfolioItem } from "@/lib/portfolio";
 
 /**
  * Prototype-only project grouping. Lives here (not portfolio.json) so the live site's data stays untouched.
- * Side-project facts come from each repo: Lane from its README, LaTeXify Resume from its backend (main.py).
  */
 export const GROUPS = ["Hardware & robotics", "Software & AI", "Side projects"] as const;
 export type Group = (typeof GROUPS)[number];
@@ -67,60 +66,15 @@ export const DRAWINGS = new Set(["P-2", "P-4"]);
 /** Within each group: strongest engineering first, wins ahead of the rest, then newest first. */
 const order = ["P-1", "P-5", "P-3", "P-4", "P-2", "P-14", "P-11", "P-9", "P-12", "P-13"];
 
-const side = (item: Omit<ProjectItem, "status" | "emoji" | "demo" | "image" | "gallery" | "documents" | "accent" | "sortOrder" | "sector">): ProjectItem => ({
-  status: "active",
-  emoji: "",
-  demo: null,
-  image: null,
-  gallery: [],
-  documents: [],
-  accent: "var(--accent)",
-  sortOrder: 99,
-  sector: "Side projects",
-  ...item,
-});
-
-const sideProjects: ProjectItem[] = [
-  side({
-    id: "S-1",
-    slug: "",
-    group: "Side projects",
-    visual: "lane",
-    title: "Lane",
-    subtitle: "Chrome extension",
-    displaySector: "Software",
-    date: "",
-    details:
-      "A Chrome extension for keeping internship applications organised across recruitment cycles. It syncs application and rejection emails from Gmail, moves each application through eight statuses from Saved to Offer, shows the whole pipeline as a Sankey chart, and exports any cycle to CSV.",
-    skills: ["React", "TypeScript", "Vite", "Recharts", "Chrome MV3", "Gmail OAuth"],
-    metrics: ["8 application statuses", "Gmail auto-sync", "CSV import and export"],
-    github: "https://github.com/louzhang15/Job-Application-Status-Chrome-Extension",
-    links: [{ label: "GitHub", href: "https://github.com/louzhang15/Job-Application-Status-Chrome-Extension", kind: "github" }],
-  }),
-  side({
-    id: "S-2",
-    slug: "",
-    group: "Side projects",
-    visual: "latex",
-    title: "LaTeXify Resume",
-    subtitle: "Web app",
-    displaySector: "Software",
-    date: "",
-    details:
-      "Upload a resume as a PDF or Word file and get it back in Jake's LaTeX template. A FastAPI backend extracts the text, structures it with Gemini, then renders and compiles the LaTeX into a PDF plus the .tex source. Nothing is stored.",
-    skills: ["Python", "FastAPI", "Gemini API", "LaTeX", "Jinja", "Next.js", "Docker"],
-    metrics: ["2 input formats (PDF, DOCX)", "2 outputs (PDF and .tex)", "0 files stored"],
-    github: "https://github.com/louzhang15/Latex---resume-converter",
-    links: [{ label: "GitHub", href: "https://github.com/louzhang15/Latex---resume-converter", kind: "github" }],
-  }),
-];
+const visualById: Record<string, ProjectItem["visual"]> = { "S-1": "lane", "S-2": "latex" };
+const sideItems: ProjectItem[] = sideProjects.map((p) => ({ ...p, group: "Side projects", visual: visualById[p.id] }));
 
 export const allProjects: ProjectItem[] = [
   ...order
     .map((id) => projects.find((p) => p.id === id))
     .filter((p): p is PortfolioItem => Boolean(p))
     .map((p) => ({ ...p, group: groupById[p.id], image: thumbnailById[p.id] ?? p.image })),
-  ...sideProjects,
+  ...sideItems,
 ];
 
 /** Hackathon results, from the project data already on the site. */

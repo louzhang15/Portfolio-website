@@ -5,6 +5,54 @@ const dive: TechDive = {
   heading: "How Trace decides who to warn, and when",
   intro:
     "Trace turns live fire and storm data into a level for each home: watch, warn or evacuate. It then plans an exit route that the hazard will not reach first. All of it was built in one day at HackHarvard 2026; the git log runs from 03:50 to 19:24 on Oct. 17.",
+  architecture: {
+    flow:
+      "Every 15 minutes the modeling pipeline writes live JSON from fire, weather, storm and road feeds. The sentinel reads it as one snapshot, scores each subscribed home and asks a policy for a level. Alerts go out as texts, calls, signed webhooks or MCP pulls. Route and timing come from code, and the LLM never writes them.",
+    layers: [
+      {
+        name: "Feeds",
+        blocks: [
+          { name: "Fire detections", role: "Satellite hot spots, perimeters and incidents.", tech: "NASA FIRMS VIIRS and MODIS, NIFC" },
+          { name: "Weather and storms", role: "Wind, gusts, humidity, fuel moisture, surge forecasts.", tech: "Open-Meteo, NWS, NHC, NOAA tide gauges" },
+          { name: "Roads", role: "Road graph and closures.", tech: "OpenStreetMap via Overpass, Caltrans D7" },
+        ],
+      },
+      {
+        name: "Modeling",
+        blocks: [
+          { name: "Spread and surge models", role: "Wind-driven fire ellipse per point, surge depth per address.", tech: "Python, live JSON per cycle" },
+        ],
+      },
+      {
+        name: "Sentinel",
+        blocks: [
+          { name: "Signals", role: "Distance, bearing, ETA, Red Flag and burn probability per home.", tech: "signals.py" },
+          { name: "Policy", role: "Turns signals into watch, warn or evacuate.", tech: "Rules, radius, or an LLM via Chalk Model Gateway" },
+          { name: "Router", role: "Time-dependent shortest path that beats the hazard by 0.25 h.", tech: "routing.py, OSM graph" },
+          { name: "State", role: "Subscribers, consent, escalation and the alert log.", tech: "JSON files in agent/state" },
+        ],
+      },
+      {
+        name: "Delivery",
+        blocks: [
+          { name: "Texts", role: "iMessage alerts and replies to NOW, WINDOW, STATUS and LEFT.", tech: "Photon bridge, Node" },
+          { name: "Voice calls", role: "Spoken alert over SIP.", tech: "ElevenLabs over Photon SIP" },
+          { name: "Agents", role: "Signed webhooks and an MCP server for personal agents.", tech: "HMAC-SHA256, MCP" },
+        ],
+      },
+      {
+        name: "Interfaces",
+        blocks: [
+          { name: "Web replay", role: "Map with 3D buildings, fire spread and surge views.", tech: "React, Vite, Mapbox GL, three.js" },
+        ],
+      },
+    ],
+    links: [
+      { from: "Photon bridge", to: "Sentinel", label: "inbound texts as POST /photon/inbound, HMAC-signed" },
+      { from: "Sentinel", to: "Photon bridge", label: "POST /send with a bearer secret" },
+      { from: "Chalk Sandboxes", to: "Sentinel", label: "run the 24/7 loop and the MCP endpoint, RestartPolicy.ALWAYS" },
+    ],
+  },
   stages: [
     {
       date: "Oct. 17, 2026",

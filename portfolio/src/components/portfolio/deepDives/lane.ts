@@ -19,7 +19,7 @@ const dive: TechDive = {
       ],
       points: [
         "Statuses: Saved, Applied, Phone Screen, Interview, Offer, Rejected, Withdrew, Ghosted.",
-        "Gmail covers applications and rejections. Interviews and offers are logged by hand, because those emails vary too much to classify.",
+        "Gmail sync covers applications and rejections. Interviews and offers are logged by hand in the dashboard.",
       ],
     },
     {
@@ -88,7 +88,7 @@ const dive: TechDive = {
           summary:
             "Completed cycles show fixed totals from TRUSTED_CYCLE_OUTCOMES in the dashboard source, saved again to storage on load.",
           verdict: "kept",
-          reason: "Gmail sync misses interviews and offers, so finished cycles keep the hand-checked numbers even after a storage reset.",
+          reason: "Gmail sync does not read interviews or offers. Fixed totals keep finished cycles correct, and they survive a storage reset.",
         },
         {
           name: "Web build for GitHub Pages (22 May)",

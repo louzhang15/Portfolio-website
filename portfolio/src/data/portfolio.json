@@ -91,7 +91,7 @@
       "details": "This Polytechnique Montréal design project addressed the Canadian Space Agency’s LEAP OASIS challenge. Team C1 worked on the structure and joined the wagon, insulation, transfer hardware, and airlock connections into one transport system. The produce compartment, docking and transfer, propulsion and control, and thermal protection were the responsibility of neighboring teams.",
       "github": null,
       "demo": null,
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBfmEpezBSpneFvCrYKhOLUOseL8Ykp1jo-HSG-ffLWpXFUDPcJaLNQ_yYG5K3rrQojomG93egnxnwooCUeOcPCLWPOTN3DCgnuB1cKbCeyo00IDUBjs5tK3QD_526_Tv0wWlf_J9c26MbyCm2M9Bh0lHMTaYyyp_lR2bOctqYMSHKc0imzdeQ5FArd6MJgX1SS1NDA5WuXGr8-BMg81vmKL76Uzzftusbi3MNmNr5KKskCa3NgMBifjJq1unU1ixty6_658_OlN05p"
+      "image": null
     },
     {
       "id": "P-2",
@@ -110,7 +110,7 @@
       "details": "3D CAD modeling project at Polytechnique Montréal (Oct.–Nov. 2024). Fully modeled a high-performance axial piston hydraulic pump from the ground up.\n\nThe assembly houses 9 individual piston assemblies — each comprising a piston and slipper pad — retained by a retaining plate and centered via a spherical nut. Optimized component geometry and assembly parameters for mechanical durability.\n\nProduced a full exploded-view drawing with a French bill of materials following standard drafting conventions.",
       "github": null,
       "demo": null,
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBfmEpezBSpneFvCrYKhOLUOseL8Ykp1jo-HSG-ffLWpXFUDPcJaLNQ_yYG5K3rrQojomG93egnxnwooCUeOcPCLWPOTN3DCgnuB1cKbCeyo00IDUBjs5tK3QD_526_Tv0wWlf_J9c26MbyCm2M9Bh0lHMTaYyyp_lR2bOctqYMSHKc0imzdeQ5FArd6MJgX1SS1NDA5WuXGr8-BMg81vmKL76Uzzftusbi3MNmNr5KKskCa3NgMBifjJq1unU1ixty6_658_OlN05p"
+      "image": null
     },
     {
       "id": "P-3",
@@ -129,7 +129,7 @@
       "details": "Autonomous seed-planting robot built in 24 hours at RoboHacks (Feb. 2025) using recycled materials for the structure: a cardboard chassis, plastic bottles, and a folded paper seed dispenser.\n\nI worked on the Arduino control sequence. Two digital IR sensors guided steering along the track, and a separate color reading triggered the servo-driven dispenser. We wired the electronics on a breadboard for quick changes during the build.\n\nWon the Unexpected Expedition Award and placed 5th overall.",
       "github": "https://github.com/louzhang15/RoboHacks-2025",
       "demo": null,
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDAS80X_XNEuUFS6k-WwWNK4ujFPPuUxPpWvmTVpU1JR5SivSd5oUG2JcVNgHI4epz7XEJI6N7eCpY_5koJUANuAI1BYhptkTPhdi5UGO2lM2yHA1--6_Zdhkuwaf4AXh47aYn5TOW2B8af31QajqbXwz4Ldn2XPUjvQPK0SasCQYVwEJls5ZWv-YsDYabLJ6PaUZtolG1ufVsJARGvsPWji9-J_dMGuf0kpNNEYucYBsS8AG3SpRwrHKSZrvL4alOKLEcgHbwa7a7w"
+      "image": null
     },
     {
       "id": "P-11",
@@ -173,7 +173,7 @@
       "details": "In Montreal, analog paper triage tags contribute to a 30% triage error rate, $1.7B in annual malpractice losses, and 10.5-hour average ER wait times. ResQ-Link replaces paper tags with a zero-power passive NFC bracelet.\n\n• Inductive copper coil (no battery required), passive NFC chip, medical-grade silicone band designed for IP68 with translucent overmolded seal\n• SmartTriage companion dashboard — real-time bracelet location maps, tag management (Morgue / Immediate / Delayed / Minor), registered staff tracking\n• Offline-mesh data sync so patient data reaches the hospital even when cellular fails\n• Business model: hardware 'Blade' at $1.50/unit + software 'Razor' SaaS at $10k–$50k/facility/year\n\nTargeting a $750k seed round for a MUHC 5,000-unit pilot, with Health Canada Class I/II certification and Quebec 'Buy Local' procurement priority.",
       "github": null,
       "demo": null,
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDAS80X_XNEuUFS6k-WwWNK4ujFPPuUxPpWvmTVpU1JR5SivSd5oUG2JcVNgHI4epz7XEJI6N7eCpY_5koJUANuAI1BYhptkTPhdi5UGO2lM2yHA1--6_Zdhkuwaf4AXh47aYn5TOW2B8af31QajqbXwz4Ldn2XPUjvQPK0SasCQYVwEJls5ZWv-YsDYabLJ6PaUZtolG1ufVsJARGvsPWji9-J_dMGuf0kpNNEYucYBsS8AG3SpRwrHKSZrvL4alOKLEcgHbwa7a7w"
+      "image": null
     },
     {
       "id": "P-5",
@@ -197,7 +197,7 @@
       "details": "On-premises AI nurse assistant prototype for Quebec long-term care facilities (CHSLDs), built at ConUHacks X (Jan. 2026): 38 commits in 16.5 hours.\n\nFalls among seniors (65+) have risen 47% between 2008 and 2019. Nursie targets the gap between an unwitnessed fall and the moment staff respond.\n\n• A TI IWR6843 mmWave radar tracks residents and detects falls with no camera in the room\n• A floor vibration sensor picks up impacts; an alert fires when the radar or the floor sensor reports a fall\n• Two ESP32 boards on FreeRTOS publish raw sensor values to ROS 2 over Wi-Fi with micro-ROS\n• A Flask backend runs the fall logic, scores each event's confidence, and escalates with a phone call (Twilio) and a dashboard alert\n• Gemini triages events, ElevenLabs gives residents a voice assistant, and MongoDB keeps each resident's history\n• An Apple Watch app posts vital signs every second\n\nNext steps: require two sensors to agree before an alert, keep all data on the facility network, and replace the simulated door sensor with real hardware. Won Best Use of ElevenLabs at ConUHacks X.",
       "github": "https://github.com/louzhang15",
       "demo": "https://devpost.com/software/nursie",
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDAS80X_XNEuUFS6k-WwWNK4ujFPPuUxPpWvmTVpU1JR5SivSd5oUG2JcVNgHI4epz7XEJI6N7eCpY_5koJUANuAI1BYhptkTPhdi5UGO2lM2yHA1--6_Zdhkuwaf4AXh47aYn5TOW2B8af31QajqbXwz4Ldn2XPUjvQPK0SasCQYVwEJls5ZWv-YsDYabLJ6PaUZtolG1ufVsJARGvsPWji9-J_dMGuf0kpNNEYucYBsS8AG3SpRwrHKSZrvL4alOKLEcgHbwa7a7w"
+      "image": null
     },
     {
       "id": "P-10",
@@ -261,7 +261,7 @@
       "details": "Fully integrated CRM outreach tool built for a community of agriculture startups, as part of Accenture's AOTC 2026 program.\n\n• Manages contact lists across 3 audience segments (corporate, schools, institutions & media)\n• Uses Google Gemini AI to generate personalized cold emails tailored to each contact's name, title, and organization — then sends them directly through the app\n• Tracks every contact through the full sales pipeline with real-time Google Sheets sync\n• Centralizes booking requests with auto-calculated revenue estimates — accept, refuse, or cancel reservations with one click, triggering a professional email to the client instantly\n\nTotal running cost: ~$0/month on free tiers.",
       "github": "https://github.com/louzhang15/Fully-Integrated-CRM-Tool",
       "demo": "https://www.youtube.com/watch?v=TVuFauDyA00",
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAq3y0pe5-zj445NQYKmzbJNwSt6pwKm-RRaSroWdOsq0I9WvDU4tlIf_ve6clLEAU1EU_s99pamo_RefOqMxhNv1gYMTs8tPSds7Jkb4ZRhxpEU9UQElEzVJSAoqViv4qiKxxL8YG9QR_aSkWObExq5swckGUTYd52SXI-msGM0W3mwkQaAm_mq0ahm8uaF08K-nIl5jUrIwBV32yVovAyJQHnlDfbkAO7aB-NtTFoGg_DNNFBe_PUARobX_wFyaL9hpiLkuNQrBNF"
+      "image": null
     },
     {
       "id": "P-12",

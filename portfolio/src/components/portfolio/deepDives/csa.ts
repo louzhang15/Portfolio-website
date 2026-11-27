@@ -12,6 +12,55 @@ const dive: TechDive = {
   heading: "From needs to a tested telescopic tube",
   intro:
     "Company C had five teams and one mandate from the Canadian Space Agency: move a vegetable compartment 3 m from a lunar greenhouse to a habitat. Team C1 owned the main structure and the integration of the four other teams (C2 compartment, C3 transfer and docking, C4 propulsion and power, C5 thermal and dust). The project ran in three stages from January to April 2025, with four design reviews. Original pages are shown in French; the text beside them explains what they show.",
+  architecture: {
+    flow:
+      "Produce rides in the C2 compartment inside the wagon. A C3 conveyor in the greenhouse airlock loads the wagon onto the rails. The wagon runs 3 m on two rails and draws C4 power through them. A conveyor in the habitat airlock unloads it. Weight goes from the wagon to the rails, the tube wall and 6 legs: 185 kg in total gives 50.0 N per leg on the Moon.",
+    layers: [
+      {
+        name: "Payload (C2)",
+        blocks: [
+          { name: "Vegetable compartment", role: "Holds 150 g of produce in a 10 cm by 10 cm cylinder. Sits inside the wagon.", tech: "Team C2" },
+        ],
+      },
+      {
+        name: "Transfer (C3)",
+        blocks: [
+          { name: "Greenhouse airlock conveyor", role: "Loads the wagon into the tube.", tech: "Team C3, conveyor height 1.25 cm" },
+          { name: "Habitat airlock conveyor", role: "Unloads the wagon at the other end.", tech: "Team C3" },
+        ],
+      },
+      {
+        name: "Transport",
+        blocks: [
+          { name: "Wagon", role: "Carries the compartment along the 3 m route.", tech: "C4 wheels, 29 mm wheel track" },
+          { name: "Hollow rails", role: "Rails on the small tube. A chamfer lets the wheel pass onto the solid rail.", tech: "C1, C-101-1, 1700 mm, 4.4 kg" },
+          { name: "Solid rails", role: "Rails on the large tube. They slide into the hollow rails.", tech: "C1, C-101-2, 1540 mm, 2.8 kg" },
+        ],
+      },
+      {
+        name: "Structure (C1)",
+        blocks: [
+          { name: "Large tube", role: "Outer section with 3 internal grooves at 120°.", tech: "C-102-1, Ø 540 mm, 1600 mm, 79.6 kg" },
+          { name: "Small tube", role: "Slides into the large tube on 3 ribs. Deploys to 3 m, stows at 1.6 m.", tech: "C-102-2, Ø 500 mm, 1600 mm, 70.2 kg" },
+          { name: "Legs", role: "6 legs raise the tube to the airlock openings and share its weight.", tech: "1400 mm² section, Al 6061" },
+        ],
+      },
+      {
+        name: "Power and protection",
+        blocks: [
+          { name: "Solar panels", role: "Power the wagon through the rails. They sit above the regolith.", tech: "C4, support C-103-1 at 35°" },
+          { name: "Wall and seals", role: "Aluminium and MLI wall, a flexible seal at the sliding joint and a seal at each airlock.", tech: "C5, 2 cm wall" },
+        ],
+      },
+    ],
+    links: [
+      { from: "Airlock conveyors", to: "Wagon", label: "conveyor lined up with the wagon; the tube was lowered 4 cm to match" },
+      { from: "Wagon", to: "Rails", label: "wheel to rail clearance 1.85 to 1.90 mm on the bench, target under 2 mm" },
+      { from: "Small tube", to: "Large tube", label: "3 notches in 3 grooves, graphite at the opening, C5 seal at the joint" },
+      { from: "Solar panels", to: "Rails", label: "C4 power reaches the wagon through the rails" },
+      { from: "Legs", to: "Lunar surface", label: "185 kg × 1.62 / 6 = 50.0 N per leg, 0.0535 MPa" },
+    ],
+  },
   stages: [
     {
       date: "Jan. to Feb. 7, 2025",

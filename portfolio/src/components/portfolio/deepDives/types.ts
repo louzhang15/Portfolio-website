@@ -54,9 +54,29 @@ export type Stage = {
   tables?: Table[];
 };
 
+/** One part of the system: a sensor, a board, a service, a store or a screen. */
+export type ArchBlock = {
+  name: string;
+  /** what it does, one short sentence */
+  role: string;
+  /** part number, language or library, e.g. "ESP32, FreeRTOS" */
+  tech?: string;
+};
+
+/** The system as ordered layers of blocks, drawn top to bottom with arrows between layers. */
+export type Architecture = {
+  /** in flow order, e.g. Sensors, Edge, Backend, Interfaces */
+  layers: { name: string; blocks: ArchBlock[] }[];
+  /** named connections between blocks, listed under the diagram */
+  links?: { from: string; to: string; label: string }[];
+  /** how data or load moves through the layers, one short paragraph */
+  flow: string;
+};
+
 export type TechDive = {
   heading: string;
   intro: string;
+  architecture?: Architecture;
   stages: Stage[];
   /** the files this was built from, in plain words, e.g. "Stage 3 report (AER1110, French, translated)" */
   sources: string[];

@@ -1,4 +1,4 @@
-import type { Calc, Iteration, Media, Stage, Table, TechDive } from "./types";
+import type { Architecture, Calc, Iteration, Media, Stage, Table, TechDive } from "./types";
 
 const WRAP = "mx-auto w-full max-w-[1352px] px-5 md:px-10 xl:px-16";
 
@@ -165,7 +165,10 @@ function StageBlock({ s, i, last }: { s: Stage; i: number; last: boolean }) {
           </ul>
         )}
         {s.stats && s.stats.length > 0 && (
-          <dl className="mt-5 grid max-w-[720px] grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[var(--border-light)] bg-[var(--border-light)] sm:grid-cols-4">
+          <dl
+            // one column per stat (up to 4) so a 3-stat row has no empty grey cell
+            className={`mt-5 grid max-w-[720px] gap-px overflow-hidden rounded-[12px] border border-[var(--border-light)] bg-[var(--border-light)] ${s.stats.length === 1 ? "grid-cols-1" : "grid-cols-2"} ${["", "sm:grid-cols-1", "sm:grid-cols-2", "sm:grid-cols-3", "sm:grid-cols-4"][Math.min(4, s.stats.length)]}`}
+          >
             {s.stats.map((x) => (
               <div key={x.label} className="flex flex-col-reverse bg-white px-4 py-3">
                 <dt className="text-xs text-[var(--text-tertiary)]">{x.label}</dt>
@@ -208,6 +211,54 @@ function StageBlock({ s, i, last }: { s: Stage; i: number; last: boolean }) {
   );
 }
 
+/** The system as layers of blocks, top to bottom, with an arrow between layers and the named links listed below. */
+function ArchitectureDiagram({ a }: { a: Architecture }) {
+  return (
+    <section aria-labelledby="system-architecture" className="mt-14">
+      <h3 id="system-architecture" className="text-[clamp(1.45rem,2.4vw,2rem)] leading-[1.12] text-[var(--text)]">System architecture</h3>
+      <p className="mt-3 max-w-[70ch] text-[16px] leading-relaxed text-[var(--text-secondary)]">{a.flow}</p>
+      <ol className="mt-6">
+        {a.layers.map((l, i) => (
+          <li key={l.name}>
+            {i > 0 && (
+              <span aria-hidden className="flex h-8 items-center justify-center text-[18px] leading-none text-[var(--accent-on-light)] md:ml-[160px]">
+                ↓
+              </span>
+            )}
+            <div className="grid gap-2 md:grid-cols-[148px_minmax(0,1fr)] md:gap-3">
+              <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--accent-on-light)] md:pt-3 md:text-right">{l.name}</span>
+              <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                {l.blocks.map((b) => (
+                  <li key={b.name} className="min-w-0 rounded-[14px] border border-[var(--border-light)] bg-white px-4 py-3">
+                    <span className="block text-[15px] font-semibold leading-snug text-[var(--text)]">{b.name}</span>
+                    <span className="mt-1 block text-[14px] leading-snug text-[var(--text-secondary)]">{b.role}</span>
+                    {b.tech && <span className="mt-1.5 block font-mono text-[12px] text-[var(--text-tertiary)]">{b.tech}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+      {a.links && a.links.length > 0 && (
+        <div className="mt-6 max-w-[820px] rounded-[16px] border border-[var(--border-light)] bg-[var(--surface-light)] px-5 py-4">
+          <h4 className="text-[13px] font-medium text-[var(--text-tertiary)]">Interfaces</h4>
+          <ul className="mt-2 space-y-1.5 text-[14px] leading-relaxed text-[var(--text-secondary)]">
+            {a.links.map((k) => (
+              <li key={`${k.from}-${k.to}-${k.label}`}>
+                <span className="font-medium text-[var(--text)]">{k.from}</span>
+                <span aria-hidden className="px-1.5 text-[var(--accent-on-light)]">→</span>
+                <span className="sr-only"> to </span>
+                <span className="font-medium text-[var(--text)]">{k.to}</span>: {k.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+}
+
 /** The project's technical story as a numbered timeline, with an index of stages to jump between. */
 export default function TechTimeline({ dive, anchor }: { dive: TechDive; anchor?: string }) {
   return (
@@ -218,6 +269,8 @@ export default function TechTimeline({ dive, anchor }: { dive: TechDive; anchor?
         <p className="mt-3 max-w-[64ch] text-[14px] text-[var(--text-tertiary)]">
           Drawings and calculation pages are the originals, some in French. The English text beside each one explains it. Click any image for full size.
         </p>
+
+        {dive.architecture && <ArchitectureDiagram a={dive.architecture} />}
 
         {/* stage index: a scannable overview before the detail */}
         <ol className="mt-10 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:thin]">

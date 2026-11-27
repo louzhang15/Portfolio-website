@@ -5,6 +5,43 @@ const dive: TechDive = {
   heading: "How MechPrep turns a CAD engine into an interview",
   intro:
     "MechPrep puts a 3D jet engine in the browser and runs a technical interview around it. The candidate clicks a part, and a Gemini interviewer asks about that part. The repo has 64 commits between Jan. 17 and Jan. 18, 2026, at McHacks 13.",
+  architecture: {
+    flow:
+      "The browser loads one GLB engine and maps each mesh to one of 5 parts. A click selects a part and sends it with the chat history to the FastAPI server. The server prompts Gemini as an interviewer and returns the reply. The same API serves the Blender add-on.",
+    layers: [
+      {
+        name: "Model",
+        blocks: [
+          { name: "J58 engine", role: "Built before the event and exported with named meshes.", tech: "Blender, Fusion, Pratt_Engine.glb" },
+        ],
+      },
+      {
+        name: "Frontend",
+        blocks: [
+          { name: "Engine explorer", role: "Hover highlights a part. A click selects it. A drag rotates without selecting.", tech: "React Three Fiber, drei" },
+          { name: "Interview card and chat", role: "Scenario card with a difficulty tag, chat beside the engine.", tech: "React" },
+        ],
+      },
+      {
+        name: "Backend",
+        blocks: [
+          { name: "Mechie API", role: "/ask_mechie, /get_question, /submit_answer and /chat.", tech: "FastAPI, Pydantic, port 8000" },
+          { name: "Interview data", role: "The scripted J58 scenario and its rubric.", tech: "Interview_data.py" },
+        ],
+      },
+      {
+        name: "Services",
+        blocks: [
+          { name: "Gemini", role: "Plays the interviewer and judges answers.", tech: "Gemini API" },
+          { name: "Blender add-on", role: "Asks Mechie about objects selected in Blender.", tech: "Blender_Mechie_Addon.py" },
+        ],
+      },
+    ],
+    links: [
+      { from: "Engine explorer", to: "Mechie API", label: "selected part plus chat history" },
+      { from: "Mechie API", to: "Interview card", label: "reply text for the chat" },
+    ],
+  },
   stages: [
     {
       date: "Dec. 31, 2025",

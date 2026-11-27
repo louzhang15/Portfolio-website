@@ -9,6 +9,8 @@ import crm from "./crm-outreach-tool";
 import mechprep from "./mechprep";
 import lazycare from "./lazycare";
 import interview from "./interview-assistant";
+import lane from "./lane";
+import latexify from "./latexify";
 
 /** Timeline deep dive per project id; a project without one keeps its summary sections. */
 const byId: Record<string, TechDive | null> = {
@@ -22,6 +24,8 @@ const byId: Record<string, TechDive | null> = {
   "P-11": mechprep,
   "P-12": lazycare,
   "P-13": interview,
+  "S-1": lane,
+  "S-2": latexify,
 };
 
 export const techDiveFor = (id: string) => byId[id] ?? null;

@@ -5,6 +5,38 @@ const dive: TechDive = {
   heading: "How LazyCare runs a small health model behind a web app",
   intro:
     "LazyCare is a health chat assistant built at UdeMHacks in March 2025. A Next.js app talks to an Express server, which calls a Python FastAPI service running TinyLlama 1.1B. Two repos record the work: a first template from Mar. 4 to 8, and the final app from Mar. 8 to 9.",
+  architecture: {
+    flow:
+      "The browser never talks to the model. A chat message goes from the Next.js app to the Express server, which calls the FastAPI service. The service wraps the message in TinyLlama's chat template, samples up to 256 new tokens and returns the answer. The Express server saves chats per email address in JSON files.",
+    layers: [
+      {
+        name: "Frontend",
+        blocks: [
+          { name: "Next.js app", role: "Login, profile, AI chat, AI analysis and delete data.", tech: "Port 3000, Firebase Google sign-in" },
+        ],
+      },
+      {
+        name: "Server",
+        blocks: [
+          { name: "Express server", role: "/user and /chat routes, CORS for localhost:3000.", tech: "Node, port 5000" },
+          { name: "JSON storage", role: "Users and chat history per email address.", tech: "users.json, historicalchats.json" },
+        ],
+      },
+      {
+        name: "Model",
+        blocks: [
+          { name: "FastAPI service", role: "POST /tinyllama-generate. Rejects empty input with 400.", tech: "Python, port 8000" },
+          { name: "TinyLlama 1.1B", role: "Base chat model, bfloat16, temperature 0.7.", tech: "Hugging Face Transformers" },
+        ],
+      },
+      {
+        name: "Training (offline)",
+        blocks: [
+          { name: "Fine-tuning script", role: "Trains on 39,540 iCliniq Q&A rows. Tested by a separate script, not served.", tech: "Hugging Face Trainer" },
+        ],
+      },
+    ],
+  },
   stages: [
     {
       date: "Mar. 4 to 7, 2025",

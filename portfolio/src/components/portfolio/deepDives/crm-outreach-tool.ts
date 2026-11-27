@@ -5,6 +5,40 @@ const dive: TechDive = {
   heading: "How the CRM finds, writes to and books contacts",
   intro:
     "The CRM runs a full outreach loop for an urban agriculture non-profit in Montreal: find contacts, write each one a personal email, send it, log it, and handle the visit bookings that come back. It is a Next.js app with server routes for Apollo, Gemini, Resend and Google Sheets. The git log runs from Mar. 27 to Apr. 12, 2026.",
+  architecture: {
+    flow:
+      "A campaign run calls five server routes in order: discover, enrich, write, send and log, with 2 s between contacts. The browser keeps contacts, campaigns and settings in localStorage. Google Sheets is the shared record. Booking requests come back through a Google Form sheet, and each staff decision emails the client and writes column L.",
+    layers: [
+      {
+        name: "Browser",
+        blocks: [
+          { name: "Next.js pages", role: "Campaigns, contacts, bookings and settings.", tech: "Next.js, React" },
+          { name: "Data context", role: "Runs the campaign loop and holds the state.", tech: "lib/data-context.tsx, localStorage" },
+        ],
+      },
+      {
+        name: "Server routes",
+        blocks: [
+          { name: "/api/discover and /api/lookup", role: "Find people by audience job titles and city, then fill missing emails.", tech: "Apollo" },
+          { name: "/api/generate", role: "Writes a subject, a 150 to 200 word email and a LinkedIn version as JSON.", tech: "Gemini 2.0 Flash" },
+          { name: "/api/send", role: "Sends email contacts. Queues LinkedIn contacts for manual outreach.", tech: "Resend" },
+          { name: "/api/sheets", role: "Appends each contact to its audience tab and the Sent tab.", tech: "Google Sheets API" },
+        ],
+      },
+      {
+        name: "Records",
+        blocks: [
+          { name: "Google Sheets", role: "Audience tabs, the Sent tab (columns A to K) and the bookings sheet.", tech: "Shared record" },
+          { name: "Google Form", role: "Visit booking requests from contacts.", tech: "Feeds the bookings sheet" },
+        ],
+      },
+    ],
+    links: [
+      { from: "Generate route", to: "Send route", label: "booking link appended if the model drops it" },
+      { from: "Bookings page", to: "Resend", label: "accept, refuse or cancel emails the client" },
+      { from: "Bookings page", to: "Google Sheets", label: "decision written to column L" },
+    ],
+  },
   stages: [
     {
       date: "Mar. 27, 2026",

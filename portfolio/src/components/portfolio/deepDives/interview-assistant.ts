@@ -5,6 +5,33 @@ const dive: TechDive = {
   heading: "How the Interview Assistant runs a spoken interview",
   intro:
     "The assistant asks an interview question out loud, records the spoken answer, transcribes it, and reads back feedback. It is a Python script on OpenAI's speech and chat APIs. The repo holds two voice loops: the interview script and a second, always-listening assistant.",
+  architecture: {
+    flow:
+      "One Python script runs each round in order. Audio files on disk pass data between the steps: question.mp3, answer.wav and response.mp3. Each answer is judged on its own, with no memory of earlier answers.",
+    layers: [
+      {
+        name: "Input",
+        blocks: [
+          { name: "Question bank", role: "Picks one question at random and removes it once asked.", tech: "Python list, tiers 0 to 3" },
+          { name: "Microphone", role: "Records for a fixed time set by the question tier.", tech: "PyAudio, 16-bit mono, 44,100 Hz" },
+        ],
+      },
+      {
+        name: "OpenAI APIs",
+        blocks: [
+          { name: "Text to speech", role: "Reads the question and the feedback aloud.", tech: "tts-1, voice fable" },
+          { name: "Transcription", role: "Turns answer.wav into text.", tech: "whisper-1" },
+          { name: "Feedback", role: "Judges the answer to the question in an interview context.", tech: "gpt-3.5-turbo" },
+        ],
+      },
+      {
+        name: "Output",
+        blocks: [
+          { name: "Speaker", role: "Plays question.mp3 and response.mp3.", tech: "playsound" },
+        ],
+      },
+    ],
+  },
   stages: [
     {
       date: "Hackathon",

@@ -7,6 +7,61 @@ const dive: TechDive = {
   heading: "How Nursie was built in 17 hours",
   intro:
     "Nursie watches a long-term care room with a TI mmWave radar, a floor vibration sensor, a PIR sensor and an Apple Watch. Two ESP32 boards publish to ROS 2 over Wi-Fi, a Flask backend runs the fall logic and a React dashboard shows the alert. The git log has 38 commits between 11:27 on Jan. 24 and 04:03 on Jan. 25, 2026.",
+  architecture: {
+    flow:
+      "The radar streams tracked people over UART to the backend, which runs the two-stage fall detector and scores its confidence. Vibration and PIR readings go from their ESP32 boards to ROS 2 over Wi-Fi, then to the dashboard over a WebSocket. Every event goes through one Flask EventProcessor. Falls start an ElevenLabs voice check. No answer or a distress phrase escalates to a Twilio call to the nurse.",
+    layers: [
+      {
+        name: "Sensors",
+        blocks: [
+          { name: "mmWave radar", role: "Tracks each person's position, height and speed with no camera.", tech: "TI IWR6843ISK-ODS, 55 ms frames" },
+          { name: "Floor vibration", role: "Digital pulse on GPIO4, measured in µs.", tech: "ESP32 #1" },
+          { name: "PIR motion", role: "Reads 0 or 1 every 50 ms.", tech: "ESP32 #2" },
+          { name: "Door", role: "Night exit alerts. Simulated in the demo.", tech: "Mock mode, POST /door/simulate" },
+          { name: "Apple Watch app", role: "Sends heart rate and accelerometer data every 1 s.", tech: "WatchApp, Swift" },
+        ],
+      },
+      {
+        name: "Edge",
+        blocks: [
+          { name: "ESP32 nodes", role: "A sensor task fills a one-slot queue. A micro-ROS task publishes the newest value.", tech: "ESP-IDF, FreeRTOS, micro-ROS" },
+          { name: "micro-ROS agent", role: "Bridges both boards into ROS 2 over Wi-Fi.", tech: "UDP port 8888" },
+        ],
+      },
+      {
+        name: "Backend",
+        blocks: [
+          { name: "mmWave UART service", role: "Sends the chirp config, decodes TLV frames, runs the fall detector with confidence scoring.", tech: "Python, 115200 and 921600 baud" },
+          { name: "ROS 2 bridge", role: "Subscribes to /vibration and /mouvement and rebroadcasts them as JSON.", tech: "rclpy, WebSocket 8765" },
+          { name: "Flask EventProcessor", role: "Fixed rules for falls, voice and door events. Other events go to Gemini triage.", tech: "Flask" },
+          { name: "MongoDB", role: "Stores alerts with their state history, events, devices and passive signals.", tech: "4 collections" },
+        ],
+      },
+      {
+        name: "Services",
+        blocks: [
+          { name: "Gemini", role: "Returns priority, an alert flag and an action line for events without a rule.", tech: "MEDIUM and alert on any error" },
+          { name: "ElevenLabs agent", role: "Asks the resident if they are okay after a fall.", tech: "Verbal check webhook" },
+          { name: "Twilio", role: "Calls the nurse when an alert escalates.", tech: "Needs a public URL, e.g. ngrok" },
+        ],
+      },
+      {
+        name: "Interfaces",
+        blocks: [
+          { name: "React dashboard", role: "Rooms, active alerts and a live radar map.", tech: "Vite; alerts 5 s, rooms 3 s, map 150 ms" },
+          { name: "Nurse phone", role: "Receives the Twilio call.", tech: "Twilio voice" },
+        ],
+      },
+    ],
+    links: [
+      { from: "ESP32 #1", to: "ROS 2", label: "/vibration, Int32 pulse width in µs" },
+      { from: "ESP32 #2", to: "ROS 2", label: "/mouvement, Int32, 0 or 1" },
+      { from: "Radar", to: "Backend", label: "TLVs 1010 to 1021, one packet per 55 ms frame" },
+      { from: "Backend", to: "Dashboard", label: "GET /mmwave/frame, polled every 150 ms" },
+      { from: "Apple Watch", to: "Backend", label: "POST /api/health-data every 1 s" },
+      { from: "Fall detector", to: "Alerts", label: "gap at the deadline: radar falls reach the map but do not create a fall_detected alert" },
+    ],
+  },
   stages: [
     {
       date: "Jan. 24, 11:27 to 15:18",

@@ -4,6 +4,39 @@ const dive: TechDive = {
   heading: "Modelling the pump part by part in CATIA",
   intro:
     "The pump is a CATIA V5 assembly of 3 parts plus 9 piston assemblies, 21 parts in all. Each part started as a sketched profile revolved about its axis. Step screenshots saved on Nov. 6, 2024 record the sketch dimensions. Final part files were saved from Nov. 6 to Nov. 8, 2024. All dimensions are in millimetres.",
+  architecture: {
+    flow:
+      "The model is a product tree. Pompe_hydraulique places three single parts and 9 copies of one piston sub-assembly. Fit is set by shared sizes: the piston ball and the pad socket share radius 6, and the tooth parameters with Nombre_dents = 21 appear in both the nut and the block files. The files hold geometry only, with no flow or pressure analysis.",
+    layers: [
+      {
+        name: "Assembly",
+        blocks: [
+          { name: "Pompe_hydraulique", role: "Top product. Places every part. 21 parts in all.", tech: "CATIA V5 product, Knowledge Relation" },
+        ],
+      },
+      {
+        name: "Main parts",
+        blocks: [
+          { name: "Cylinder block", role: "Houses the 9 pistons.", tech: "Bloc-cylindre, tooth parameters" },
+          { name: "Spherical nut", role: "Curved outer face and an internal spline. Centres the retaining plate.", tech: "Noix spherique, Nombre_dents = 21" },
+          { name: "Retaining plate", role: "Holds the 9 slipper pads around the axis.", tech: "Plaque de retenue, Ø 82.62, 9-hole pattern" },
+        ],
+      },
+      {
+        name: "Piston assembly × 9",
+        blocks: [
+          { name: "Piston", role: "Revolved body with a radius 6 ball end.", tech: "Ø 12.66, body 41.68" },
+          { name: "Slipper pad", role: "Flanged cup with a radius 6 socket.", tech: "Patin" },
+        ],
+      },
+    ],
+    links: [
+      { from: "Piston", to: "Slipper pad", label: "ball in socket, both radius 6; constraints Axe piston, Axe patin, Epaulement patin" },
+      { from: "Slipper pad", to: "Retaining plate", label: "one pad per hole in the circular pattern of 9" },
+      { from: "Spherical nut", to: "Retaining plate", label: "the nut centres the plate" },
+      { from: "Spherical nut", to: "Cylinder block", label: "same tooth parameters in both files" },
+    ],
+  },
   stages: [
     {
       date: "Nov. 6, 2024",

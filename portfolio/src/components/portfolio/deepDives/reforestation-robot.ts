@@ -1,9 +1,48 @@
 import type { TechDive } from "./types";
 
 const dive: TechDive = {
-  heading: "Four Arduino sketches, one robot",
+  heading: "Four test sketches, one assembled robot",
   intro:
-    "The robot's code is four separate Arduino sketches: colour detection, a drive test, the seed dispenser and the line follower. File save times show the order they were written on Feb. 15, 2025. The steering is on/off logic from two infrared sensors. No sketch contains a PID loop.",
+    "The robot's code is four test sketches and one assembled sketch. The test sketches cover colour detection, a drive test, the seed dispenser and the line follower, saved on Feb. 15, 2025. Final_Code_Assembled.ino runs all of them in one loop and was committed on Feb. 24, 2025. Steering is on/off logic from two infrared sensors. No sketch contains a PID loop.",
+  architecture: {
+    flow:
+      "Each loop reads both infrared sensors, then the three colour channels. A green or blue reading stops the motors and runs two dispenser sweeps. The infrared pair then picks one of four steering cases. The loop ends with a 500 ms delay, so one pass takes at least 1.1 s.",
+    layers: [
+      {
+        name: "Sensors",
+        blocks: [
+          { name: "Infrared pair", role: "HIGH means the sensor sees the black line.", tech: "Right pin 11, left pin 12" },
+          { name: "Colour sensor", role: "Red, green and blue read one at a time as pulse widths.", tech: "S0 to S3 on pins 4 to 7, OUT on 8, 20% scaling" },
+        ],
+      },
+      {
+        name: "Controller",
+        blocks: [
+          { name: "Assembled sketch", role: "One loop: read, decide, drive. Lowest pulse width wins the colour.", tech: "Final_Code_Assembled.ino, Arduino C++" },
+        ],
+      },
+      {
+        name: "Actuators",
+        blocks: [
+          { name: "Wheel motors", role: "Two DC motors through a driver board. Only direction pins are written.", tech: "Right 2 and 3, left 4 and 5" },
+          { name: "Dispenser servo", role: "Two sweeps 0° to 120° and back at 10 ms per step.", tech: "Servo library, pin 12" },
+        ],
+      },
+      {
+        name: "Mechanics",
+        blocks: [
+          { name: "Paper dispenser", role: "Drops seeds from the cup when the servo turns.", tech: "Folded paper, seed cup" },
+          { name: "Chassis", role: "Carries the board, breadboard, driver and dispenser.", tech: "Cardboard" },
+        ],
+      },
+    ],
+    links: [
+      { from: "Infrared pair", to: "Sketch", label: "digitalRead() on pins 11 and 12 once per loop" },
+      { from: "Colour sensor", to: "Sketch", label: "3 pulseIn() reads on pin 8, each followed by 200 ms" },
+      { from: "Sketch", to: "Wheel motors", label: "digitalWrite() on 2 to 5; enables 6 and 7 never written" },
+      { from: "Sketch", to: "Servo", label: "operateSeedDispenser() on a green or blue reading" },
+    ],
+  },
   stages: [
     {
       date: "Feb. 15, 03:33",
@@ -72,6 +111,7 @@ const dive: TechDive = {
         "The sweep back from 120° to 0° never runs. The loop condition is pos <= 0 with pos starting at 120, so it is false on the first check.",
         "The second sweep therefore starts with a jump from 120° straight to 0°.",
         "After 2 sweeps the servo holds at 120°.",
+        "The assembled sketch fixes this. Its reverse loop runs while pos >= 0, so each sweep goes 0° to 120° and back.",
         "Drops are timed by the sketch alone. No sensor triggers them.",
       ],
       calcs: [
@@ -104,6 +144,7 @@ const dive: TechDive = {
         "MOTOR_SPEED is 180, but no analogWrite() call uses it. Only its sign sets each wheel's direction, so the motors run at whatever the enable inputs allow.",
         "setup() changes the Timer0 prescaler from 64 to 8. On an Uno-class board this makes delay() run 8 times fast.",
         "Every reading is printed to the Serial Monitor at 9600 baud for debugging.",
+        "The assembled sketch drops the Timer0 change and moves the motors to pins 2 to 7, so its delays run at normal speed.",
       ],
       tables: [
         {
@@ -136,37 +177,71 @@ const dive: TechDive = {
       ],
     },
     {
-      date: "Feb. 15, demo",
+      date: "Feb. 24, 2025",
       phase: "Integration",
-      title: "What the files show about the final build",
+      title: "One assembled sketch runs all three subsystems",
       summary:
-        "The folder has no combined sketch. The four sketches reuse the same pins, so they cannot run together as written. Pins 4 to 8 and pin 12 each have two jobs.",
+        "Final_Code_Assembled.ino joins the four test sketches in one loop. It reads both infrared sensors, then red, green and blue. A green or blue reading stops the motors and runs the seed dispenser. Then the infrared pair sets the steering.",
       points: [
-        "The colour sensor uses pins 4 to 8. The line follower uses 5 to 8 for the motor driver.",
-        "Pin 12 is the left infrared sensor in one sketch and the servo in another.",
-        "Running all three sensors at once needs a re-pinned sketch that is not in the project files.",
-        "The demo photos show two wheel motors, a driver board, the paper dispenser and the seed cup on a cardboard chassis.",
+        "Steering starts both wheels at MOTOR_SPEED 180 and adds or removes an offset of 20. There is no error term and no PID.",
+        "rotateMotor() adds another 20 to the right wheel. A stop command of 0 therefore leaves the right wheel's direction pins set to forward.",
+        "The left-sensor case applies the same offsets as the straight case. Only the both-black case differs.",
+        "No analogWrite() call is made. The speed values only pick each wheel's direction, so all three moving cases drive both wheels forward.",
+        "operateSeedDispenser() sweeps the servo 0° to 120° and back twice, at 10 ms per step.",
+        "The pin clash from the test sketches remains. S0 to S3 share pins 4 to 7 with the left motor inputs and both enable pins. The servo is attached to pin 12, which is also the left infrared input.",
+        "Each colour read writes S2 and S3 on pins 6 and 7. If the enables are wired as declared, every colour read also switches the motor driver's enable inputs.",
       ],
       stats: [
-        { value: "4", label: "sketches" },
-        { value: "297", label: "lines of code" },
-        { value: "6", label: "shared pins" },
+        { value: "230", label: "lines in the assembled sketch" },
+        { value: "5", label: "shared pins" },
+        { value: "1.1 s", label: "fixed delay per loop" },
+        { value: "4.84 s", label: "per dispense" },
       ],
       tables: [
         {
-          caption: "Pin use across the four sketches",
-          head: ["Pin", "Colour", "Drive test", "Dispenser", "Line follower"],
+          caption: "Steering in the assembled sketch (Final_Code_Assembled.ino, lines 120 to 146 and rotateMotor())",
+          head: ["Right sensor", "Left sensor", "Right command", "Left command", "Wheels"],
           rows: [
-            ["2, 3", "", "Motor 1 direction", "", ""],
-            ["4", "S0", "Motor 2 direction", "", ""],
-            ["5", "S1", "Motor 2 direction", "", "Left enable"],
-            ["6", "S2", "Enable 1", "", "Right enable"],
-            ["7", "S3", "Enable 2", "", "Right input 1"],
-            ["8", "OUT", "", "", "Right input 2"],
-            ["9, 10", "", "", "", "Left inputs"],
-            ["11", "", "", "", "Right IR sensor"],
-            ["12", "", "", "Servo", "Left IR sensor"],
+            ["White", "White", "160 + 20 = 180", "200", "Both forward"],
+            ["Black", "White", "200 + 20 = 220", "160", "Both forward"],
+            ["White", "Black", "160 + 20 = 180", "200", "Both forward"],
+            ["Black", "Black", "0 + 20 = 20", "0", "Right forward, left stopped"],
           ],
+        },
+        {
+          caption: "Pin use in Final_Code_Assembled.ino",
+          head: ["Pin", "Job 1", "Job 2"],
+          rows: [
+            ["2, 3", "Right motor direction", ""],
+            ["4", "Left motor input 1", "Colour S0"],
+            ["5", "Left motor input 2", "Colour S1"],
+            ["6", "Right motor enable", "Colour S2"],
+            ["7", "Left motor enable", "Colour S3"],
+            ["8", "Colour OUT", ""],
+            ["11", "Right infrared sensor", ""],
+            ["12", "Left infrared sensor", "Servo signal"],
+          ],
+        },
+      ],
+      calcs: [
+        {
+          title: "One loop period",
+          given: ["3 colour reads, each followed by delay(200)", "delay(500) at the end of loop()", "pulseIn() waits for one low pulse, up to 1 s by default"],
+          steps: [
+            "Colour delays = 3 × 200 ms = 600 ms",
+            "Fixed delay per loop = 600 ms + 500 ms = 1,100 ms",
+            "Loop period = 1.1 s + the time of 3 pulseIn() reads",
+            "Infrared reads per second ≤ 1 / 1.1 s = 0.91",
+          ],
+          result: "At least 1.1 s per loop, so the line sensors are checked under once a second. The line-follower test sketch checked them about every 62.5 ms.",
+          source: "Final_Code_Assembled.ino, lines 72 to 77 and 148",
+        },
+        {
+          title: "Time for one dispense",
+          given: ["Forward sweep 0° to 120° = 121 writes", "Reverse sweep 120° to 0° = 121 writes", "Delay per step 10 ms, 2 sweeps"],
+          steps: ["One sweep = (121 + 121) × 10 ms = 2,420 ms", "Two sweeps = 2 × 2.42 s = 4.84 s"],
+          result: "A green or blue reading adds 4.84 s, so that loop takes at least 5.94 s.",
+          source: "Final_Code_Assembled.ino, lines 158 to 174",
         },
       ],
       media: [
@@ -177,6 +252,7 @@ const dive: TechDive = {
   ],
   sources: [
     "Arduino sketches: Black_Line_detection.ino, Color_detector.ino, Motor_wheels.ino, Seed_Dispenser.ino (file save times, Feb. 15, 2025)",
+    "Final_Code_Assembled.ino in the public RoboHacks-2025 repo (commit of Feb. 24, 2025)",
     "Two photos of the robot taken at RoboHacks",
   ],
 };

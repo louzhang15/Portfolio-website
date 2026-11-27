@@ -185,8 +185,9 @@ function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: s
 
 function Specs({ item }: { item: PortfolioItem }) {
   const cells = item.metrics.slice(0, 4).map((m) => {
+    // only a leading number becomes the big value ("8.4 cm ...", "0.3 s ..."); a phrase like "No cameras" stays whole
     const i = m.indexOf(" ");
-    return i > 0 ? { value: m.slice(0, i), caption: m.slice(i + 1) } : { value: m, caption: "" };
+    return i > 0 && /\d/.test(m.slice(0, i)) ? { value: m.slice(0, i), caption: m.slice(i + 1) } : { value: m, caption: "" };
   });
   if (!cells.length) return null;
   return (
@@ -194,7 +195,7 @@ function Specs({ item }: { item: PortfolioItem }) {
       {cells.map((c) => (
         <div key={c.value + c.caption} className="flex flex-col-reverse justify-end border-t border-[var(--text)] pb-2 pr-4 pt-4">
           <dt className="mt-2 text-[14px] text-[var(--text-tertiary)]">{c.caption}</dt>
-          <dd className="wide text-[clamp(1.75rem,3.2vw,2.5rem)] leading-none tabular-nums text-[var(--text)]">{c.value}</dd>
+          <dd className={`wide leading-none tabular-nums text-[var(--text)] ${c.caption ? "text-[clamp(1.75rem,3.2vw,2.5rem)]" : "text-[clamp(1.15rem,1.8vw,1.45rem)]"}`}>{c.value}</dd>
         </div>
       ))}
     </dl>
@@ -246,7 +247,9 @@ function Gallery({ item, src }: { item: PortfolioItem; src: string[] }) {
   );
 }
 
-function Related({ item, related }: { item: PortfolioItem; related: PortfolioItem[] }) {
+function Related({ item, related: all }: { item: PortfolioItem; related: PortfolioItem[] }) {
+  // a card without a picture reads as a broken box, so only projects with one are suggested
+  const related = all.filter((r) => r.image ?? r.gallery[0]);
   if (!related.length) return null;
   return (
     <section className={`${WRAP} py-20 md:py-28`}>

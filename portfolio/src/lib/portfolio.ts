@@ -254,7 +254,49 @@ export const activeProjects: PortfolioItem[] = rawProjects.map(hydrate);
 export const projects = activeProjects;
 export const featuredProjects: PortfolioItem[] = activeProjects.slice(0, 5);
 
-export const allPortfolioItems: PortfolioItem[] = [...activeProjects, ...internships].filter(
+const side = (item: Pick<PortfolioItem, "id" | "slug" | "title" | "subtitle" | "details" | "skills" | "metrics" | "github">): PortfolioItem => ({
+  status: "active",
+  emoji: "",
+  demo: null,
+  image: null,
+  gallery: [],
+  documents: [],
+  links: item.github ? [{ label: "GitHub", href: item.github, kind: "github" }] : [],
+  accent: "var(--accent)",
+  sortOrder: 99,
+  sector: "Side projects",
+  displaySector: "Software",
+  date: "May 2026",
+  ...item,
+});
+
+/** Side projects: not in portfolio.json, so /game and the older pages leave them out. Facts from each repo. */
+export const sideProjects: PortfolioItem[] = [
+  side({
+    id: "S-1",
+    slug: "lane",
+    title: "Lane",
+    subtitle: "Chrome extension",
+    details:
+      "A Chrome extension for keeping internship applications organised across recruitment cycles. It syncs application and rejection emails from Gmail, moves each application through eight statuses from Saved to Offer, shows the whole pipeline as a Sankey chart, and exports any cycle to CSV.",
+    skills: ["React", "TypeScript", "Vite", "Recharts", "Chrome MV3", "Gmail OAuth"],
+    metrics: ["8 application statuses", "Gmail auto-sync", "CSV import and export"],
+    github: "https://github.com/louzhang15/Job-Application-Status-Chrome-Extension",
+  }),
+  side({
+    id: "S-2",
+    slug: "latexify-resume",
+    title: "LaTeXify Resume",
+    subtitle: "Web app",
+    details:
+      "Upload a resume as a PDF or Word file and get it back in Jake's LaTeX template. A FastAPI backend extracts the text, structures it with Gemini, then renders and compiles the LaTeX into a PDF plus the .tex source. Nothing is stored.",
+    skills: ["Python", "FastAPI", "Gemini API", "LaTeX", "Jinja", "Next.js", "Docker"],
+    metrics: ["2 input formats (PDF, DOCX)", "2 outputs (PDF and .tex)", "0 files stored"],
+    github: "https://github.com/louzhang15/Latex---resume-converter",
+  }),
+];
+
+export const allPortfolioItems: PortfolioItem[] = [...activeProjects, ...sideProjects, ...internships].filter(
   (item) => item.status === "active"
 );
 
