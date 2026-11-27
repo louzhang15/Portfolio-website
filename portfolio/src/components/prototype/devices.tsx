@@ -207,7 +207,7 @@ export function Watch({ m, notif }: { m: Motion; notif: MotionValue<number> }) {
 
 const apps = [
   ["SolidWorks", "SW"],
-  ["CATIA V6", "CA"],
+  ["CATIA V5", "CA"],
   ["AutoCAD", "AC"],
   ["FEA", "FE"],
   ["GD&T", "GD"],

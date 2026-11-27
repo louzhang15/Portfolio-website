@@ -147,7 +147,7 @@ function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: s
             A telescoping 3 m tube that carries fresh produce from a lunar greenhouse to a habitat. I led the seven-student team that designed its structure and fitted four other teams’ subsystems into it.
           </p>
           <dl className="mt-8 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-4 text-[15px] sm:grid-cols-4">
-            {[["Role", "Team lead, structure and integration"], ["Client", "Canadian Space Agency, LEAP OASIS"], ["School", "Polytechnique Montréal"], ["When", "Jan. to Apr. 2025"]].map(([k, v]) => (
+            {[["Role", "Team lead, structure and integration"], ["Program", "CSA LEAP OASIS design course (AER1110)"], ["School", "Polytechnique Montréal"], ["When", "Jan. to Apr. 2025"]].map(([k, v]) => (
               <div key={k}>
                 <dt className="text-[var(--text-tertiary)]">{k}</dt>
                 <dd className="mt-0.5 text-[var(--text)]">{v}</dd>

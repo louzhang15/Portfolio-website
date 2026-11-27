@@ -241,7 +241,7 @@ export const TRADEOFFS: Record<string, Tradeoff[]> = {
  */
 export const HOOKS: Record<string, string> = {
   "P-1": "A 3 m telescopic tube that carries fresh produce from a lunar greenhouse to a habitat. The tube beat a rover and a zipline 251 to 206 and 197, then passed clearance and load tests on a wood and PLA bench model.",
-  "P-5": "Spots a fall in a care-home room with no camera, using mmWave radar and a floor vibration sensor. In testing, the alert reached the nurse's dashboard 0.3 s after the fall.",
+  "P-5": "Spots a fall in a care-home room with no camera, using mmWave radar and a floor vibration sensor. In a scripted test, the detector flagged a simulated fall 0.3 s after it began.",
   "P-3": "A robot built in 24 hours from cardboard and bottles that follows a black line and plants seeds. A colour reading stops the motors and turns a folded-paper dispenser.",
   "P-4": "A $1.50 triage bracelet with no battery: its NFC chip runs on the reader's own field. A SmartTriage dashboard maps every tagged patient.",
   "P-2": "An axial piston pump modelled part by part in CATIA: 9 pistons with slipper pads, one retaining plate and a spherical nut, in a 21-part exploded drawing.",

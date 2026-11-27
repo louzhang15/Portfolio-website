@@ -58,7 +58,7 @@ const dive: TechDive = {
       { from: "Wagon", to: "Rails", label: "wheel to rail clearance 1.85 to 1.90 mm on the bench, target under 2 mm" },
       { from: "Small tube", to: "Large tube", label: "3 notches in 3 grooves, graphite at the opening, thermal team seal at the joint" },
       { from: "Solar panels", to: "Rails", label: "Solar power reaches the wagon through the rails" },
-      { from: "Legs", to: "Lunar surface", label: "185 kg × 1.62 / 6 = 50.0 N per leg, 0.0535 MPa" },
+      { from: "Legs", to: "Lunar surface", label: "185 kg × 1.62 / 6 = 50.0 N per leg unfactored; 0.0535 MPa with the 1.5 factor" },
     ],
   },
   stages: [

@@ -29,7 +29,7 @@ const LOADER_CSS = `
 
 const MIN_MS = 900; // no flash on a warm cache
 const IDLE_MS = 4500; // loaded but no device on screen (deep link): don't wait for a 3D frame
-const MAX_MS = 9000; // never hold anyone hostage
+const MAX_MS = 2500; // never hold anyone hostage
 
 /**
  * First-load screen: a watch assembling layer by layer while three.js downloads and compiles. Server-rendered,

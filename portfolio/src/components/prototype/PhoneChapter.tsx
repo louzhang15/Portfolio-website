@@ -36,7 +36,7 @@ const disciplines: Omit<Beat, "start" | "end">[] = [
   {
     title: "Mechanical design.",
     body: "The structure that holds it all together.",
-    tools: ["SolidWorks", "CATIA V6", "GD&T", "DFM / DFA", "FEA (Ansys)"],
+    tools: ["SolidWorks", "CATIA V5", "GD&T", "DFM / DFA", "FEA (Ansys)"],
     note: "Layers 3 and 4: frame and midframe",
   },
   {

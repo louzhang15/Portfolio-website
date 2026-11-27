@@ -125,7 +125,7 @@ function EndPaper({ active }: { active: boolean }) {
       <div>
         <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-on-light-secondary)]">End of the book</p>
         <p className="mt-3 text-[1.9rem] font-semibold leading-[1.05] text-[var(--text-on-light)]">
-          Seven pages.
+          Nine pages.
           <br />
           One PDF.
         </p>

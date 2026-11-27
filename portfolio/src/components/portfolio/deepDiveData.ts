@@ -14,7 +14,7 @@ const csa: DeepDive = {
       title: "50+ part interfaces in one 3.1 m envelope",
       points: [
         "Coordinated geometry conflicts between the telescopic, structural and thermal subsystems.",
-        "CATIA V6 parametric assemblies enforced interface constraints and carried design changes to dependent parts.",
+        "CATIA V5 parametric assemblies enforced interface constraints and carried design changes to dependent parts.",
         "GD&T on every critical mating surface: flatness, perpendicularity and true position for manufacturing.",
         "Tolerance stack-up across all telescopic stages checked fit under worst-case dimensional variation.",
         "Design freezes tracked in MS Project across the mechanical, thermal and electrical subsystems.",

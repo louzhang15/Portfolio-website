@@ -142,7 +142,7 @@ const myFlags = [
   ["Welding drops 6061-T6 to roughly half its yield strength near the joint. Our checks used the parent metal value.", "Use the as-welded allowable at every leg joint, or plan a post-weld heat treatment."],
   ["Graphite needs moisture to lubricate, so it stops working in vacuum.", "Use MoS₂ or a PTFE liner at the sliding joint of a flight design."],
   ["With stresses under 1% of yield, strength never sized the legs.", "Size them for buckling, stiffness, and handling loads, then cut mass."],
-  ["The reported rail stress has a units inconsistency. The moment calculation is traceable, but the reported stress needs a separate check.", "Recompute stress from the actual section modulus, using consistent units throughout."],
+  ["The rail stress sheet reports 0.0308 MPa, but its own inputs (9,578 N·mm × 11.67 mm / 3,625 mm⁴) give 30.8 MPa: a unit slip of 1,000. Recomputing the section gives about 13,750 mm⁴ and 8.1 MPa. Both values stay well under the 160 MPa allowable (240 MPa / 1.5).", "Recompute stress from the actual section modulus, using consistent units throughout."],
   ["The bench test recorded no deflection, only that nothing visibly bent.", "Instrument the next test with a dial gauge and compare against the beam model."],
 ];
 
@@ -487,7 +487,7 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
           />
           <div className="space-y-8 lg:pt-2">
             <dl className="grid grid-cols-1 gap-x-4 sm:grid-cols-3">
-              {[["3 / 3", "wagon trials passed"], ["1.90 mm", "largest wheel clearance, target < 2 mm"], ["2.8×", "bench load over the GEVS test load, wood mock-up"]].map(([value, label]) => (
+              {[["3 / 3", "wagon trials passed"], ["1.90 mm", "largest wheel clearance, target < 2 mm"], ["6.0 kg", "held 5 min on the wood mock-up rails"]].map(([value, label]) => (
                 <div key={label} className={STAT_CELL}>
                   <dt className="mt-2 text-sm text-[var(--text-tertiary)]">{label}</dt>
                   <dd className="wide text-[clamp(1.25rem,2.4vw,1.75rem)] leading-none tabular-nums text-[var(--text)]">{value}</dd>
@@ -496,7 +496,7 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
             </dl>
             <div className={PROSE}>
               <p>Clearance measured 1.85 to 1.90 mm across three wagon runs, and the wagon advanced every time. A separate continuity check confirmed the rails could carry power to the wagon.</p>
-              <p>The wooden rails held four loads from 4.8 to 6.0 kg for five minutes each with no visible deformation. The lunar limit load is 17.0 N (10.5 kg × 1.62 m/s²), so the GEVS test load is 21.3 N. The 6 kg step (59 N) is 2.8 times that. We did not measure deflection, so the test shows the mock-up held. It does not prove the beam model.</p>
+              <p>The wooden rails held four loads from 4.8 to 6.0 kg for five minutes each with no visible deformation. The lunar limit load is 17.0 N (10.5 kg × 1.62 m/s²), so the GEVS test load is 21.3 N. The 6 kg step put 59 N on a scale model made of wood, so it is not a direct comparison with the aluminium design. We did not measure deflection, so the test shows the mock-up held. It does not prove the beam model.</p>
             </div>
             <div className="flex flex-wrap gap-3">
               {demos.map((demo) => (

@@ -8,7 +8,7 @@ import { InternLogos, OpenTo, btnGhostDark, btnPrimaryLight } from "./stage";
 
 const SKILLS: [string, string[]][] = [
   ["Software", ["Python", "TypeScript", "React", "Next.js", "LLM agents", "SQL"]],
-  ["Mechanical design", ["SolidWorks", "CATIA V6", "GD&T", "DFM / DFA", "FEA (Ansys)"]],
+  ["Mechanical design", ["SolidWorks", "CATIA V5", "GD&T", "DFM / DFA", "FEA (Ansys)"]],
   ["Electronics", ["Arduino", "ESP32", "Raspberry Pi", "ROS 2", "PLC / HMI"]],
   ["Manufacturing", ["CNC machining", "Root-cause analysis", "Equipment design"]],
 ];

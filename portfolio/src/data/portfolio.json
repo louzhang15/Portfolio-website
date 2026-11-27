@@ -102,12 +102,12 @@
       "emoji": "⚙️",
       "skills": [
         "3D CAD",
-        "SolidWorks",
+        "CATIA V5",
         "Mechanical Design",
-        "GD&T",
-        "Assembly Modeling"
+        "Assembly Modeling",
+        "Technical Drawings"
       ],
-      "details": "3D CAD modeling project at Polytechnique Montréal (Oct.–Nov. 2024). Fully modeled a high-performance axial piston hydraulic pump from the ground up.\n\nThe assembly houses 9 individual piston assemblies — each comprising a piston and slipper pad — retained by a retaining plate and centered via a spherical nut. Optimized component geometry and assembly parameters for mechanical durability.\n\nProduced a full exploded-view drawing with a French bill of materials following standard drafting conventions.",
+      "details": "3D CAD modeling project at Polytechnique Montréal (Oct.–Nov. 2024). Modeled an axial piston hydraulic pump part by part in CATIA V5.\n\nThe assembly houses 9 individual piston assemblies — each comprising a piston and slipper pad — retained by a retaining plate and centered via a spherical nut.\n\nProduced a full exploded-view drawing with a French bill of materials following standard drafting conventions.",
       "github": null,
       "demo": null,
       "image": null

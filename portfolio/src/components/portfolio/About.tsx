@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const skills = [
   "Next.js", "React", "TypeScript", "Python", "Node.js", "SQL",
-  "SolidWorks", "CATIA V6", "AutoCAD", "Arduino", "Raspberry Pi", "ROS 2",
+  "SolidWorks", "CATIA V5", "AutoCAD", "Arduino", "Raspberry Pi", "ROS 2",
   "FEA", "GD&T", "PLC",
 ];
 

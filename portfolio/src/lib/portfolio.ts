@@ -42,7 +42,6 @@ export const fullPortfolioPageTitles = [
   "Nursie, AI nurse assistant",
   "Nursie, alert pipeline and outcomes",
   "Autonomous reforestation robot",
-  "Nursie and Reforestation Robot, hardware build checks",
 ];
 
 export const fullPortfolioPages = fullPortfolioPageTitles.map(
@@ -99,7 +98,7 @@ const mediaById: Record<
         kind: "demo",
       },
     ],
-    metrics: ["7 engineering students led", "5/5 decision matrices won by our concept", "42% less volume stowed for launch", "1.90\u00a0mm largest wheel clearance, target under 2\u00a0mm"],
+    metrics: ["7 engineering students led", "251 vs 206 vs 197 concept score", "42% less volume stowed for launch", "1.90\u00a0mm largest wheel clearance, target under 2\u00a0mm"],
     accent: "#1b6fff",
     emoji: "Moon",
   },
@@ -134,7 +133,7 @@ const mediaById: Record<
     image: "/media/nursie/dashboard.png",
     gallery: ["/media/nursie/mmwave-radar.webp", "/media/nursie/door-node.webp", "/media/nursie/vibration-node.webp"],
     documents: [fullPortfolioDocument],
-    metrics: ["No cameras", "8.4 cm radar range resolution", "0.3 s fall to alert in test", "Best Use of ElevenLabs"],
+    metrics: ["No cameras", "8.4 cm radar range resolution", "0.3 s detector trigger, scripted test", "Best Use of ElevenLabs"],
     accent: "#7b4fd6",
     emoji: "Care",
   },
