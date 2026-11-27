@@ -35,14 +35,14 @@ type RawPortfolioItem = Omit<PortfolioItem, "slug" | "gallery" | "documents" | "
 export const fullPortfolioPageTitles = [
   "Profile and skills",
   "Lunar Transport System",
-  "Predictive simulation and analysis",
-  "Mechatronics and fabrication",
+  "Lunar Transport System, structural checks and tube wall",
+  "Lunar Transport System, integration and prototype",
+  "Lunar Transport System, design decisions",
+  "Lunar Transport System, rail analysis and bench tests",
   "Nursie, AI nurse assistant",
   "Nursie, alert pipeline and outcomes",
   "Autonomous reforestation robot",
-  "Lunar Transport System, concept decisions",
-  "Lunar Transport System, rail calculation and validation",
-  "Nursie and Reforestation Robot, hardware checks",
+  "Nursie and Reforestation Robot, hardware build checks",
 ];
 
 export const fullPortfolioPages = fullPortfolioPageTitles.map(
