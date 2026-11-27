@@ -84,7 +84,7 @@ export default function DriveList({ world, onDrive }: { world: WorldData; onDriv
               className="group grid overflow-hidden rounded-[6px] border border-[#1d2321]/20 bg-[#fbfaf6] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1d2321] sm:grid-cols-[1fr_1.35fr]"
             >
               <div className="relative aspect-[2/1] bg-[#d4d9cf] sm:aspect-auto">
-                <Image src={featured.featureImage} alt="Team C1’s lunar transport bench prototype" fill sizes="(max-width: 639px) calc(100vw - 2rem), 286px" className="object-cover object-[50%_30%]" />
+                <Image src={featured.featureImage} alt="The structure team’s lunar transport bench prototype" fill sizes="(max-width: 639px) calc(100vw - 2rem), 286px" className="object-cover object-[50%_30%]" />
               </div>
               <div className="p-4 sm:p-5">
                 <p className="font-label text-[11px] font-bold uppercase tracking-[0.14em] text-[#5b625e]">{featured.kicker}</p>

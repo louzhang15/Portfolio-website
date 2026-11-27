@@ -18,7 +18,7 @@ export default function LunarChapter({ id }: { id: string }) {
       <div className="mx-auto grid max-w-[1352px] items-center gap-8 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-14">
         <div>
           <p className="font-mono text-xs font-medium tracking-wide text-[var(--accent-on-light)]">
-            CSA LEAP OASIS · Team C1
+            CSA LEAP OASIS · Structure team lead
           </p>
           <h2 id="lunar-chapter-title" className="mt-4 text-[clamp(2rem,10vw,3.75rem)] md:text-[clamp(2.25rem,4.4vw,4rem)]">
             {project.title}
@@ -46,7 +46,7 @@ export default function LunarChapter({ id }: { id: string }) {
             className="aspect-[4/3] w-full object-cover object-center"
           />
           <figcaption className="border-t border-[var(--border-light)] px-4 py-3 text-sm text-[var(--text-secondary)]">
-            Team C1’s bench prototype, with the wagon and rail interface exposed.
+            The structure team’s bench prototype, with the wagon and rail interface exposed.
           </figcaption>
         </figure>
       </div>

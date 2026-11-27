@@ -110,7 +110,7 @@ export function buildWorld(): WorldData {
       stops.push({
         id: p.slug,
         kind: "project",
-        kicker: lunar ? "CSA LEAP OASIS · Team C1" : sector,
+        kicker: lunar ? "CSA LEAP OASIS · Structure team lead" : sector,
         title: p.title,
         line: lunar ? "Structural design and integration for a telescoping tube with a rail-guided wagon to move produce on the Moon." : p.subtitle,
         href: `/portfolio/${p.slug}`,

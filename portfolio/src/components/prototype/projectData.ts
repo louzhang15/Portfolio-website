@@ -141,9 +141,9 @@ export const COMMUNITY: Recognition[] = [
     title: "Apprentice, Accent on the Community",
     org: "Accenture",
     meta: "Jan.–Apr. 2026",
-    detail: "Pro-bono consulting program. Our student team built a CRM outreach tool for a community of agriculture startups.",
+    detail: "Pro-bono consulting for a community of agriculture startups, under NDA. Our student team identified the key market segments, scored 9 new revenue activities on 5 criteria, built a financial model and an operating plan, and built a CRM outreach tool.",
     logo: "/logo/accenture-mark.png",
-    image: "/media/drive/crm-outreach-tool.webp",
+    image: "/media/drive/accenture.webp",
     href: "/portfolio/crm-outreach-tool",
   },
   {

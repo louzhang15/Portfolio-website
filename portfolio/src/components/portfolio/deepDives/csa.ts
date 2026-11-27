@@ -4,41 +4,41 @@ const D = "/media/csa/deep/";
 const M = "/media/csa/";
 
 /**
- * Lunar Transport System (CSA LEAP, AER1110, winter 2025), team C1: structure and integration.
- * Built from the C1 stage 1, 2 and 3 reports, the design review decks, the critical-part sheets and the
+ * Lunar Transport System (CSA LEAP, AER1110, winter 2025), structure and integration team.
+ * Built from the structure team's stage 1, 2 and 3 reports, the design review decks, the critical-part sheets and the
  * detail drawings (French, translated). Calculation pages and drawings stay in French as images.
  */
 const dive: TechDive = {
   heading: "From needs to a tested telescopic tube",
   intro:
-    "Company C had five teams and one mandate from the Canadian Space Agency: move a vegetable compartment 3 m from a lunar greenhouse to a habitat. Team C1 owned the main structure and the integration of the four other teams (C2 compartment, C3 transfer and docking, C4 propulsion and power, C5 thermal and dust). The project ran in three stages from January to April 2025, with four design reviews. Original pages are shown in French; the text beside them explains what they show.",
+    "Five student teams shared one mandate from the Canadian Space Agency: move a vegetable compartment 3 m from a lunar greenhouse to a habitat. Our team owned the main structure and the integration of the four other teams: compartment, transfer and docking, propulsion and power, and thermal and dust. The project ran in three stages from January to April 2025, with four design reviews. Original pages are shown in French; the text beside them explains what they show.",
   architecture: {
     flow:
-      "Produce rides in the C2 compartment inside the wagon. A C3 conveyor in the greenhouse airlock loads the wagon onto the rails. The wagon runs 3 m on two rails and draws C4 power through them. A conveyor in the habitat airlock unloads it. Weight goes from the wagon to the rails, the tube wall and 6 legs: 185 kg in total gives 50.0 N per leg on the Moon.",
+      "Produce rides in the compartment team's container inside the wagon. The transfer team's conveyor in the greenhouse airlock loads the wagon onto the rails. The wagon runs 3 m on two rails and draws power from the propulsion and power team through them. A conveyor in the habitat airlock unloads it. Weight goes from the wagon to the rails, the tube wall and 6 legs: 185 kg in total gives 50.0 N per leg on the Moon.",
     layers: [
       {
-        name: "Payload (C2)",
+        name: "Payload (compartment team)",
         blocks: [
-          { name: "Vegetable compartment", role: "Holds 150 g of produce in a 10 cm by 10 cm cylinder. Sits inside the wagon.", tech: "Team C2" },
+          { name: "Vegetable compartment", role: "Holds 150 g of produce in a 10 cm by 10 cm cylinder. Sits inside the wagon.", tech: "Compartment team" },
         ],
       },
       {
-        name: "Transfer (C3)",
+        name: "Transfer (transfer team)",
         blocks: [
-          { name: "Greenhouse airlock conveyor", role: "Loads the wagon into the tube.", tech: "Team C3, conveyor height 1.25 cm" },
-          { name: "Habitat airlock conveyor", role: "Unloads the wagon at the other end.", tech: "Team C3" },
+          { name: "Greenhouse airlock conveyor", role: "Loads the wagon into the tube.", tech: "Transfer team, conveyor height 1.25 cm" },
+          { name: "Habitat airlock conveyor", role: "Unloads the wagon at the other end.", tech: "Transfer team" },
         ],
       },
       {
         name: "Transport",
         blocks: [
-          { name: "Wagon", role: "Carries the compartment along the 3 m route.", tech: "C4 wheels, 29 mm wheel track" },
-          { name: "Hollow rails", role: "Rails on the small tube. A chamfer lets the wheel pass onto the solid rail.", tech: "C1, C-101-1, 1700 mm, 4.4 kg" },
-          { name: "Solid rails", role: "Rails on the large tube. They slide into the hollow rails.", tech: "C1, C-101-2, 1540 mm, 2.8 kg" },
+          { name: "Wagon", role: "Carries the compartment along the 3 m route.", tech: "Propulsion team wheels, 29 mm wheel track" },
+          { name: "Hollow rails", role: "Rails on the small tube. A chamfer lets the wheel pass onto the solid rail.", tech: "Structure team, C-101-1, 1700 mm, 4.4 kg" },
+          { name: "Solid rails", role: "Rails on the large tube. They slide into the hollow rails.", tech: "Structure team, C-101-2, 1540 mm, 2.8 kg" },
         ],
       },
       {
-        name: "Structure (C1)",
+        name: "Structure (our team)",
         blocks: [
           { name: "Large tube", role: "Outer section with 3 internal grooves at 120°.", tech: "C-102-1, Ø 540 mm, 1600 mm, 79.6 kg" },
           { name: "Small tube", role: "Slides into the large tube on 3 ribs. Deploys to 3 m, stows at 1.6 m.", tech: "C-102-2, Ø 500 mm, 1600 mm, 70.2 kg" },
@@ -48,16 +48,16 @@ const dive: TechDive = {
       {
         name: "Power and protection",
         blocks: [
-          { name: "Solar panels", role: "Power the wagon through the rails. They sit above the regolith.", tech: "C4, support C-103-1 at 35°" },
-          { name: "Wall and seals", role: "Aluminium and MLI wall, a flexible seal at the sliding joint and a seal at each airlock.", tech: "C5, 2 cm wall" },
+          { name: "Solar panels", role: "Power the wagon through the rails. They sit above the regolith.", tech: "Propulsion and power team, support C-103-1 at 35°" },
+          { name: "Wall and seals", role: "Aluminium and MLI wall, a flexible seal at the sliding joint and a seal at each airlock.", tech: "Thermal and dust team, 2 cm wall" },
         ],
       },
     ],
     links: [
       { from: "Airlock conveyors", to: "Wagon", label: "conveyor lined up with the wagon; the tube was lowered 4 cm to match" },
       { from: "Wagon", to: "Rails", label: "wheel to rail clearance 1.85 to 1.90 mm on the bench, target under 2 mm" },
-      { from: "Small tube", to: "Large tube", label: "3 notches in 3 grooves, graphite at the opening, C5 seal at the joint" },
-      { from: "Solar panels", to: "Rails", label: "C4 power reaches the wagon through the rails" },
+      { from: "Small tube", to: "Large tube", label: "3 notches in 3 grooves, graphite at the opening, thermal team seal at the joint" },
+      { from: "Solar panels", to: "Rails", label: "Solar power reaches the wagon through the rails" },
       { from: "Legs", to: "Lunar surface", label: "185 kg × 1.62 / 6 = 50.0 N per leg, 0.0535 MPa" },
     ],
   },
@@ -67,12 +67,12 @@ const dive: TechDive = {
       phase: "Requirements",
       title: "Client needs, two houses of quality",
       summary:
-        "Stage 1 turned meetings with the CSA mentor into ranked needs, then into measurable characteristics (house of quality 1) and functions for the C1 structure (house of quality 2).",
+        "Stage 1 turned meetings with the CSA mentor into ranked needs, then into measurable characteristics (house of quality 1) and functions for the structure (house of quality 2).",
       points: [
         "Explicit needs ranked 1 to 10 by the CSA. Transport, produce preservation and environmental protection scored 9.",
         "Payload set at 150 g in a 10 cm by 10 cm cylinder. Route set at 3 m, straight and flat, in 10 minutes or less.",
         "Launch load target from the SpaceX Falcon 9 stage 1 peak: 4.5 g for 40 s. Redundancy factor of 2 for essential systems.",
-        "House of quality 2 kept the characteristics with the most weight for C1: payload, total load capacity (12%), structural strength, interoperability and lunar protection (22% together).",
+        "House of quality 2 kept the characteristics with the most weight for the structure team: payload, total load capacity (12%), structural strength, interoperability and lunar protection (22% together).",
         "Late answers from the client delayed the ranking. The team added hours and outside sources to deliver on Feb. 7.",
       ],
       stats: [
@@ -136,7 +136,7 @@ const dive: TechDive = {
       phase: "Concept selection",
       title: "Zipline, tube or rover",
       summary:
-        "A weighted Pugh matrix rated the six configurations on feasibility for C1. Four passed and three went to the second design review (PDR II), where every team presented its part of each concept. A company-wide matrix then picked the tube with rails.",
+        "A weighted Pugh matrix rated the six configurations on feasibility for the structure team. Four passed and three went to the second design review (PDR II), where every team presented its part of each concept. A company-wide matrix then picked the tube with rails.",
       points: [
         "Pugh criteria and weights: technical simplicity 0.12, fit for the other subsystems 0.11, mechanical reliability 0.11, airlock interface 0.10, transport volume 0.10, then cost, life, maintenance access and installation.",
         "Mass estimates used in the scoring: a lunar rover from 40 kg to 899 kg, a 6 m galvanized cable of 4 mm at 0.366 kg, a 3 m metal tube from 60 kg to 100 kg.",
@@ -145,7 +145,7 @@ const dive: TechDive = {
       ],
       tables: [
         {
-          caption: "C1 feasibility study, weighted Pugh matrix (stage 2 report, table 5)",
+          caption: "Structure team feasibility study, weighted Pugh matrix (stage 2 report, table 5)",
           head: ["Configuration", "Weighted score", "Rank", "Kept"],
           rows: [
             ["Tube with rails", "3.14", "1", "Yes"],
@@ -160,11 +160,11 @@ const dive: TechDive = {
           caption: "Company decision matrix, score out of 70 per team (stage 2 report, annex F)",
           head: ["Team", "Tube with rails", "Zipline", "Rover"],
           rows: [
-            ["C1 structure", "49", "47", "40"],
-            ["C2 compartment", "50", "42", "44"],
-            ["C3 transfer and docking", "54", "42", "46"],
-            ["C4 propulsion and power", "46", "33", "39"],
-            ["C5 thermal and dust", "52", "33", "37"],
+            ["Structure", "49", "47", "40"],
+            ["Compartment", "50", "42", "44"],
+            ["Transfer and docking", "54", "42", "46"],
+            ["Propulsion and power", "46", "33", "39"],
+            ["Thermal and dust", "52", "33", "37"],
             ["Total", "251", "197", "206"],
           ],
         },
@@ -174,26 +174,26 @@ const dive: TechDive = {
           name: "Zipline (cable system)",
           summary: "A cable between greenhouse and habitat. A rack lifts one end so gravity moves the compartment. A hook docks onto a ring on the compartment.",
           verdict: "dropped",
-          reason: "Needs holes through the airlocks, is hard to protect from regolith, and scored 197 of 350. C1 rated its reliability 4 of 10.",
+          reason: "Needs holes through the airlocks, is hard to protect from regolith, and scored 197 of 350. Our team rated its reliability 4 of 10.",
           media: { src: M + "concept-cableway.webp", caption: "Zipline sketch: pulley, gondola, greenhouse and habitat.", kind: "sketch" },
         },
         {
           name: "Tube with rails",
           summary: "A two-section telescopic Al 6061 tube on 3 pairs of legs. A wagon runs on rails inside, conveyors in each airlock load it, solar panels sit on top, 50 cm of regolith covers it.",
           verdict: "kept",
-          reason: "First in the C1 Pugh matrix (3.14) and in all five team matrices (251 of 350). Simple, fixed path, and it shields the produce from regolith.",
+          reason: "First in our team's Pugh matrix (3.14) and in all five team matrices (251 of 350). Simple, fixed path, and it shields the produce from regolith.",
           media: { src: M + "concept-sketch-tube.webp", caption: "Tube and rails sketch: tube, supports and rails between greenhouse and habitat.", kind: "sketch" },
         },
         {
           name: "Lunar rover",
           summary: "A solar-powered rover with suspension, a sealed door for maintenance and a two-ring docking system.",
           verdict: "dropped",
-          reason: "Needs complex mechanisms and much programming, and is more exposed to regolith. C1 rated its simplicity 1 of 10. Total 206 of 350.",
+          reason: "Needs complex mechanisms and much programming, and is more exposed to regolith. Our team rated its simplicity 1 of 10. Total 206 of 350.",
           media: { src: M + "concept-sketch-rover.webp", caption: "Rover sketch: solar panels, motors and batteries, compartment box, wheels with suspension.", kind: "sketch" },
         },
       ],
       media: [
-        { src: D + "pugh-matrix.webp", caption: "C1 Pugh matrix: six configurations scored 1 to 4 on ten weighted criteria.", kind: "chart" },
+        { src: D + "pugh-matrix.webp", caption: "Structure team Pugh matrix: six configurations scored 1 to 4 on ten weighted criteria.", kind: "chart" },
         { src: D + "pdr-tube-concept.webp", caption: "PDR II slide for the tube: load spreading, the telescopic sketch and the 3 m truss support idea, with pros and cons.", kind: "document" },
         { src: D + "company-scores.webp", caption: "Total score of each concept over the five team matrices.", kind: "chart" },
       ],
@@ -207,14 +207,14 @@ const dive: TechDive = {
       points: [
         "Outer diameter 46.0 cm, main opening 44.0 cm. Legs 3.50 x 10.45 x 4.00 cm.",
         "Calculated with a safety factor of 1.5: structural mass 106.3 kg, payload 10 kg, 33.6 kPa on one leg, 0.510 mm leg elongation, 1.51 mm tube elongation.",
-        "Interfaces set at this review: C2 compartment inside the wagon, C3 loading systems inside the structure, C4 loads added to the calculations, C5 choosing the material.",
+        "Interfaces set at this review: the compartment sits inside the wagon, the transfer team's loading systems sit inside the structure, propulsion loads were added to the calculations, and the thermal and dust team chose the material.",
       ],
       iterations: [
         {
           name: "Grade 2 titanium structure",
           summary: "Titanium shell, allowable stress 183.33 MPa, 106.3 kg of structure.",
           verdict: "revised",
-          reason: "Replaced by aluminium 6061 for stage 2, a material choice made with C5. The stage 3 report justifies it: aluminium is cheaper and easier to weld than titanium, and making it takes 210 MJ/kg against 690 MJ/kg.",
+          reason: "Replaced by aluminium 6061 for stage 2, a material choice made with the thermal and dust team. The stage 3 report justifies it: aluminium is cheaper and easier to weld than titanium, and making it takes 210 MJ/kg against 690 MJ/kg.",
           media: { src: M + "evolution-cdr-assembly.webp", caption: "Critical design review assembly with the compartment and wagon in place.", kind: "render" },
         },
       ],
@@ -230,7 +230,7 @@ const dive: TechDive = {
         "Rails: 2 symmetric pairs. Hollow rails on the small tube, solid rails on the large tube, sliding into each other.",
         "Inner diameters 50.0 cm and 48.2 cm, wall 2 cm (aluminium and MLI), structure about 80 kg.",
         "Solar panel support: 76.0 x 54.0 cm plate at 35° on a 65.0 cm threaded tube, screwed into the main tube to sit above the regolith.",
-        "The tube was lowered 4 cm so the wagon lines up with the airlock conveyors (C3 wagon conveyor height 1.25 cm).",
+        "The tube was lowered 4 cm so the wagon lines up with the airlock conveyors (the transfer team's wagon conveyor height is 1.25 cm).",
         "Stage 2 cost 300 team hours against 176 for stage 1. The gap came from integration sessions in weeks 6 and 7, as every team changed its parts, and from a backup hand-built mock-up made while the CAD was adapted for 3D printing.",
       ],
       iterations: [
@@ -261,13 +261,13 @@ const dive: TechDive = {
       ],
       tables: [
         {
-          caption: "C1 interfaces with the other teams (stage 2 review)",
-          head: ["Team", "What C1 had to accommodate"],
+          caption: "Structure team interfaces with the other teams (stage 2 review)",
+          head: ["Team", "What the structure had to accommodate"],
           rows: [
             ["CSA", "3 m route, airlock opening size, tube height adjusted by 4 cm"],
-            ["C3 transfer and docking", "Wagon conveyor dimensions and alignment with the airlock conveyors"],
-            ["C4 propulsion and power", "Wheel shape and spacing, power through the rails, solar panels"],
-            ["C5 thermal and dust", "Aluminium and MLI wall (2 cm), flexible seal at the sliding joint, seal between airlock and tube"],
+            ["Transfer and docking", "Wagon conveyor dimensions and alignment with the airlock conveyors"],
+            ["Propulsion and power", "Wheel shape and spacing, power through the rails, solar panels"],
+            ["Thermal and dust", "Aluminium and MLI wall (2 cm), flexible seal at the sliding joint, seal between airlock and tube"],
           ],
         },
       ],
@@ -293,11 +293,11 @@ const dive: TechDive = {
         },
       ],
       media: [
-        { src: M + "telescopic-assembly-cad.webp", caption: "Exploded C1 subassembly: small tube, large tube, nested rails and the solar panel support.", kind: "render" },
+        { src: M + "telescopic-assembly-cad.webp", caption: "Exploded structure subassembly: small tube, large tube, nested rails and the solar panel support.", kind: "render" },
         { src: M + "evolution-stage2-assembly.webp", caption: "Stage 2 CAD: two aluminium sections, legs and the 35° solar panel mast.", kind: "render" },
-        { src: D + "stage2-section-subsystems.webp", caption: "Section view of the full assembly: tube and rails (C1), conveyor (C3), wheels and motor (C4), material and seals (C5).", kind: "render" },
+        { src: D + "stage2-section-subsystems.webp", caption: "Section view of the full assembly: tube and rails (structure team), conveyor (transfer team), wheels and motor (propulsion and power team), material and seals (thermal and dust team).", kind: "render" },
         { src: D + "stage2-dimensions.webp", caption: "Stage 2 review slide: tube diameters, wall thickness, solar support and leg strain.", kind: "document" },
-        { src: M + "wheel-rail-interface-clean.webp", caption: "Wheel to rail interface. The C4 wheel spacing set the rail spacing.", kind: "render" },
+        { src: M + "wheel-rail-interface-clean.webp", caption: "Wheel to rail interface. The propulsion team's wheel spacing set the rail spacing.", kind: "render" },
       ],
     },
     {
@@ -385,9 +385,9 @@ const dive: TechDive = {
       phase: "Drawings and build",
       title: "Detail drawings, data sheets and the bench prototype",
       summary:
-        "C1 drew every non-standard part in CATIA V5 with tolerances, wrote a data sheet per part, and built a scale bench prototype from 3D printed PLA and wood.",
+        "Our team drew every non-standard part in CATIA V5 with tolerances, wrote a data sheet per part, and built a scale bench prototype from 3D printed PLA and wood.",
       points: [
-        "Part numbering C-1XX-Y: C for the company, 1 for team C1, XX for the part family, Y for the part.",
+        "Part numbering C-1XX-Y: C for the five-team project, 1 for the structure team, XX for the part family, Y for the part.",
         "Large tube C-102-1: Ø 540 mm, 1600 mm long, 10 mm wall, 4 legs 270 mm high with 1400 mm² section, 3 internal grooves at 120°, 2 handles, 79.6 kg.",
         "Small tube C-102-2: Ø 500 mm outside, 460 mm inside, 1600 mm long, 3 external ribs at 120°, 2 legs, a Ø 70 mm threaded hole for the solar support, 70.2 kg.",
         "Hollow rails C-101-1: 1700 mm, 3 supports, a chamfer so the wheel passes onto the solid rail, 4.4 kg. Solid rails C-101-2: 1540 mm, 29 mm wheel track, 2.8 kg. Both carry current.",
@@ -410,7 +410,7 @@ const dive: TechDive = {
       phase: "Tests and final review",
       title: "Bench tests, final review and the stage 3 report",
       summary:
-        "C1 tested the two functions of the rails on the bench, presented the structure at the final review on Apr. 15, and closed the project with the stage 3 report on Apr. 20.",
+        "Our team tested the two functions of the rails on the bench, presented the structure at the final review on Apr. 15, and closed the project with the stage 3 report on Apr. 20.",
       points: [
         "Wheel to rail test: 3 runs, clearance 1.90, 1.90 and 1.85 mm against a target under 2 mm. The wagon stayed level and moved forward every time.",
         "Rail strength test, planned from NASA GEVS 2.4.1 (loads at 1.25 times the limit load): 4.80, 5.20, 5.60 and 6.00 kg held for 5 minutes each with no visible deformation. The test wagon weighs 4.0 kg.",
@@ -459,7 +459,7 @@ const dive: TechDive = {
       ],
       media: [
         { src: D + "bench-tests.webp", caption: "Stage 3 report, tables 3 and 4: wheel to rail test and rail strength test results.", kind: "document" },
-        { src: D + "final-performance-table.webp", caption: "Final review slide: C1 performance against targets, safety factor 1.5.", kind: "document" },
+        { src: D + "final-performance-table.webp", caption: "Final review slide: structure performance against targets, safety factor 1.5.", kind: "document" },
         { src: D + "final-rails.webp", caption: "Final review slide: the rail system and its clearance target under 2 mm.", kind: "document" },
         { src: D + "final-stowed-volume.webp", caption: "Final review slide: 0.65 m³ deployed, 0.38 m³ stowed, handles for two astronauts.", kind: "document" },
         { src: M + "evolution-final-aluminum.webp", caption: "Final CAD of the aluminium 6061-T6 structure with handles.", kind: "render" },
@@ -473,7 +473,7 @@ const dive: TechDive = {
     "Morphological matrix deck (Feb. 11, 2025) and PDR II deck (Feb. 18, 2025)",
     "Critical design review deck (Feb. 25, 2025), end of stage 2 deck, final review deck (Apr. 15, 2025)",
     "Rail free-body sheet (Mar. 29, 2025) and critical-part strength sheet (Apr. 1, 2025)",
-    "C1 detail drawings and part data sheets (Mar. 30 to Apr. 2025)",
+    "Structure team detail drawings and part data sheets (Mar. 30 to Apr. 2025)",
   ],
 };
 

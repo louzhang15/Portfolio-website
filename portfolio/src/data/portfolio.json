@@ -88,7 +88,7 @@
         "Systems Integration",
         "Prototype Verification"
       ],
-      "details": "This Polytechnique Montréal design project addressed the Canadian Space Agency’s LEAP OASIS challenge. Team C1 worked on the structure and joined the wagon, insulation, transfer hardware, and airlock connections into one transport system. The produce compartment, docking and transfer, propulsion and control, and thermal protection were the responsibility of neighboring teams.",
+      "details": "This Polytechnique Montréal design project addressed the Canadian Space Agency’s LEAP OASIS challenge. The structure and integration team worked on the structure and joined the wagon, insulation, transfer hardware, and airlock connections into one transport system. The produce compartment, docking and transfer, propulsion and control, and thermal protection were the responsibility of neighboring teams.",
       "github": null,
       "demo": null,
       "image": null
@@ -258,7 +258,7 @@
         "Apollo.io",
         "Google Sheets API"
       ],
-      "details": "Fully integrated CRM outreach tool built for a community of agriculture startups, as part of Accenture's AOTC 2026 program.\n\n• Manages contact lists across 3 audience segments (corporate, schools, institutions & media)\n• Uses Google Gemini AI to generate personalized cold emails tailored to each contact's name, title, and organization — then sends them directly through the app\n• Tracks every contact through the full sales pipeline with real-time Google Sheets sync\n• Centralizes booking requests with auto-calculated revenue estimates — accept, refuse, or cancel reservations with one click, triggering a professional email to the client instantly\n\nTotal running cost: ~$0/month on free tiers.",
+      "details": "Part of a pro-bono consulting engagement with a community of agriculture startups through Accenture's Accent on the Community program (Jan.–Apr. 2026). The details are under NDA. Our student team identified the key market segments, scored 9 new revenue activities on 5 criteria (technical feasibility, cost, operational ease, revenue and marketing potential), built a financial model and an operating plan with partnership targets and KPIs, and presented the recommendations to the client.\n\nFully integrated CRM outreach tool built for a community of agriculture startups, as part of Accenture's AOTC 2026 program.\n\n• Manages contact lists across 3 audience segments (corporate, schools, institutions & media)\n• Uses Google Gemini AI to generate personalized cold emails tailored to each contact's name, title, and organization — then sends them directly through the app\n• Tracks every contact through the full sales pipeline with real-time Google Sheets sync\n• Centralizes booking requests with auto-calculated revenue estimates — accept, refuse, or cancel reservations with one click, triggering a professional email to the client instantly\n\nTotal running cost: ~$0/month on free tiers.",
       "github": "https://github.com/louzhang15/Fully-Integrated-CRM-Tool",
       "demo": "https://www.youtube.com/watch?v=TVuFauDyA00",
       "image": null

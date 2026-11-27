@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
 
-// Every number on this page comes from Team C1's design records (Polytechnique Montréal, AER/MEC1110, winter 2025).
+// Every number on this page comes from the structure team's design records (Polytechnique Montréal, AER/MEC1110, winter 2025).
 
 const chapters = [
   ["lunar-leadership", "Team & schedule"],
@@ -117,10 +117,10 @@ const railProblems = [
 
 const interfaces = [
   { team: "CSA brief", need: "A 3 m route between two airlocks.", answer: "Tube height adjusted by 4 cm so the opening lines up with each airlock." },
-  { team: "C2 · Produce compartment", need: "A sealed compartment that rides in the wagon.", answer: "Compartment and wagon sized to fit the tube’s clear diameter above the rails." },
-  { team: "C3 · Transfer and docking", need: "Conveyors that hand the compartment from wagon to airlock.", answer: "Wagon stops level with each airlock conveyor, so alignment became a structural requirement." },
-  { team: "C4 · Propulsion and power", need: "Wheel profile and spacing, power to the motors, a solar panel mount.", answer: "Rail profile follows the wheel, spacing is adjustable, the rails carry power, and a threaded mast lifts the panels above the regolith." },
-  { team: "C5 · Thermal and dust", need: "Insulation inside the shell, a seal at the sliding joint, 50 cm of regolith on top.", answer: "Aluminum wall with space for 1 cm of multilayer insulation, and a flexible seal at the joint." },
+  { team: "Produce compartment team", need: "A sealed compartment that rides in the wagon.", answer: "Compartment and wagon sized to fit the tube’s clear diameter above the rails." },
+  { team: "Transfer and docking team", need: "Conveyors that hand the compartment from wagon to airlock.", answer: "Wagon stops level with each airlock conveyor, so alignment became a structural requirement." },
+  { team: "Propulsion and power team", need: "Wheel profile and spacing, power to the motors, a solar panel mount.", answer: "Rail profile follows the wheel, spacing is adjustable, the rails carry power, and a threaded mast lifts the panels above the regolith." },
+  { team: "Thermal and dust team", need: "Insulation inside the shell, a seal at the sliding joint, 50 cm of regolith on top.", answer: "Aluminum wall with space for 1 cm of multilayer insulation, and a flexible seal at the joint." },
 ];
 
 const checks = [
@@ -209,7 +209,7 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
       <Chapter
         id="lunar-leadership"
         title="Running the team"
-        lede={<p>I coordinated Team C1’s schedule and worked on the structural CAD and subsystem interfaces. The hardest part was keeping our structure current while the four partner teams refined their designs.</p>}
+        lede={<p>I coordinated the structure team’s schedule and worked on the structural CAD and subsystem interfaces. The hardest part was keeping our structure current while the four partner teams refined their designs.</p>}
       >
         <dl className="grid grid-cols-2 gap-x-6 md:grid-cols-4">
           {leadStats.map(([value, label]) => (
@@ -372,7 +372,7 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
               <p>The rails double as the power path to the wagon, which is why their profile is custom. Standard extrusions are the obvious next step.</p>
             </div>
           </div>
-          <div className="grid gap-8 lg:sticky lg:top-28 lg:self-start">
+          <div className="grid gap-8">
             <Figure
               file="telescopic-assembly-cad.webp" width={1138} height={816}
               alt="Exploded engineering line drawing showing the two tube sections and their rails along the same deployment axis."
@@ -417,10 +417,9 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
             <p className="mt-4 text-[15px] text-[var(--text-secondary)]">The wheel was the tightest of these: the rail spacing stayed adjustable, with a wheel-to-rail clearance target under 2 mm.</p>
           </div>
           <Figure
-            className="lg:sticky lg:top-28 lg:self-start"
-            file="wheel-rail-interface-clean.webp" width={1400} height={611}
+                        file="wheel-rail-interface-clean.webp" width={1400} height={611}
             alt="Section view of the wagon axle with its two wheels seated in the stepped rails, with dimensions marked."
-            caption="Wheel-to-rail interface. The wheel spacing from C4 set the rail spacing."
+            caption="Wheel-to-rail interface. The propulsion team’s wheel spacing set the rail spacing."
             source="Stage 2 review, figure 1.10"
           />
         </div>
@@ -466,8 +465,7 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
             <p className="text-sm text-[var(--text-tertiary)]">Stresses from the Stage 3 report, annex J table 17 and abstract. Yield shares computed here.</p>
           </div>
           <Figure
-            className="lg:sticky lg:top-28 lg:self-start"
-            file="rail-load-hand-calculation.webp" width={667} height={419}
+                        file="rail-load-hand-calculation.webp" width={667} height={419}
             alt="Handwritten rail free-body diagram with a centered load, support reaction equations, and a shear force plot."
             caption="Original free-body diagram, reactions, and shear plot."
             source="Critical-part mechanics worksheet, Apr. 1, 2025"
