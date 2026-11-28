@@ -63,8 +63,18 @@ function useBookFit() {
 }
 
 function PageList({ active, onPick }: { active: number[]; onPick: (i: number) => void }) {
+  const list = useRef<HTMLOListElement>(null);
+  const first = active[0] ?? 0;
+  // the list scrolls inside itself on short windows: keep the open pages in view (only the list moves, never the page)
+  useEffect(() => {
+    const ol = list.current;
+    const on = ol?.children[first] as HTMLElement | undefined;
+    if (!ol || !on) return;
+    if (on.offsetTop < ol.scrollTop || on.offsetTop + on.offsetHeight > ol.scrollTop + ol.clientHeight)
+      ol.scrollTo({ top: on.offsetTop - ol.clientHeight / 2 + on.offsetHeight / 2, behavior: "smooth" });
+  }, [first]);
   return (
-    <ol className="mt-6 max-h-[38svh] space-y-0.5 overflow-y-auto">
+    <ol ref={list} className="relative mt-3 max-h-[46svh] space-y-0.5 overflow-y-auto py-3 [mask-image:linear-gradient(to_bottom,transparent,#000_14px,#000_calc(100%-14px),transparent)]">
       {PAGE_TITLES.map((t, i) => {
         const on = active.includes(i);
         return (
@@ -72,13 +82,13 @@ function PageList({ active, onPick }: { active: number[]; onPick: (i: number) =>
             <button
               onClick={() => onPick(i)}
               aria-current={on}
-              className="flex min-h-[36px] w-full max-w-[26rem] items-center gap-4 rounded-lg px-3 text-left text-[15px] transition-colors hover:bg-[var(--surface-light)]"
+              className="flex min-h-11 w-full max-w-[26rem] items-baseline gap-4 rounded-lg px-3 py-2.5 text-left text-[15px] leading-snug transition-colors hover:bg-[var(--surface-light)]"
               style={{
                 color: on ? "var(--text-on-light)" : "var(--text-on-light-secondary)",
                 background: on ? "var(--surface-light)" : undefined,
               }}
             >
-              <span className="w-5 font-mono text-xs tabular-nums" style={{ color: on ? "var(--accent-on-light)" : undefined }}>
+              <span className="w-5 shrink-0 font-mono text-xs tabular-nums" style={{ color: on ? "var(--accent-on-light)" : undefined }}>
                 {i + 1}
               </span>
               <span className={on ? "font-medium" : undefined}>{t}</span>
@@ -131,7 +141,7 @@ function StaticDeck({ id }: { id: string }) {
   );
 }
 
-/** Pages visible on spread `s`: cover alone, then [1|2], [3|4], [5|6], [7]. */
+/** Pages visible on spread `s`: cover alone, then [1|2], [3|4], [5|6], [7|8], [9]. */
 const pagesOn = (s: number) => (s < 1 ? [] : [2 * s - 2, 2 * s - 1].filter((i) => i < fullPortfolioPages.length));
 
 function caption(visible: number[]) {
@@ -173,7 +183,7 @@ function PinnedDeck({ id }: { id: string }) {
   return (
     <section ref={ref} id={id} data-theme="light" data-stops={STOPS} className="light relative" style={{ height: `${100 + SPREADS * 45}svh` }}>
       <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden pt-14">
-        <div className="relative mx-auto grid w-full max-w-[1480px] grid-cols-[minmax(0,1fr)] items-center gap-6 px-6 md:px-10 xl:px-16 md:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] md:gap-10 lg:grid-cols-[minmax(0,0.5fr)_minmax(0,1.5fr)] lg:gap-12">
+        <div className="relative mx-auto grid w-full max-w-[1480px] grid-cols-[minmax(0,1fr)] items-center gap-6 px-6 md:px-10 xl:px-16 md:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] md:gap-10 lg:grid-cols-[minmax(20rem,0.5fr)_minmax(0,1.5fr)] lg:gap-12">
           <div className="order-2 md:order-1">
             <Intro />
             <div className="tall-only hidden lg:block">
@@ -184,7 +194,7 @@ function PinnedDeck({ id }: { id: string }) {
             </p>
             <button
               onClick={() => setReading(visible[0] ?? 0)}
-              className="link mt-1 inline-flex items-center text-sm font-medium max-lg:min-h-[44px] lg:mt-5"
+              className="link mt-1 inline-flex min-h-11 items-center text-sm font-medium lg:mt-3"
             >
               Read {visible.length > 1 ? "these pages" : "this page"} full size
             </button>

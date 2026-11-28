@@ -113,7 +113,7 @@ const ARROW_LEFT = "M13 8H3M7.5 3.5 3 8l4.5 4.5";
 const CLOSE = "M4 4l8 8M12 4l-8 8";
 
 const panel = "rounded-[6px] border border-[#1d2321]/12 bg-[#fbfaf6]/92 shadow-[0_1px_2px_rgba(29,35,33,0.06),0_8px_24px_-12px_rgba(29,35,33,0.25)] backdrop-blur-md";
-const control = "min-h-8 rounded-[4px] border border-[#1d2321]/15 bg-white px-1.5 font-label text-[11px] font-semibold text-[#1d2321] hover:border-[#1d2321]/40 active:bg-[#e7ecdf] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2321] pointer-coarse:min-h-11 pointer-coarse:min-w-11";
+const control = "min-h-11 rounded-[4px] border border-[#1d2321]/15 bg-white px-1.5 font-label text-[13px] font-semibold text-[#1d2321] hover:border-[#1d2321]/40 active:bg-[#e7ecdf] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1d2321] pointer-coarse:min-w-11";
 
 function StopCard({ stop, visible }: { stop: Stop; visible: boolean }) {
   return (

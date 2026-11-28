@@ -39,6 +39,7 @@ function LaptopModel({ jobs, lid, screenOn, track }: LaptopProps) {
   const mat = useMaterials();
   // phones show the screen a few hundred pixels wide: the 1x texture is already ~3x that and half the upload
   const [scale] = useState(() => (window.innerWidth < 768 || (navigator.hardwareConcurrency ?? 8) <= 4 ? 1 : 1.5));
+  const [compact] = useState(() => window.innerWidth < 768);
   const lidRef = useRef<THREE.Group>(null);
   const rig = useRef<THREE.Group>(null);
   const loaded = useRef(0);
@@ -63,7 +64,7 @@ function LaptopModel({ jobs, lid, screenOn, track }: LaptopProps) {
   const screen = useScreen(
     1280,
     800,
-    (ctx) => drawLaptop(ctx, state(), jobs, logos),
+    (ctx) => drawLaptop(ctx, state(), jobs, logos, compact),
     () => {
       const s = state();
       return `${s.screen.toFixed(3)}|${s.track.toFixed(3)}|${loaded.current}`;

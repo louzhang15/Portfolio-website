@@ -115,11 +115,11 @@ function ChapterNav() {
         Skip to projects
       </a>
       {/* quiet typographic bar: wordmark, text links, a hairline under the current chapter; no pills */}
-      <div className="mx-auto grid h-12 max-w-[1480px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:gap-4 sm:px-5 md:px-10 lg:grid-cols-[1fr_auto_1fr] xl:px-16">
+      <div className="mx-auto grid h-12 max-w-[1480px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:gap-4 sm:px-5 md:px-10 min-[1180px]:grid-cols-[1fr_auto_1fr] xl:px-16">
         <Link href="/" className="wide inline-flex min-h-11 items-center justify-self-start whitespace-nowrap text-[15px] tracking-tight max-[359px]:text-[13px]" style={{ color: fg }}>
           Louis Zhang
         </Link>
-        <nav aria-label="Chapters" className="hidden h-full items-stretch lg:flex">
+        <nav aria-label="Chapters" className="hidden h-full items-stretch min-[1180px]:flex">
           {chapters.map((c, i) => {
             const on = i === active;
             // plain anchors: deep-linkable, work without JS; html scroll-behavior keeps the glide
@@ -148,7 +148,7 @@ function ChapterNav() {
           aria-expanded={menu}
           aria-controls="chapter-menu"
           aria-label={`Sections, currently ${current}`}
-          className="chapter-glass-trigger flex h-11 w-full min-w-11 max-w-36 items-center justify-center gap-1 justify-self-center px-1.5 text-[13px] lg:hidden"
+          className="chapter-glass-trigger flex h-11 w-full min-w-11 max-w-36 items-center justify-center gap-1 justify-self-center px-1 text-[12px] min-[1180px]:hidden"
           style={{ color: menu ? fg : muted }}
         >
           <span className="truncate">{current === "Lunar Transport" ? "Lunar" : current}</span>
@@ -163,7 +163,7 @@ function ChapterNav() {
           <Link
             href="/game"
             aria-label="Play the 3D game, the portfolio as a driving game"
-            className="nav-game group relative inline-flex min-h-11 min-w-11 items-center justify-center gap-2 overflow-hidden whitespace-nowrap px-2 text-[13px] font-semibold transition-[background-color,transform] duration-200 hover:-translate-y-px sm:px-3 lg:min-h-[34px]"
+            className="nav-game group relative inline-flex min-h-11 min-w-11 items-center justify-center gap-2 whitespace-nowrap px-2 text-[13px] font-semibold transition-[background-color,transform] duration-200 before:absolute before:inset-x-0 before:-inset-y-[5px] before:content-[''] hover:-translate-y-px sm:px-3 lg:min-h-[34px]"
           >
             <CarFront aria-hidden className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-rotate-6 max-[359px]:hidden" strokeWidth={2} />
             <span className="relative max-sm:hidden">Play the 3D game</span>
@@ -176,7 +176,7 @@ function ChapterNav() {
           <a
             href="#contact"
             aria-current={atContact ? "location" : undefined}
-            className="group whitespace-nowrap text-[13px] font-medium max-lg:hidden"
+            className="group inline-flex min-h-11 items-center whitespace-nowrap text-[13px] font-medium max-[1179px]:hidden"
             style={{ color: fg }}
           >
             <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 group-hover:bg-[length:100%_1px]" style={atContact ? { backgroundSize: "100% 1px" } : undefined}>
@@ -194,7 +194,7 @@ function ChapterNav() {
             id="chapter-menu"
             aria-label="Sections"
             // solid, not frosted: a backdrop-filter nested in the bar's own doesn't blur, so the page showed through
-            className="absolute inset-x-0 top-full border-b shadow-[0_24px_40px_-24px_rgba(0,0,0,0.25)] lg:hidden"
+            className="absolute inset-x-0 top-full border-b shadow-[0_24px_40px_-24px_rgba(0,0,0,0.25)] min-[1180px]:hidden"
             style={{ background: light ? "var(--bg-light)" : "var(--bg)", borderColor: light ? "var(--border-light)" : "var(--border)" }}
           >
             <ul className="px-5 py-2">
@@ -259,9 +259,9 @@ function FooterRecap() {
           </div>
         ))}
       </dl>
-      <nav aria-label="Back to a chapter" className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[15px]">
+      <nav aria-label="Back to a chapter" className="mt-6 flex flex-wrap gap-x-5 text-[15px]">
         {chapters.map((c) => (
-          <a key={c.id} href={`#${c.id}`} className="text-[var(--text-secondary)] underline-offset-4 transition-colors hover:text-[var(--text)] hover:underline max-md:inline-flex max-md:min-h-11 max-md:min-w-11 max-md:items-center">
+          <a key={c.id} href={`#${c.id}`} className="inline-flex min-h-11 min-w-11 items-center text-[var(--text-secondary)] underline-offset-4 transition-colors hover:text-[var(--text)] hover:underline">
             {c.label}
           </a>
         ))}
@@ -282,7 +282,7 @@ function ContactFooter() {
           <OpenTo className="mt-6" />
           {/* typographic contact: the address itself is the call to action, no button chrome */}
           <a href={`mailto:${CONTACT.email}`} className="group mt-10 flex w-fit max-w-full items-baseline gap-3 text-[var(--text)] max-md:min-h-11 max-md:items-center">
-            <span className="wide truncate bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-left-bottom bg-no-repeat pb-1 text-[clamp(1.5rem,3.4vw,2.6rem)] leading-tight transition-[background-size] duration-300 group-hover:bg-[length:100%_2px]">
+            <span className="wide min-w-0 [overflow-wrap:anywhere] bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-left-bottom bg-no-repeat pb-1 text-[clamp(1.25rem,3.4vw,2.6rem)] leading-tight transition-[background-size] duration-300 group-hover:bg-[length:100%_2px]">
               {CONTACT.email}
             </span>
             <span aria-hidden className="text-[clamp(1.25rem,2.6vw,2rem)] text-[var(--accent-on-light)] transition-transform duration-300 group-hover:translate-x-1">
@@ -308,7 +308,7 @@ function ContactFooter() {
               </li>
             ))}
             <li className="ml-4">
-              <a href="/game" className="group inline-flex items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] max-md:min-h-11">
+              <a href="/game" className="group inline-flex min-h-11 items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]">
                 Game version
                 <span aria-hidden className="text-[var(--accent-on-light)] transition-transform duration-200 group-hover:translate-x-0.5">
                   →

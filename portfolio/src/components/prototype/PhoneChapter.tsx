@@ -90,7 +90,7 @@ function DepthHud({ dive, progress }: { dive: MotionValue<number>; progress: Mot
     // aligned to the stage's content column (same max width and gutters as DeviceStage), not the window edge
     <motion.div
       style={{ opacity }}
-      className="pointer-events-none absolute inset-x-0 bottom-8 mx-auto hidden w-full max-w-[1480px] items-center gap-4 px-6 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-tertiary)] md:px-10 lg:flex xl:px-16"
+      className="pointer-events-none absolute inset-x-0 bottom-8 mx-auto hidden w-full max-w-[1480px] items-center gap-4 px-6 font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--text-secondary)] md:px-10 lg:flex xl:px-16"
     >
       <span>
         Layer <span className="text-[var(--text)]">{String(layer).padStart(2, "0")}</span>/08

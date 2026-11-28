@@ -262,10 +262,10 @@ export function Callout({ part, c }: { part: Part; c: CalloutRef }) {
       >
         <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-[var(--accent)]" />
         <span className="leading-tight">
-          <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--text)]">
-            <span className="text-[var(--text-tertiary)]">{part.code}</span> {part.name}
+          <span className="block font-mono text-[12px] uppercase tracking-[0.1em] text-[var(--text)]">
+            <span className="text-[var(--text-secondary)]">{part.code}</span> {part.name}
           </span>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.1em] text-[var(--text-tertiary)]">{part.spec}</span>
+          <span className="block font-mono text-[12px] uppercase tracking-[0.06em] text-[var(--text-secondary)]">{part.spec}</span>
         </span>
       </div>
     </>
@@ -280,7 +280,7 @@ export function calloutsShown() {
   return wideQuery.matches;
 }
 
-const ROW = 34; // min vertical distance between labels, px
+const ROW = 38; // min vertical distance between labels, px
 
 /**
  * Engineering-drawing callouts: labels sit in one column right of the part in stacking order (callouts[0] is the

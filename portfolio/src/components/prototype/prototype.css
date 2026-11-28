@@ -319,7 +319,3 @@ body:has(.proto) {
 
 .proto .hero-glass-action:focus-visible,
 .proto .chapter-glass-nav :focus-visible { outline-color: var(--accent-on-light); }
-
-@media (max-width: 1023px) {
-  .proto .chapter-step-controls > button { width: 44px; height: 44px; }
-}

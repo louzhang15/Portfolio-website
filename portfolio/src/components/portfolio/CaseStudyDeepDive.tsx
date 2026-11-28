@@ -5,16 +5,16 @@ const WRAP = "mx-auto w-full max-w-[1352px] px-5 md:px-10 xl:px-16";
 const H2 = "text-balance text-[clamp(2rem,4vw,3.25rem)]";
 
 /** Every design decision for a project and what it bought, numbered. */
-export function Tradeoffs({ id }: { id: string }) {
+export function Tradeoffs({ id, min = 1 }: { id: string; min?: number }) {
   const list = TRADEOFFS[id];
-  if (!list?.length) return null;
+  if (!list || list.length < min) return null;
   return (
     <section className={`${WRAP} mt-24 md:mt-32`}>
       <h2 className={H2}>Design decisions and tradeoffs</h2>
-      <ol className="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-light)] bg-[var(--border-light)] md:grid-cols-2">
+      <ol className={`mt-10 grid gap-px overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-light)] bg-[var(--border-light)] md:grid-cols-2 ${list.length === 3 ? "lg:grid-cols-3" : ""}`}>
         {list.map((t, i) => (
-          // an odd last item spans the row instead of leaving an empty grey cell
-          <li key={t.choice} className={`flex gap-5 bg-white p-6 md:p-8 ${i === list.length - 1 && list.length % 2 ? "md:col-span-2" : ""}`}>
+          // three cards sit in three columns; any other odd last item spans the row instead of leaving an empty grey cell
+          <li key={t.choice} className={`flex gap-5 bg-white p-6 md:p-8 ${i === list.length - 1 && list.length % 2 ? `md:col-span-2 ${list.length === 3 ? "lg:col-span-1" : ""}` : ""}`}>
             <span className="font-mono text-sm tabular-nums text-[var(--accent-on-light)]">{String(i + 1).padStart(2, "0")}</span>
             <span>
               <span className="block text-[1.15rem] font-semibold leading-snug text-[var(--text)]">{t.choice}</span>

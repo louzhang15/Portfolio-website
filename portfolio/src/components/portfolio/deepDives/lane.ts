@@ -9,11 +9,10 @@ const dive: TechDive = {
     {
       date: "May 2026",
       phase: "Problem",
-      title: "1,046 applications across 3 recruitment cycles",
+      title: "Three recruitment cycles of applications",
       summary:
-        "The README tracks 3 internship cycles: Summer 2025, Winter 2026 and Summer 2026. A spreadsheet could not keep up with that volume. Lane had to capture each application with no typing and read outcomes from the inbox.",
+        "The README tracks 3 internship cycles: Summer 2025, Winter 2026 and Summer 2026. A spreadsheet could not keep up across all three. Lane had to capture each application with no typing and read outcomes from the inbox.",
       stats: [
-        { value: "1,046", label: "applications tracked (README)" },
         { value: "3", label: "recruitment cycles" },
         { value: "8", label: "application statuses" },
       ],

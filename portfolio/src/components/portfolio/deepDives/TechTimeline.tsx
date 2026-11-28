@@ -1,3 +1,7 @@
+"use client";
+
+import { ChevronDown } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Architecture, Calc, Iteration, Media, Stage, Table, TechDive } from "./types";
 
 const WRAP = "mx-auto w-full max-w-[1352px] px-5 md:px-10 xl:px-16";
@@ -17,10 +21,62 @@ const KIND: Partial<Record<NonNullable<Media["kind"]>, string>> = {
   chart: "Chart",
 };
 
+/**
+ * Sideways scroller that shows a right-edge fade and a "Scroll" hint while more content sits off to the right.
+ * `fade` is the background the content sits on, so the fade blends into it.
+ */
+export function ScrollX({ children, label, fade = "from-white", className = "", hint = true }: {
+  children: ReactNode;
+  label: string;
+  fade?: string;
+  className?: string;
+  hint?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [over, setOver] = useState(false);
+  const [more, setMore] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const check = () => {
+      setOver(el.scrollWidth > el.clientWidth + 1);
+      setMore(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+    };
+    check();
+    el.addEventListener("scroll", check, { passive: true });
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", check);
+      ro.disconnect();
+    };
+  }, []);
+  return (
+    <div className={`relative min-w-0 ${more && hint ? "mb-8" : ""}`}>
+      {/* focusable only when it scrolls, so keyboard users can scroll it with the arrow keys */}
+      <div ref={ref} role={over ? "region" : undefined} aria-label={over ? label : undefined} tabIndex={over ? 0 : undefined} className={`overflow-x-auto ${className}`}>
+        {children}
+      </div>
+      {more && (
+        <>
+          <span aria-hidden className={`pointer-events-none absolute inset-y-px right-px w-14 bg-linear-to-l ${fade} to-transparent`} />
+          {hint && (
+            <span aria-hidden className="pointer-events-none absolute right-0 top-full mt-1.5 rounded-[6px] border border-[var(--border-light)] bg-white px-2 py-0.5 text-[12px] font-medium text-[var(--text)] shadow-sm">
+              Scroll →
+            </span>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 function Figure({ m, compact = false }: { m: Media; compact?: boolean }) {
-  // drawings, documents and charts are shown whole on white; photos, renders and screenshots fill the frame
+  // drawings, documents and charts are shown whole on white; photos and renders fill the frame
   const whole = m.kind === "drawing" || m.kind === "document" || m.kind === "chart" || m.kind === "sketch";
-  const aspect = m.shape === "tall" ? "aspect-[4/5]" : m.shape === "square" ? "aspect-square" : "aspect-[16/10]";
+  // code and app screenshots keep their own shape so no line is cut off; open full size to read them on a phone
+  const natural = m.kind === "screenshot";
+  const aspect = natural ? "h-auto max-h-[80vh]" : m.shape === "tall" ? "aspect-[4/5]" : m.shape === "square" ? "aspect-square" : "aspect-[16/10]";
   return (
     <figure className="min-w-0">
       <a
@@ -34,12 +90,12 @@ function Figure({ m, compact = false }: { m: Media; compact?: boolean }) {
           alt={m.caption}
           loading="lazy"
           decoding="async"
-          className={`w-full ${aspect} ${whole ? "object-contain p-2" : "object-cover"} transition-transform duration-500 group-hover:scale-[1.02]`}
+          className={`w-full ${aspect} ${whole ? "object-contain p-2" : natural ? "object-contain" : "object-cover"} transition-transform duration-500 group-hover:scale-[1.02]`}
         />
         {m.kind && KIND[m.kind] && (
           <span className="absolute left-2.5 top-2.5 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white">{KIND[m.kind]}</span>
         )}
-        <span className="absolute bottom-2.5 right-2.5 rounded-full bg-white/90 px-2 py-0.5 text-[11px] text-[var(--text)] opacity-0 transition-opacity group-hover:opacity-100">
+        <span className="absolute bottom-2.5 right-2.5 rounded-full border border-[var(--border-light)] bg-white/95 px-2 py-0.5 text-[12px] text-[var(--text)] transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
           Open full size ↗
         </span>
         <span className="sr-only">(opens full size in a new tab)</span>
@@ -58,7 +114,7 @@ function CalcCard({ c }: { c: Calc }) {
       </div>
       <div className={`grid gap-5 p-5 ${c.proof ? "md:grid-cols-[minmax(0,1fr)_220px]" : ""}`}>
         <div className="min-w-0">
-          <h5 className="text-[17px] font-semibold leading-snug text-[var(--text)]">{c.title}</h5>
+          <h4 className="text-[17px] font-semibold leading-snug text-[var(--text)]">{c.title}</h4>
           {c.given && c.given.length > 0 && (
             <ul className="mt-3 flex flex-wrap gap-1.5">
               {c.given.map((g) => (
@@ -87,7 +143,7 @@ function CalcCard({ c }: { c: Calc }) {
 function IterationCard({ it }: { it: Iteration }) {
   const v = VERDICT[it.verdict];
   return (
-    <li className={`flex flex-col rounded-[16px] border border-[var(--border-light)] bg-white p-4 ${it.verdict === "dropped" ? "opacity-85" : ""}`}>
+    <li className={`flex flex-col rounded-[16px] border border-[var(--border-light)] bg-white p-4`}>
       {it.media && <Figure m={it.media} compact />}
       <div className={`flex items-start justify-between gap-3 ${it.media ? "mt-3" : ""}`}>
         <span className="text-[16px] font-semibold leading-snug text-[var(--text)]">{it.name}</span>
@@ -105,7 +161,7 @@ function IterationCard({ it }: { it: Iteration }) {
 function DataTable({ t }: { t: Table }) {
   return (
     <figure className="min-w-0">
-      <div className="overflow-x-auto rounded-[14px] border border-[var(--border-light)] bg-white">
+      <ScrollX label={t.caption} className="rounded-[14px] border border-[var(--border-light)] bg-white">
         <table className="w-full min-w-[520px] text-left text-[14px]">
           <thead className="bg-[var(--surface-light)] text-[12px] uppercase tracking-[0.06em] text-[var(--text-tertiary)]">
             <tr>
@@ -128,7 +184,7 @@ function DataTable({ t }: { t: Table }) {
             ))}
           </tbody>
         </table>
-      </div>
+      </ScrollX>
       <figcaption className="mt-2 text-[14px] text-[var(--text-tertiary)]">{t.caption}</figcaption>
     </figure>
   );
@@ -167,7 +223,7 @@ function StageBlock({ s, i, last }: { s: Stage; i: number; last: boolean }) {
         {s.stats && s.stats.length > 0 && (
           <dl
             // one column per stat (up to 4) so a 3-stat row has no empty grey cell
-            className={`mt-5 grid max-w-[720px] gap-px overflow-hidden rounded-[12px] border border-[var(--border-light)] bg-[var(--border-light)] ${s.stats.length === 1 ? "grid-cols-1" : "grid-cols-2"} ${["", "sm:grid-cols-1", "sm:grid-cols-2", "sm:grid-cols-3", "sm:grid-cols-4"][Math.min(4, s.stats.length)]}`}
+            className={`mt-5 grid max-w-[720px] gap-px overflow-hidden rounded-[12px] border border-[var(--border-light)] bg-[var(--border-light)] ${s.stats.length === 1 ? "grid-cols-1" : "grid-cols-2"} [&>div:last-child:nth-child(odd)]:col-span-2 sm:[&>div:last-child:nth-child(odd)]:col-span-1 ${["", "sm:grid-cols-1", "sm:grid-cols-2", "sm:grid-cols-3", "sm:grid-cols-4"][Math.min(4, s.stats.length)]}`}
           >
             {s.stats.map((x) => (
               <div key={x.label} className="flex flex-col-reverse bg-white px-4 py-3">
@@ -259,21 +315,25 @@ function ArchitectureDiagram({ a }: { a: Architecture }) {
   );
 }
 
-/** The project's technical story as a numbered timeline, with an index of stages to jump between. */
-export default function TechTimeline({ dive, anchor }: { dive: TechDive; anchor?: string }) {
-  return (
-    <section className="light mt-24 py-20 md:mt-32 md:py-28">
-      <div className={WRAP}>
-        <h2 id={anchor} className="scroll-mt-20 text-balance text-[clamp(2rem,4vw,3.25rem)]">{dive.heading}</h2>
-        <p className="mt-4 max-w-[64ch] text-[17px] leading-relaxed text-[var(--text-secondary)]">{dive.intro}</p>
-        <p className="mt-3 max-w-[64ch] text-[14px] text-[var(--text-tertiary)]">
-          Drawings and calculation pages are the originals, some in French. The English text beside each one explains it. Click any image for full size.
-        </p>
+/** Every image in the dive: stage media, iteration media and calculation proofs. */
+const allMedia = (d: TechDive): Media[] =>
+  d.stages.flatMap((s) => [...(s.media ?? []), ...(s.iterations ?? []).flatMap((it) => (it.media ? [it.media] : [])), ...(s.calcs ?? []).flatMap((c) => (c.proof ? [c.proof] : []))]);
 
-        {dive.architecture && <ArchitectureDiagram a={dive.architecture} />}
+/**
+ * The project's technical story as a numbered timeline, with an index of stages to jump between.
+ * `collapsed` puts the stages in a closed disclosure under that label (Lunar tells the story once above it).
+ */
+export default function TechTimeline({ dive, anchor, collapsed }: { dive: TechDive; anchor?: string; collapsed?: string }) {
+  const media = allMedia(dive);
+  // the note about original (French) pages only makes sense where there are drawings or scanned pages
+  const hasOriginals = media.some((m) => m.kind === "drawing" || m.kind === "document" || m.kind === "sketch");
+  const calcs = dive.stages.reduce((n, s) => n + (s.calcs?.length ?? 0), 0);
 
-        {/* stage index: a scannable overview before the detail */}
-        <ol className="mt-10 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:thin]">
+  const body = (
+    <>
+      {/* stage index: a scannable overview before the detail */}
+      <ScrollX label="Stages" fade="from-[var(--bg-light)]" hint={false} className="mt-10">
+        <ol className="flex gap-2 pb-2">
           {dive.stages.map((s, i) => (
             <li key={s.title} className="shrink-0">
               <a href={`#stage-${i + 1}`} className="flex min-h-[44px] items-center gap-2 rounded-full border border-[var(--border-light)] bg-white px-3.5 text-[13px] text-[var(--text-secondary)] transition-colors hover:border-[var(--accent)] hover:text-[var(--text)]">
@@ -283,22 +343,55 @@ export default function TechTimeline({ dive, anchor }: { dive: TechDive; anchor?
             </li>
           ))}
         </ol>
+      </ScrollX>
 
-        <ol className="mt-14 space-y-20 md:space-y-24">
-          {dive.stages.map((s, i) => (
-            <StageBlock key={s.title} s={s} i={i} last={i === dive.stages.length - 1} />
-          ))}
-        </ol>
+      <ol className="mt-14 space-y-20 md:space-y-24">
+        {dive.stages.map((s, i) => (
+          <StageBlock key={s.title} s={s} i={i} last={i === dive.stages.length - 1} />
+        ))}
+      </ol>
 
-        {dive.sources.length > 0 && (
-          <div className="mt-20 border-t border-[var(--border-light)] pt-6">
-            <h4 className="text-[13px] font-medium text-[var(--text-tertiary)]">Built from</h4>
-            <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-[var(--text-tertiary)]">
-              {dive.sources.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ul>
-          </div>
+      {dive.sources.length > 0 && (
+        <div className="mt-20 border-t border-[var(--border-light)] pt-6">
+          <h4 className="text-[13px] font-medium text-[var(--text-tertiary)]">Built from</h4>
+          <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-[var(--text-tertiary)]">
+            {dive.sources.map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </>
+  );
+
+  return (
+    <section className="light mt-24 py-20 md:mt-32 md:py-28">
+      <div className={WRAP}>
+        <h2 id={anchor} className="scroll-mt-20 text-balance text-[clamp(2rem,4vw,3.25rem)]">{dive.heading}</h2>
+        <p className="mt-4 max-w-[64ch] text-[17px] leading-relaxed text-[var(--text-secondary)]">{dive.intro}</p>
+        {hasOriginals && (
+          <p className="mt-3 max-w-[64ch] text-[14px] text-[var(--text-tertiary)]">
+            Drawings and calculation pages are the originals, some in French. The English text beside each one explains it. Click any image for full size.
+          </p>
+        )}
+
+        {dive.architecture && <ArchitectureDiagram a={dive.architecture} />}
+
+        {collapsed ? (
+          <details className="group/rec mt-14 rounded-[16px] border border-[var(--border-light)] bg-white open:bg-transparent open:border-transparent">
+            <summary className="flex min-h-[64px] cursor-pointer list-none items-center justify-between gap-4 rounded-[16px] px-5 py-4 hover:bg-[var(--bg-light)] [&::-webkit-details-marker]:hidden">
+              <span>
+                <span className="block text-[17px] font-semibold text-[var(--text)]">{collapsed}</span>
+                <span className="mt-1 block text-[14px] text-[var(--text-secondary)]">
+                  {dive.stages.length} stages from {dive.stages[0].phase.toLowerCase()} to {dive.stages[dive.stages.length - 1].phase.toLowerCase()}, {calcs} worked calculations and {media.length} drawings, photos and pages.
+                </span>
+              </span>
+              <ChevronDown aria-hidden className="h-5 w-5 shrink-0 text-[var(--accent-on-light)] transition-transform group-open/rec:rotate-180" />
+            </summary>
+            {body}
+          </details>
+        ) : (
+          body
         )}
       </div>
     </section>

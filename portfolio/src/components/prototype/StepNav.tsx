@@ -107,7 +107,7 @@ export default function StepNav({ chapters, color, className = "" }: { chapters:
   const s = here.stop;
   const where = s ? `${s.chapter}${s.count > 1 ? `, ${s.index + 1} of ${s.count}` : ""}` : "";
   const btn =
-    "flex h-10 w-9 items-center justify-center rounded-[8px] transition-[color,background-color,opacity,transform] duration-200 hover:bg-black/[0.05] hover:!text-[var(--accent-on-light)] active:scale-90 disabled:pointer-events-none disabled:opacity-30";
+    "flex h-11 w-11 items-center justify-center rounded-[8px] transition-[color,background-color,opacity,transform] duration-200 hover:bg-black/[0.05] hover:!text-[var(--accent-on-light)] active:scale-90 disabled:pointer-events-none disabled:opacity-30";
 
   return (
     <div role="group" aria-label={`Step through the page${where ? `, now at ${where}` : ""}`} className={`flex items-center ${className}`} style={{ color }}>

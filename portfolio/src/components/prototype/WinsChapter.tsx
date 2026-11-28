@@ -38,7 +38,7 @@ function WinImage({ slug, alt }: { slug: string; alt: string }) {
  * One entry as a picture card, like the wins: the 16:10 card from /game, then the role, organisation,
  * date (or amount) and one sentence. The whole card links when there is a case study.
  */
-function RecordCard({ r, money }: { r: Recognition; money?: boolean }) {
+function RecordCard({ r, money, className }: { r: Recognition; money?: boolean; className?: string }) {
   const body = (
     <>
       <span className="relative block aspect-[16/10] overflow-hidden rounded-[18px] border border-[var(--border-light)] bg-white shadow-[0_24px_48px_-30px_rgba(0,0,0,0.35)]">
@@ -72,20 +72,33 @@ function RecordCard({ r, money }: { r: Recognition; money?: boolean }) {
           </span>
         )}
       </h4>
-      {r.detail && <span className="mt-2 block text-[15px] leading-relaxed text-[var(--text-on-light-secondary)]">{r.detail}</span>}
+      {r.detail && <span className="mt-2 line-clamp-3 text-[15px] leading-relaxed text-[var(--text-on-light-secondary)]">{r.detail}</span>}
     </>
   );
-  return <li>{r.href ? <Link href={r.href} className="group flex h-full flex-col">{body}</Link> : <div className="group flex h-full flex-col">{body}</div>}</li>;
+  return <li className={className}>{r.href ? <Link href={r.href} className="group flex h-full flex-col">{body}</Link> : <div className="group flex h-full flex-col">{body}</div>}</li>;
 }
 
-/** a titled grid of picture cards */
-function Panel({ title, items, money, cols }: { title: string; items: Recognition[]; money?: boolean; cols: string }) {
+/**
+ * A titled grid of picture cards, all one width. Three across on a six-column grid: a short last row is centred
+ * (and a lone last card on two columns too), so no row ends in an empty slot. `pair` lays two cards side by side.
+ */
+function Panel({ title, items, money, pair }: { title: string; items: Recognition[]; money?: boolean; pair?: boolean }) {
+  const n = items.length;
+  const place = (i: number) => {
+    if (pair) return undefined;
+    const c = ["lg:col-span-2"];
+    if (n % 2 === 1 && i === n - 1) c.push("sm:col-span-2 sm:mx-auto sm:w-[calc(50%-0.75rem)] lg:mx-0 lg:w-auto");
+    const lastRow = n - (n % 3 || 3);
+    if (i === lastRow && n % 3 === 2) c.push("lg:col-start-2");
+    if (i === lastRow && n % 3 === 1) c.push("lg:col-start-3");
+    return c.join(" ");
+  };
   return (
     <div className="mt-24">
       <h3 className="text-lg text-[var(--text-on-light)]">{title}</h3>
-      <ul className={`mt-5 grid gap-x-6 gap-y-12 lg:gap-x-8 ${cols}`}>
-        {items.map((r) => (
-          <RecordCard key={r.title + r.org} r={r} money={money} />
+      <ul className={`mt-5 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:gap-x-8 ${pair ? "" : "lg:grid-cols-6"}`}>
+        {items.map((r, i) => (
+          <RecordCard key={r.title + r.org} r={r} money={money} className={place(i)} />
         ))}
       </ul>
     </div>
@@ -190,8 +203,8 @@ export default function WinsChapter({ id }: { id: string }) {
         </div>
 
         {/* the rest of the record, as picture cards like the wins */}
-        <Panel title="Beyond the hackathons" items={COMMUNITY} cols="sm:grid-cols-2 lg:grid-cols-3" />
-        <Panel title="Scholarships" items={SCHOLARSHIPS} money cols="sm:grid-cols-2 lg:grid-cols-3" />
+        <Panel title="Beyond the hackathons" items={COMMUNITY} />
+        <Panel title="Scholarships" items={SCHOLARSHIPS} money pair />
       </div>
     </section>
   );

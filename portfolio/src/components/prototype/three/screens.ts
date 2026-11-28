@@ -146,13 +146,15 @@ export function drawPhone(
   wallpaper(ctx, W, H);
 
   if (s.home > 0.01) {
+    // one label size for every app: the size at which the longest name fits its column, clear of the bezel
+    const labelPx = Math.min(...APPS.map(([name]) => fitFont(ctx, name, 150, 600, 34, DISPLAY, 20)));
     APPS.forEach(([name, mark], i) => {
       const a = clamp01((s.home - i * 0.04) / 0.68);
       if (a <= 0) return;
       ctx.globalAlpha = a;
       const col = i % 3;
       const row = Math.floor(i / 3);
-      const cx = 90 + col * 180;
+      const cx = 100 + col * 170;
       const y = 150 + row * 220 + (1 - a) * 14;
       rr(ctx, cx - 64, y, 128, 128, 32);
       ctx.fillStyle = i === 0 ? t["--accent"] : t["--surface-hover"];
@@ -162,7 +164,7 @@ export function drawPhone(
       ctx.font = `700 44px ${MONO}`;
       ctx.fillText(mark, cx, y + 80);
       ctx.fillStyle = t["--text"];
-      fitFont(ctx, name, 170, 600, 34, DISPLAY, 24);
+      ctx.font = `600 ${labelPx}px ${DISPLAY}`;
       ctx.fillText(name, cx, y + 172);
     });
     // dock: editor, mail, files, terminal as simple glyphs
@@ -285,7 +287,8 @@ export function drawLaptop(
   ctx: CanvasRenderingContext2D,
   s: { screen: number; track: number },
   jobs: PortfolioItem[],
-  logos: Record<string, HTMLImageElement>
+  logos: Record<string, HTMLImageElement>,
+  compact = false
 ) {
   const t = readTokens();
   const { W, H } = logicalSize(ctx);
@@ -304,13 +307,14 @@ export function drawLaptop(
   ctx.textAlign = "left";
   ctx.fillStyle = t["--text"];
   ctx.font = `600 32px ${DISPLAY}`;
-  ctx.fillText("Experience", 32, 45);
+  if (!compact) ctx.fillText("Experience", 32, 45);
   const x0 = 260;
   const x1 = W - 190;
   const seg = (x1 - x0) / jobs.length;
   const active = Math.min(Math.floor(s.track), jobs.length - 1);
   ctx.textAlign = "center";
-  jobs.forEach((j, i) => {
+  // phones show the screen ~1/4 size: the menu-bar type would be ~7px, so only the progress rule stays
+  if (!compact) jobs.forEach((j, i) => {
     ctx.fillStyle = i === active ? t["--text"] : t["--text-tertiary"];
     fitFont(ctx, company(j), seg - 24, i === active ? 600 : 500, 28, DISPLAY, 16);
     ctx.fillText(company(j), x0 + (i + 0.5) * seg, 45);
@@ -322,7 +326,7 @@ export function drawLaptop(
   ctx.textAlign = "right";
   ctx.fillStyle = t["--text-secondary"];
   ctx.font = `500 28px ${DISPLAY}`;
-  ctx.fillText(`${jobs.length} roles`, W - 32, 45);
+  if (!compact) ctx.fillText(`${jobs.length} roles`, W - 32, 45);
 
   // windows, back to front: one big, simple card per role (logo, company, role, three tools, dates)
   const WW = 1120;
@@ -365,27 +369,25 @@ export function drawLaptop(
     ctx.textAlign = "left";
     ctx.fillStyle = t["--text-secondary"];
     ctx.font = `500 28px ${DISPLAY}`;
-    ctx.fillText(company(job), 156, 44);
+    if (!compact) ctx.fillText(company(job), 156, 44);
 
     ctx.globalAlpha = s.screen * op * content;
     const logo = job.image ? logos[job.image] : undefined;
+    if (compact) {
+      // phones: the role's details sit under the laptop, so the screen shows only the logo and company, large
+      drawLogoTile(ctx, logo, (WW - 560) / 2, 104, 560, 300, t["--surface-light"]);
+      ctx.textAlign = "center";
+      ctx.fillStyle = t["--text"];
+      fitFont(ctx, company(job), WW - 96, 700, 120, DISPLAY, 64);
+      ctx.fillText(company(job), WW / 2, 530);
+      ctx.restore();
+      continue;
+    }
     // logos are mostly wide wordmarks: a landscape tile shows them at a readable size instead of a sliver
     const LW = 210;
     const LH = 150;
     const LY = 108;
-    rr(ctx, 48, LY, LW, LH, 24);
-    ctx.fillStyle = t["--surface-light"];
-    ctx.fill();
-    if (logo?.complete && logo.naturalWidth) {
-      ctx.save();
-      rr(ctx, 48, LY, LW, LH, 24);
-      ctx.clip();
-      const r = Math.min(LW / logo.naturalWidth, LH / logo.naturalHeight);
-      const lw = logo.naturalWidth * r;
-      const lh = logo.naturalHeight * r;
-      ctx.drawImage(logo, 48 + (LW - lw) / 2, LY + (LH - lh) / 2, lw, lh);
-      ctx.restore();
-    }
+    drawLogoTile(ctx, logo, 48, LY, LW, LH, t["--surface-light"]);
     const tx0 = 48 + LW + 36;
     ctx.fillStyle = t["--text"];
     fitFont(ctx, job.title, WW - tx0 - 48, 600, 72, DISPLAY, 40);
@@ -421,6 +423,22 @@ export function drawLaptop(
     ctx.restore();
   }
   ctx.globalAlpha = 1;
+}
+
+/** A rounded tile with a logo fitted inside it. */
+function drawLogoTile(ctx: CanvasRenderingContext2D, logo: HTMLImageElement | undefined, x: number, y: number, w: number, h: number, fill: string) {
+  rr(ctx, x, y, w, h, 24);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  if (!logo?.complete || !logo.naturalWidth) return;
+  ctx.save();
+  rr(ctx, x, y, w, h, 24);
+  ctx.clip();
+  const r = Math.min(w / logo.naturalWidth, h / logo.naturalHeight);
+  const lw = logo.naturalWidth * r;
+  const lh = logo.naturalHeight * r;
+  ctx.drawImage(logo, x + (w - lw) / 2, y + (h - lh) / 2, lw, lh);
+  ctx.restore();
 }
 
 /* ---------------------------------------------------------------- static textures */

@@ -4,7 +4,7 @@ import type { TechDive } from "./types";
 const dive: TechDive = {
   heading: "How the CRM finds, writes to and books contacts",
   intro:
-    "The CRM runs a full outreach loop for a community of agriculture startups (the client is under NDA): find contacts, write each one a personal email, send it, log it, and handle the visit bookings that come back. It is a Next.js app with server routes for Apollo, Gemini, Resend and Google Sheets. The git log runs from Mar. 27 to Apr. 12, 2026.",
+    "The CRM runs a full outreach loop for a community of agriculture startups (the client is under NDA): find contacts, write each one a personal email, send it, log it, and handle the bookings that come back. It is a Next.js app with server routes for Apollo, Gemini, Resend and Google Sheets. The git log runs from Mar. 27 to Apr. 12, 2026.",
   architecture: {
     flow:
       "A campaign run calls five server routes in order: discover, enrich, write, send and log, with 2 s between contacts. The browser keeps contacts, campaigns and settings in localStorage. Google Sheets is the shared record. Booking requests come back through a Google Form sheet, and each staff decision emails the client and writes column L.",
@@ -29,7 +29,7 @@ const dive: TechDive = {
         name: "Records",
         blocks: [
           { name: "Google Sheets", role: "Audience tabs, the Sent tab (columns A to K) and the bookings sheet.", tech: "Shared record" },
-          { name: "Google Form", role: "Visit booking requests from contacts.", tech: "Feeds the bookings sheet" },
+          { name: "Google Form", role: "Booking requests from contacts.", tech: "Feeds the bookings sheet" },
         ],
       },
     ],
@@ -45,7 +45,7 @@ const dive: TechDive = {
       phase: "Problem",
       title: "Three audiences, one small team",
       summary:
-        "The client sells guided visits to three kinds of groups. Each needs a different pitch and pipeline, and the team tracked it all by hand. Prices are left out because of the NDA.",
+        "The client reaches three kinds of audiences. Each needs a different pitch and pipeline, and the team tracked it all by hand. Client details stay private under the NDA.",
       tables: [
         {
           caption: "Audience segments (lib/types.ts)",
@@ -53,7 +53,7 @@ const dive: TechDive = {
           rows: [
             ["Corporate", "team building, ESG and CSR values"],
             ["Schools and non-profits", "curriculum links: local food, circular economy"],
-            ["Institutions and media", "press visits, tourism, event venue"],
+            ["Institutions and media", "partnerships and press coverage"],
           ],
         },
       ],
@@ -114,10 +114,7 @@ const dive: TechDive = {
       phase: "Bookings",
       title: "Booking requests with a revenue estimate",
       summary:
-        "Visit requests arrive in a Google Form sheet. The bookings page reads them, estimates revenue, and lets staff accept, refuse or cancel. Each action emails the client through Resend and writes the decision into column L of the sheet.",
-      points: [
-        "The estimate adds a base price per audience, a charge per person over 20 and any catering add-on. The client's prices stay private under the NDA.",
-      ],
+        "Booking requests arrive in a Google Form sheet. The bookings page reads them, estimates revenue, and lets staff accept, refuse or cancel. Each action emails the client through Resend and writes the decision into column L of the sheet.",
     },
     {
       date: "Mar. 27 to Apr. 12, 2026",

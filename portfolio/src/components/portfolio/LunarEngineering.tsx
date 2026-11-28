@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
+import { ScrollX } from "./deepDives/TechTimeline";
 
 // Every number on this page comes from the structure team's design records (Polytechnique Montréal, AER/MEC1110, winter 2025).
 
@@ -195,7 +196,8 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
       </header>
 
       <nav aria-label="Lunar case study chapters" className="z-30 mt-10 border-y border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur md:sticky md:top-12">
-        <ol className="mx-auto grid w-full max-w-[1352px] grid-cols-2 gap-px px-5 py-2 md:flex md:gap-1 md:overflow-x-auto md:px-10 xl:px-16">
+        <ScrollX label="Chapters" fade="from-[var(--bg)]" hint={false}>
+        <ol className="mx-auto grid w-full max-w-[1352px] grid-cols-2 gap-px px-5 py-2 md:flex md:gap-1 md:px-10 xl:px-16">
           {chapters.map(([id, label], i) => (
             <li key={id} className="shrink-0">
               <a href={`#${id}`} className="flex min-h-11 items-center gap-2 rounded-md px-2 text-sm text-[var(--text)] underline decoration-[var(--border-hover)] underline-offset-4 hover:bg-[var(--bg-light)] md:px-3">
@@ -204,6 +206,7 @@ export default function LunarEngineering({ demos }: { demos: PortfolioItem["link
             </li>
           ))}
         </ol>
+        </ScrollX>
       </nav>
 
       <Chapter

@@ -141,7 +141,7 @@ export const COMMUNITY: Recognition[] = [
     title: "Apprentice, Accent on the Community",
     org: "Accenture",
     meta: "Jan.–Apr. 2026",
-    detail: "Pro-bono consulting for a community of agriculture startups, under NDA. Our student team identified the key market segments, scored 9 new revenue activities on 5 criteria, built a financial model and an operating plan, and built a CRM outreach tool.",
+    detail: "Pro-bono consulting for agriculture startups, under NDA. We found key market segments, scored 9 revenue ideas and built a CRM tool.",
     logo: "/logo/accenture-mark.png",
     image: "/media/drive/accenture.webp",
     href: "/portfolio/crm-outreach-tool",
@@ -240,7 +240,7 @@ export const TRADEOFFS: Record<string, Tradeoff[]> = {
  * Shown in place of the auto summary on the homepage.
  */
 export const HOOKS: Record<string, string> = {
-  "P-1": "A 3 m telescopic tube that carries fresh produce from a lunar greenhouse to a habitat. The tube beat a rover and a zipline 251 to 206 and 197, then passed clearance and load tests on a wood and PLA bench model.",
+  "P-1": "A 3 m telescopic tube that carries produce from a lunar greenhouse to a habitat. It beat a rover and a zipline 251 to 206 and 197.",
   "P-5": "Spots a fall in a care-home room with no camera, using mmWave radar and a floor vibration sensor. In a scripted test, the detector flagged a simulated fall 0.3 s after it began.",
   "P-3": "A robot built in 24 hours from cardboard and bottles that follows a black line and plants seeds. A colour reading stops the motors and turns a folded-paper dispenser.",
   "P-4": "A $1.50 triage bracelet with no battery: its NFC chip runs on the reader's own field. A SmartTriage dashboard maps every tagged patient.",

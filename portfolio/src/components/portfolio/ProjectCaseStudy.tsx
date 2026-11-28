@@ -2,10 +2,10 @@
 
 import { ArrowLeft, ArrowUpRight, FileText, GitBranch, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
 import { CONTACT, OpenTo } from "@/components/prototype/stage";
-import { FOCUS, photoFor } from "@/components/prototype/projectData";
+import { DRAWINGS, FOCUS, photoFor } from "@/components/prototype/projectData";
 import LunarEngineering from "./LunarEngineering";
 import "@/components/prototype/prototype.css";
 import { DeepDive, Tradeoffs } from "./CaseStudyDeepDive";
@@ -119,8 +119,8 @@ function TopBar({ title }: { title: string }) {
 
 function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: string | null; hasHardwareDetails: boolean }) {
   const isLunar = item.slug === "lunar-transport-system";
-  // the subtitle often carries the date already; say it once
-  const meta = [item.displaySector, item.date && !item.subtitle.includes(item.date) ? item.date : ""].filter(Boolean).join(" · ");
+  // every hero reads: category, title, meta row, buttons, then the media frame. The subtitle often carries the date already; say it once
+  const meta = [...item.subtitle.split(" · "), item.date && !item.subtitle.includes(item.date) ? item.date : ""].filter(Boolean);
   const words = item.title.split(" ");
   return (
     <section className={`${WRAP} pb-10 pt-28 md:pt-36`}>
@@ -129,7 +129,7 @@ function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: s
           // logos come with their own ground (red Tesla, navy Lockheed), so the tile is the logo itself
           <img src={logo} alt={`${item.title} logo`} width={88} height={56} className="h-14 w-[88px] rounded-[var(--radius-md)] border border-[var(--border)] object-cover" />
         )}
-        {!isLunar && <p className="text-[15px] text-[var(--text-tertiary)]">{meta}</p>}
+        <p className="text-[15px] text-[var(--text-tertiary)]">{item.displaySector}</p>
       </div>
       <h1 className="mt-4 max-w-[14ch] text-balance text-[clamp(2.75rem,7vw,5.75rem)] text-[var(--text)]">
         {words.map((w, i) => (
@@ -156,7 +156,14 @@ function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: s
           </dl>
         </>
       ) : (
-        <p className="mt-6 max-w-2xl text-[19px] leading-[1.5] text-[var(--text-secondary)]">{item.subtitle}</p>
+        <ul className="mt-6 flex max-w-3xl flex-wrap gap-x-3 gap-y-1 text-[17px] leading-[1.5] text-[var(--text-secondary)]">
+          {meta.map((m, i) => (
+            <li key={m} className="flex items-center gap-3">
+              {i > 0 && <span aria-hidden className="h-1 w-1 rounded-full bg-[var(--border-hover)]" />}
+              {m}
+            </li>
+          ))}
+        </ul>
       )}
       {(isLunar || hasHardwareDetails || item.links.length > 0 || item.documents.length > 0) && (
         <div className="mt-8 flex flex-wrap gap-3">
@@ -179,24 +186,50 @@ function Hero({ item, logo, hasHardwareDetails }: { item: PortfolioItem; logo: s
 function Specs({ item }: { item: PortfolioItem }) {
   const cells = item.metrics.slice(0, 4).map((m) => {
     // only a leading number becomes the big value ("8.4 cm ...", "0.3 s ..."); a phrase like "No cameras" stays whole
-    const i = m.indexOf(" ");
-    return i > 0 && /\d/.test(m.slice(0, i)) ? { value: m.slice(0, i), caption: m.slice(i + 1) } : { value: m, caption: "" };
+    // a unit or ordinal word stays with its number ("8.4 cm", "24 hour", "1st place")
+    const u = /^(\S*\d\S*(?: (?:mm|cm|m|km|s|ms|h|hour|hours|kg|g|N|kN|MPa|Hz|kHz|V|W|place))?),? (.+)$/.exec(m);
+    return u ? { value: u[1], caption: u[2] } : { value: m, caption: "" };
   });
+  // numbers get the big-figure cells; phrases ("Gmail auto-sync") read as one full-width line of plain text
+  const nums = cells.filter((c) => c.caption);
+  const phrases = cells.filter((c) => !c.caption);
   if (!cells.length) return null;
   return (
-    <dl className={`${WRAP} mt-12 grid grid-cols-2 gap-px ${cells.length === 3 ? "md:grid-cols-3" : "md:grid-cols-4"}`}>
-      {cells.map((c) => (
-        <div key={c.value + c.caption} className="flex flex-col-reverse justify-end border-t border-[var(--text)] pb-2 pr-4 pt-4">
-          <dt className="mt-2 text-[14px] text-[var(--text-tertiary)]">{c.caption}</dt>
-          <dd className={`wide leading-none tabular-nums text-[var(--text)] ${c.caption ? "text-[clamp(1.75rem,3.2vw,2.5rem)]" : "text-[clamp(1.15rem,1.8vw,1.45rem)]"}`}>{c.value}</dd>
-        </div>
-      ))}
-    </dl>
+    <div className={`${WRAP} mt-12`}>
+      {nums.length > 0 && (
+        <dl className={`grid grid-cols-2 gap-px ${["", "md:grid-cols-1", "md:grid-cols-2", "md:grid-cols-3", "md:grid-cols-4"][nums.length]}`}>
+          {nums.map((c) => (
+            <div key={c.value + c.caption} className="flex flex-col-reverse justify-end border-t border-[var(--text)] pb-2 pr-4 pt-4">
+              <dt className="mt-2 text-[14px] text-[var(--text-tertiary)]">{c.caption}</dt>
+              <dd className="wide text-[clamp(1.75rem,3.2vw,2.5rem)] leading-none tabular-nums text-[var(--text)]">{c.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {phrases.length > 0 && (
+        <ul className={`flex flex-wrap gap-x-3 gap-y-1 border-t border-[var(--text)] pt-4 text-[17px] text-[var(--text)] ${nums.length ? "mt-4" : ""}`}>
+          {phrases.map((c, i) => (
+            <li key={c.value} className="flex items-center gap-3">
+              {i > 0 && <span aria-hidden className="h-1 w-1 rounded-full bg-[var(--accent)]" />}
+              {c.value}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
 
 function Gallery({ item, src }: { item: PortfolioItem; src: string[] }) {
   const pages = src.some((s) => s.includes("/portfolio-pages/full/"));
+  // portrait photos (Nursie's sensor shots) get a portrait frame instead of a wide crop; measured once each loads
+  const [tall, setTall] = useState<Record<string, boolean>>({});
+  const measure = (s: string, el: HTMLImageElement | null) => {
+    if (!el?.complete || !el.naturalWidth) return;
+    const t = el.naturalHeight > el.naturalWidth;
+    setTall((m) => (m[s] === t ? m : { ...m, [s]: t }));
+  };
+  const allTall = !pages && src.length > 1 && src.every((s) => tall[s]);
   if (!src.length) return null;
   return (
     <section className="light mt-24 py-20 md:py-28">
@@ -210,17 +243,17 @@ function Gallery({ item, src }: { item: PortfolioItem; src: string[] }) {
             </a>
           )}
         </div>
-        <div className={`mt-10 grid gap-6 ${pages ? "mx-auto max-w-[940px]" : src.length > 1 ? "md:grid-cols-2" : ""}`}>
+        <div className={`mt-10 grid gap-6 ${pages ? "mx-auto max-w-[940px]" : allTall ? "sm:grid-cols-2 lg:grid-cols-3" : src.length > 1 ? "md:grid-cols-2" : ""}`}>
           {src.map((s, i) => (
             <a
               key={s}
-              data-lead={!pages && src.length % 2 === 1 && i === 0 ? "" : undefined}
+              data-lead={!pages && !allTall && src.length % 2 === 1 && i === 0 ? "" : undefined}
               href={s}
               target="_blank"
               rel="noopener noreferrer"
               className="group block overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-light)] bg-white data-[lead]:md:col-span-2 shadow-[0_1px_0_rgba(0,0,0,.03),0_24px_48px_-28px_rgba(0,0,0,.28)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_1px_0_rgba(0,0,0,.03),0_36px_60px_-28px_rgba(0,0,0,.35)]"
             >
-              <div className={pages ? "aspect-[8.5/11] p-2" : "aspect-[16/10] overflow-hidden group-data-[lead]:md:aspect-[2/1]"}>
+              <div className={pages ? "aspect-[8.5/11] p-2" : allTall ? "aspect-[3/4] overflow-hidden" : "aspect-[16/10] overflow-hidden group-data-[lead]:md:aspect-[2/1]"}>
                 <img
                   src={s}
                   alt={pages ? `${item.title}, portfolio page ${i + 1}` : `${item.title}, image ${i + 1}`}
@@ -228,7 +261,9 @@ function Gallery({ item, src }: { item: PortfolioItem; src: string[] }) {
                   height={pages ? 1100 : 1000}
                   loading="lazy"
                   decoding="async"
-                  className={`h-full w-full ${pages ? "object-contain" : "object-cover transition-transform duration-300 ease-out group-hover:scale-[1.025]"}`}
+                  ref={(el) => measure(s, el)}
+                  onLoad={(e) => measure(s, e.currentTarget)}
+                  className={`h-full w-full ${pages || (tall[s] && !allTall) ? "object-contain" : "object-cover transition-transform duration-300 ease-out group-hover:scale-[1.025]"}`}
                 />
               </div>
               <span className="sr-only">(opens full size in a new tab)</span>
@@ -317,6 +352,8 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
   const heroSrc = photoFor(item.id) ?? item.image ?? item.gallery[0] ?? null;
   const heroIsPage = heroSrc?.includes("/portfolio-pages/full/") ?? false;
   const heroIsLogo = heroSrc?.includes("/logo/") ?? false;
+  // diagrams, drawings and CAD show whole in the frame; photos and screenshots fill it
+  const heroWhole = DRAWINGS.has(item.id) || /\/diagrams\/|drawing|cutaway/.test(heroSrc ?? "");
   // a page or logo already shown as the hero isn't repeated in the gallery
   const gallery = item.gallery.filter((s) => !(heroIsLogo && s === heroSrc));
 
@@ -337,7 +374,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
               height={800}
               fetchPriority="high"
               decoding="async"
-              className="aspect-[4/3] w-full object-cover md:aspect-[16/8]"
+              className={`aspect-video w-full ${heroWhole ? "bg-white object-contain p-3 md:p-6" : "object-cover"}`}
               style={{ objectPosition: FOCUS[item.id] }}
             />
           </div>
@@ -388,7 +425,8 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
 
       {!isLunar && (
         <>
-          <Tradeoffs id={item.id} />
+          {/* a single decision card reads as unfinished; the timeline's own decisions stage covers it */}
+          <Tradeoffs id={item.id} min={techDiveFor(item.id) ? 2 : 1} />
           {techDiveFor(item.id) ? (
             <TechTimeline dive={techDiveFor(item.id)!} anchor={hasHardwareDetails ? "hardware-details" : undefined} />
           ) : (
@@ -397,7 +435,7 @@ export default function ProjectCaseStudy({ item, related }: { item: PortfolioIte
           <Gallery item={item} src={gallery} />
         </>
       )}
-      {isLunar && techDiveFor(item.id) && <TechTimeline dive={techDiveFor(item.id)!} />}
+      {isLunar && techDiveFor(item.id) && <TechTimeline dive={techDiveFor(item.id)!} collapsed="Full engineering record: stages, calculations and drawings" />}
       <Related item={item} related={related} />
       <Footer />
     </main>

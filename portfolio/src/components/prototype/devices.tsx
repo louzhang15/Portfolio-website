@@ -86,10 +86,10 @@ function Layer({
             <span className="mt-[6px] h-px w-16 bg-[var(--mat-alu-lo)]" />
             <span className="mt-[3px] h-[7px] w-[7px] shrink-0 rounded-full" style={{ background: ACCENT }} />
             <span className="leading-tight">
-              <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text)]">
-                <span className="text-[var(--text-tertiary)]">{part.code}</span> {part.name}
+              <span className="block font-mono text-[12px] uppercase tracking-[0.12em] text-[var(--text)]">
+                <span className="text-[var(--text-secondary)]">{part.code}</span> {part.name}
               </span>
-              <span className="block font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--text-tertiary)]">{part.spec}</span>
+              <span className="block font-mono text-[12px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">{part.spec}</span>
             </span>
           </motion.div>
         </motion.div>

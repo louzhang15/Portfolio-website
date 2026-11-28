@@ -112,7 +112,7 @@ export function Filters({ options, value, onChange }: { options: readonly Group[
             aria-pressed={on}
             aria-label={f}
             onClick={() => onChange(f)}
-            className="min-h-[40px] shrink-0 whitespace-nowrap rounded-full px-3.5 text-[13px] font-medium transition-colors hover:text-[var(--text-on-light)] sm:min-h-[34px] sm:px-4"
+            className="min-h-11 shrink-0 whitespace-nowrap rounded-full px-3.5 text-[13px] font-medium transition-colors hover:text-[var(--text-on-light)] sm:px-4"
             style={on ? { background: "var(--text-on-light)", color: "var(--bg-light)" } : { color: "var(--text-on-light-secondary)" }}
           >
             <span className="sm:hidden">{SHORT[f] ?? f}</span>
@@ -137,8 +137,15 @@ export function Detail({ item }: { item: ProjectItem }) {
       </div>
       <h3 className="mt-3 text-[clamp(1.6rem,3vw,2.5rem)] text-[var(--text-on-light)]">{item.title}</h3>
       <p className="mt-1 text-[15px] text-[var(--text-on-light-secondary)]">{context(item.subtitle)}</p>
-      {/* exclusive ranges, so the clamp never depends on utility order: 2 lines on phones, 3 on short windows, 4 on tall */}
-      <p className="phone-roomy-only mt-3 line-clamp-2 max-w-[32rem] text-[15px] leading-[1.55] text-[var(--text-on-light-secondary)] [@media(min-width:640px)_and_(max-height:859px)]:line-clamp-3 [@media(min-width:640px)_and_(min-height:860px)]:line-clamp-4">
+      {/* hand-written hooks are short and show whole from 640px up; generated summaries keep the clamp (2 lines on phones,
+          3 on short windows, 4 on tall), with exclusive ranges so the clamp never depends on utility order */}
+      <p
+        className={`phone-roomy-only mt-3 max-w-[32rem] text-[15px] leading-[1.55] text-[var(--text-on-light-secondary)] ${
+          HOOKS[item.id]
+            ? "max-sm:line-clamp-4 max-sm:[@media(max-height:760px)]:line-clamp-2"
+            : "line-clamp-2 [@media(min-width:640px)_and_(max-height:859px)]:line-clamp-3 [@media(min-width:640px)_and_(min-height:860px)]:line-clamp-4"
+        }`}
+      >
         {HOOKS[item.id] ?? summary(item.details, context(item.subtitle))}
       </p>
       {item.metrics.length > 0 && (
@@ -462,7 +469,7 @@ export function Rail({ list, active, onPick }: { list: ProjectItem[]; active: nu
                   )}
                 </span>
                 <span
-                  className="phone-tall-only mt-2 block truncate text-[13px] leading-5 transition-colors group-hover:text-[var(--text-on-light)]"
+                  className="phone-tall-only mt-2 line-clamp-2 text-[13px] leading-[18px] transition-colors group-hover:text-[var(--text-on-light)]"
                   style={{ color: on ? "var(--text-on-light)" : "var(--text-on-light-secondary)" }}
                 >
                   {item.title}
