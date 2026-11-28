@@ -133,7 +133,8 @@ function EndPaper({ active }: { active: boolean }) {
           Every project at full resolution, ready to share.
         </p>
         <div className="mt-6">
-          <a className={btnPrimaryLight} href={fullPortfolioDocument.href} target="_blank" rel="noopener noreferrer" tabIndex={tab}>
+          {/* the book is drawn scaled down: an invisible extension keeps the tap area at 44px or more */}
+          <a className={`${btnPrimaryLight} relative before:absolute before:-inset-x-3 before:-inset-y-6 before:content-['']`} href={fullPortfolioDocument.href} target="_blank" rel="noopener noreferrer" tabIndex={tab}>
             Open the full PDF
           </a>
         </div>

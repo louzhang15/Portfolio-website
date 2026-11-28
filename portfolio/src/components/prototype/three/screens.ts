@@ -7,8 +7,10 @@ import { clamp01, readTokens, wrapText } from "./core";
  * sits under real glass. Colours come from the CSS tokens; fonts are the page webfonts.
  */
 
-const DISPLAY = "Archivo, 'Helvetica Neue', Arial, sans-serif";
-const MONO = "'JetBrains Mono', ui-monospace, Menlo, monospace";
+// next/font gives the webfonts generated family names; read them from the variables set on <html>
+const cssFont = (name: string) => (typeof document === "undefined" ? "" : getComputedStyle(document.documentElement).getPropertyValue(name).trim());
+const DISPLAY = `${cssFont("--font-archivo") || "Archivo"}, 'Helvetica Neue', Arial, sans-serif`;
+const MONO = `${cssFont("--font-jetbrains") || "'JetBrains Mono'"}, ui-monospace, Menlo, monospace`;
 
 function rr(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number | number[]) {
   ctx.beginPath();

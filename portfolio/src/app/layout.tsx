@@ -1,7 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+// self-hosted and preloaded, with a metric-matched fallback, so headings do not re-wrap when the webfont arrives
+// optional: the fallback cannot copy Archivo's 125% width, so a late swap would re-wrap titles; a slow first visit keeps the fallback
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "optional" });
+const jetbrains = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-jetbrains" });
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -49,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${archivo.variable} ${jetbrains.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
